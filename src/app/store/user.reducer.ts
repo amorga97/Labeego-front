@@ -5,16 +5,19 @@ import { UserStore } from '../interfaces/interfaces';
 import * as user from './user.actions';
 
 export const initialState = {
+  id: '',
+  teamLeader: '',
   userName: '',
   name: '',
-  userImage: '',
   admin: false,
   mail: '',
+  token: '',
 };
 
-const _userReducer = createReducer(
+export const UserReducer = createReducer(
   initialState,
   on(user.login, (state: UserStore, { userData }) => {
+    localStorage.setItem('projectsUser', JSON.stringify(userData));
     return { ...state, ...userData };
   })
 );
