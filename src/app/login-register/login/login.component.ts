@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
     this.auth.loginUser(this.loginForm.value).subscribe((data) => {
       this.store.dispatch(user.saveUser({ userData: { ...data } }));
     });
-    console.log(this);
   }
 
   ngOnInit(): void {

@@ -1,12 +1,15 @@
-<h2>{{ project.title }}</h2>
-<h3>{{ project.description }}</h3>
-<p>{{ lastUpdate }}</p>
-<img
-  *ngIf="userData.admin"
-  [src]="project.user.userImage"
-  [alt]="project.user.name"
-/>
-<ul *ngFor="let item of tasks">
-  <li>{{ item.title }}</li>
-</ul>
-<p>Progress: {{ progress }}%</p>
+<div>
+  <h2>{{ project.title }}</h2>
+  <h3>{{ project.description }}</h3>
+  <p>{{ lastUpdate }}</p>
+  <p *ngIf="hasAppointment">{{ appointmentDate }}</p>
+  <img
+    *ngIf="userData.admin"
+    [src]="project.user.userImage"
+    [alt]="project.user.name"
+  />
+  <ul *ngFor="let item of tasks">
+    <li>{{ item.title }}</li>
+  </ul>
+  <p>Progress: {{ progress }}%</p>
+</div>

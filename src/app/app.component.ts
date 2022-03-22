@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   title = 'front';
   ngOnInit(): void {
     let userData = this.localStorageServ.getDataFromLocalStorage();
-    console.log('localStorage', userData);
     if (userData) {
       this.store.dispatch(saveUser({ userData }));
     }

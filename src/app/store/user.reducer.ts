@@ -18,10 +18,6 @@ export const UserReducer = createReducer(
   on(user.saveUser, (state: UserStore, { userData }) => {
     const storedData =
       LocalStorageService.prototype.saveDataToLocalStorage(userData);
-    console.log(
-      'data from local storage',
-      localStorage.getItem('projectsUser')
-    );
     return { ...state, ...storedData };
   })
 );

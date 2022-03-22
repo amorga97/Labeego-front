@@ -9,10 +9,12 @@ import { ifProject, ifTask, UserStore } from 'src/app/interfaces/interfaces';
 })
 export class ProjectCardComponent implements OnInit {
   @Input() project!: ifProject;
+  @Input() hasAppointment!: boolean;
   lastUpdate!: Object;
   tasks!: ifTask[];
   progress!: number;
   userData!: UserStore;
+  appointmentDate!: string;
   constructor(private store: Store<{ user: UserStore }>) {}
 
   getLastUpdate() {
@@ -51,17 +53,23 @@ export class ProjectCardComponent implements OnInit {
     this.progress = Math.floor((doneTasks / totalTasks) * 100);
   }
 
+  getAppointmentDate() {
+    if (this.hasAppointment) {
+      this.appointmentDate = new Date(
+        this.project.appointment
+      ).toLocaleDateString();
+    }
+  }
+
   ngOnInit(): void {
-    console.log('project', this.project);
     this.store
       .select((state) => state.user)
       .subscribe((data) => {
-        console.log(data);
         this.userData = data;
       });
-    console.log(this.userData.admin);
     this.getLastUpdate();
     this.getRelevantTasks();
     this.getProgress();
+    this.getAppointmentDate();
   }
 }

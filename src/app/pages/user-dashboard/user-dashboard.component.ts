@@ -5,15 +5,26 @@ import { ProjectsService } from 'src/app/services/projects.service';
 
 @Component({
   selector: 'app-user-dashboard',
-  template: ` <h1>Hola, {{ userData.name }}</h1>
-    <div *ngFor="let item of projects">
-      <app-project-card [project]="item"></app-project-card>
+  template: ` <h2 class="dashboard-title">Hola, {{ userData.name }}</h2>
+    <h3 class="dashboard-subtitle">Aquí tienes tus proyectos actuales</h3>
+    <div *ngFor="let item of projectsWithAppointment" class="project list">
+      <app-project-card
+        [hasAppointment]="true"
+        [project]="item"
+      ></app-project-card>
+    </div>
+    <div *ngFor="let item of projectsWithNoAppointment" class="project list">
+      <app-project-card
+        [hasAppointment]="false"
+        [project]="item"
+      ></app-project-card>
     </div>`,
   styles: [],
 })
 export class UserDashboardComponent implements OnInit {
   userData!: UserStore;
-  projects!: ifProject[];
+  projectsWithAppointment!: ifProject[];
+  projectsWithNoAppointment!: ifProject[];
   constructor(
     private store: Store<{ user: UserStore }>,
     private projectsServ: ProjectsService
@@ -23,13 +34,16 @@ export class UserDashboardComponent implements OnInit {
     this.store
       .select((state) => state.user)
       .subscribe((data) => {
-        console.log(data);
         this.userData = data;
       });
 
     this.projectsServ.getAllProjects(this.userData.token).subscribe((data) => {
-      console.log(data);
-      this.projects = data;
+      this.projectsWithAppointment = data.filter(
+        (item) => item.appointment && item
+      );
+      this.projectsWithNoAppointment = data.filter(
+        (item) => !item.appointment && item
+      );
     });
   }
 }

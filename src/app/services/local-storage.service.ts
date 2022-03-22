@@ -14,7 +14,6 @@ export class LocalStorageService {
   }
 
   saveDataToLocalStorage(data: UserStore) {
-    console.log('app-user-info');
     if (!localStorage.getItem('app-user-info')) {
       localStorage.setItem('app-user-info', JSON.stringify(data));
     } else return this.getDataFromLocalStorage();
