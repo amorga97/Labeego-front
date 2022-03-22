@@ -55,7 +55,7 @@ export class RegisterComponent implements OnInit {
 
   handleSubmit() {
     this.auth.registerUser(this.regForm.value).subscribe((data) => {
-      this.store.dispatch(user.login({ userData: { ...data } }));
+      this.store.dispatch(user.saveUser({ userData: { ...data } }));
     });
   }
 
