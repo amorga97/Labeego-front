@@ -8,6 +8,10 @@ import { UserReducer } from './store/user.reducer';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginRegisterModule } from './login-register/login-register.module';
 import { HttpClientModule } from '@angular/common/http';
+import { UserDashboardModule } from './pages/user-dashboard/user-dashboard.module';
+import { CoreModule } from './core/core.module';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +23,13 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     LoginRegisterModule,
     HttpClientModule,
+    UserDashboardModule,
+    CoreModule,
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production, // Restrict extension to log-only mode
+      autoPause: true,
+    }),
   ],
   bootstrap: [AppComponent],
 })

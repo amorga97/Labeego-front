@@ -1,0 +1,18 @@
+<div class="project-card">
+  <h2 class="project-card__title">{{ project.title }}</h2>
+  <h3 class="project-card__description">{{ project.description }}</h3>
+  <p class="project-card__update-date">{{ lastUpdate }}</p>
+  <p class="project-card__appointment" *ngIf="hasAppointment">
+    {{ appointmentDate }}
+  </p>
+  <img
+    class="project-card__user-image"
+    *ngIf="userData.admin"
+    [src]="project.user.userImage"
+    [alt]="project.user.name"
+  />
+  <ul class="project-card__task-list" *ngFor="let item of tasks">
+    <li class="project-card__task">{{ item.title }}</li>
+  </ul>
+  <p class="project-card__progress">Progress: {{ progress }}%</p>
+</div>

@@ -39,9 +39,8 @@ export class LoginComponent implements OnInit {
 
   handleSubmit() {
     this.auth.loginUser(this.loginForm.value).subscribe((data) => {
-      this.store.dispatch(user.login({ userData: { ...data } }));
+      this.store.dispatch(user.saveUser({ userData: { ...data } }));
     });
-    console.log(this);
   }
 
   ngOnInit(): void {

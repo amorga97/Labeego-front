@@ -1,7 +1,6 @@
 import { createReducer, on, State } from '@ngrx/store';
-import { InitialState } from '@ngrx/store/src/models';
-import { OnReducer } from '@ngrx/store/src/reducer_creator';
 import { UserStore } from '../interfaces/interfaces';
+import { LocalStorageService } from '../services/local-storage.service';
 import * as user from './user.actions';
 
 export const initialState = {
@@ -16,12 +15,9 @@ export const initialState = {
 
 export const UserReducer = createReducer(
   initialState,
-  on(user.login, (state: UserStore, { userData }) => {
-    localStorage.setItem('projectsUser', JSON.stringify(userData));
-    console.log(
-      'data from local storage',
-      localStorage.getItem('projectsUser')
-    );
-    return { ...state, ...userData };
+  on(user.saveUser, (state: UserStore, { userData }) => {
+    const storedData =
+      LocalStorageService.prototype.saveDataToLocalStorage(userData);
+    return { ...state, ...storedData };
   })
 );
