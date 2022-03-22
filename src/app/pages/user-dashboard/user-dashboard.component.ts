@@ -9,6 +9,7 @@ import { ProjectsService } from 'src/app/services/projects.service';
     <div class="project-cards-wrapper">
       <h3 class="dashboard-subtitle">Proyectos en curso</h3>
       <div class="project-cards-list">
+        <app-new-project></app-new-project>
         <app-project-card
           *ngFor="let item of projectsWithNoAppointment"
           class="project list"
