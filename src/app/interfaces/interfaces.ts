@@ -40,3 +40,14 @@ export interface ifTask {
   project: string;
   status: string;
 }
+
+export interface ifClient {
+  _id: string;
+  name: string;
+  email: string;
+  address: {
+    street: string;
+    number: number;
+  };
+  projects: string[];
+}
