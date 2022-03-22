@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  regForm!: FormGroup;
+  regForm: FormGroup;
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -57,10 +57,6 @@ export class RegisterComponent implements OnInit {
     this.auth.registerUser(this.regForm.value).subscribe((data) => {
       this.store.dispatch(user.login({ userData: { ...data } }));
     });
-  }
-
-  handleClick() {
-    console.log('pepe');
   }
 
   ngOnInit(): void {

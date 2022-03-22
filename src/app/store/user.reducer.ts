@@ -18,6 +18,10 @@ export const UserReducer = createReducer(
   initialState,
   on(user.login, (state: UserStore, { userData }) => {
     localStorage.setItem('projectsUser', JSON.stringify(userData));
+    console.log(
+      'data from local storage',
+      localStorage.getItem('projectsUser')
+    );
     return { ...state, ...userData };
   })
 );
