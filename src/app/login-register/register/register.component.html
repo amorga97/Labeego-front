@@ -1,0 +1,14 @@
+<h1>register</h1>
+<form [formGroup]="regForm" (ngSubmit)="handleSubmit()">
+  value: {{ regForm.value | json }}
+  <input type="text" placeholder="user name" id="" formControlName="userName" />
+  <input type="text" placeholder="name" id="" formControlName="name" />
+  <input type="text" placeholder="email" id="" formControlName="mail" />
+  <input
+    type="password"
+    placeholder="password"
+    id=""
+    formControlName="password"
+  />
+  <button type="submit">Register</button>
+</form>
