@@ -22,6 +22,12 @@ export interface ifProject {
   tasks: object;
 }
 
+export interface ifNewProject {
+  title: string;
+  description: string;
+  client: string;
+}
+
 export interface ifPartialUserStore {
   id?: string;
   teamLeader?: string;

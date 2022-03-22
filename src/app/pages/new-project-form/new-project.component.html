@@ -1,0 +1,17 @@
+<p>New projects works!</p>
+<form (ngSubmit)="handleSubmit()" [formGroup]="newProjectForm">
+  <input type="text" placeholder="project name" formControlName="title" />
+  <input
+    type="text"
+    placeholder="project description"
+    formControlName="description"
+  />
+  <button type="submit">Create</button>
+</form>
+<div *ngFor="let item of clients" (click)="handleClick(item)">
+  <p class="client__name">{{ item.name }}</p>
+  <div class="client__address-wrapper">
+    <p class="client__street">{{ item.address.street }}</p>
+    <p class="client__number">{{ item.address.number }}</p>
+  </div>
+</div>

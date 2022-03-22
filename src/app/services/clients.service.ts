@@ -13,6 +13,6 @@ export class ClientsService {
   getAllClients(token: string) {
     return this.http.get(environment.backUrl + 'clients', {
       headers: { Authorization: `Bearer ${token}` },
-    }) as Observable<ifClient>;
+    }) as Observable<ifClient[]>;
   }
 }

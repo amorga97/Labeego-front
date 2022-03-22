@@ -13,6 +13,13 @@ const routes: Routes = [
         (m) => m.UserDashboardModule
       ),
   },
+  {
+    path: 'new-project',
+    loadChildren: () =>
+      import('./pages/new-project-form/new-project.module').then(
+        (m) => m.NewProjectModule
+      ),
+  },
 ];
 
 @NgModule({
