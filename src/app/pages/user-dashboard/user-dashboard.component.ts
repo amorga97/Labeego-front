@@ -6,20 +6,27 @@ import { ProjectsService } from 'src/app/services/projects.service';
 @Component({
   selector: 'app-user-dashboard',
   template: ` <h2 class="dashboard-title">Hola, {{ userData.name }}</h2>
-    <h3 class="dashboard-subtitle">Aquí tienes tus proyectos actuales</h3>
-    <div *ngFor="let item of projectsWithAppointment" class="project list">
-      <app-project-card
-        [hasAppointment]="true"
-        [project]="item"
-      ></app-project-card>
-    </div>
-    <div *ngFor="let item of projectsWithNoAppointment" class="project list">
-      <app-project-card
-        [hasAppointment]="false"
-        [project]="item"
-      ></app-project-card>
+    <div class="project-cards-wrapper">
+      <h3 class="dashboard-subtitle">Proyectos en curso</h3>
+      <div class="project-cards-list">
+        <app-project-card
+          *ngFor="let item of projectsWithNoAppointment"
+          class="project list"
+          [hasAppointment]="false"
+          [project]="item"
+        ></app-project-card>
+      </div>
+      <h3 class="dashboard-subtitle">Esperando aprobación</h3>
+      <div class="project-cards-list">
+        <app-project-card
+          *ngFor="let item of projectsWithAppointment"
+          class="project list"
+          [hasAppointment]="true"
+          [project]="item"
+        ></app-project-card>
+      </div>
     </div>`,
-  styles: [],
+  styleUrls: ['./user-dashboard.component.scss'],
 })
 export class UserDashboardComponent implements OnInit {
   userData!: UserStore;
