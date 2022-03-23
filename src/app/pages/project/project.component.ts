@@ -53,10 +53,6 @@ export class ProjectComponent implements OnInit {
         event.previousIndex,
         event.currentIndex
       );
-      console.log(this.toDo);
-      console.log(this.doing);
-      console.log(this.toReview);
-      console.log(this.done);
 
       this.projects
         .update(this.userData.token, this.project._id, {
@@ -128,7 +124,6 @@ export class ProjectComponent implements OnInit {
       });
     this.projects.getOne(this.userData.token, this.id).subscribe((data) => {
       this.project = data;
-      console.log(this.project);
       this.toDo = this.project.toDo as ifTask[];
       this.doing = this.project.doing as ifTask[];
       this.toReview = this.project.toReview as ifTask[];
