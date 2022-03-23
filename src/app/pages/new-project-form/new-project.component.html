@@ -1,0 +1,41 @@
+<h2>Crear un nuevo proyecto</h2>
+<form (ngSubmit)="handleProjectSubmit()" [formGroup]="newProjectForm">
+  <label for="title">Título del proyecto</label>
+  <input id="title" type="text" formControlName="title" />
+  <label for="description">Descripción del nuevo proyecto</label>
+  <textarea
+    type="text-area"
+    id="description"
+    formControlName="description"
+    rows="5"
+    cols="33"
+  ></textarea>
+  <h3>Crea un nuevo cliente</h3>
+  <form (ngSubmit)="handleClientSubmit()" [formGroup]="newClientForm">
+    <label for="name">Nombre del cliente</label>
+    <input type="text" id="name" formControlName="name" />
+    <label for="street">Calle</label>
+    <input type="text" id="street" formControlName="street" />
+    <label for="number">Número</label>
+    <input type="text" id="number" formControlName="number" />
+    <label for="email">Correo electrónico</label>
+    <input type="text" id="email" formControlName="email" />
+    <button type="submit" [disabled]="!newClientForm.valid">
+      Crear nuevo cliente
+    </button>
+  </form>
+
+  <h3>O elige uno de los clientes ya existentes</h3>
+  <ul>
+    <li *ngFor="let item of clients" (click)="handleClick(item)">
+      <p class="client__name">{{ item.name }}</p>
+      <div class="client__address-wrapper">
+        <p class="client__street">{{ item.address.street }}</p>
+        <p class="client__number">{{ item.address.number }}</p>
+      </div>
+    </li>
+  </ul>
+  <button type="submit" [disabled]="!newProjectForm.valid">
+    Crear nuevo proyecto
+  </button>
+</form>

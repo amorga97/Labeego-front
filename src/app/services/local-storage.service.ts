@@ -18,4 +18,8 @@ export class LocalStorageService {
       localStorage.setItem('app-user-info', JSON.stringify(data));
     } else return this.getDataFromLocalStorage();
   }
+
+  clearLocalStorage() {
+    localStorage.removeItem('app-user-info');
+  }
 }

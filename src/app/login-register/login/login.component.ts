@@ -43,6 +43,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  handleLogout() {
+    this.store.dispatch(user.logout());
+  }
+
   ngOnInit(): void {
     console.log('Form loaded');
   }
