@@ -1,1 +1,61 @@
-<p>project works!</p>
+<div cdkDropListGroup class="tasks">
+  <div class="tasks__container">
+    <h2>Por hacer</h2>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="toDo"
+      class="tasks__list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="tasks__item" *ngFor="let item of toDo" cdkDrag>
+        {{ item.title }}
+      </div>
+    </div>
+  </div>
+
+  <div class="tasks__container">
+    <h2>En proceso</h2>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="doing"
+      class="tasks__list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="tasks__item" *ngFor="let item of doing" cdkDrag>
+        {{ item.title }}
+      </div>
+    </div>
+  </div>
+
+  <div class="tasks__container">
+    <h2>Por aprobar</h2>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="toReview"
+      class="tasks__list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="tasks__item" *ngFor="let item of toReview" cdkDrag>
+        {{ item.title }}
+      </div>
+    </div>
+  </div>
+
+  <div class="tasks__container">
+    <h2>Done</h2>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="done"
+      class="tasks__list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="tasks__item" *ngFor="let item of done" cdkDrag>
+        {{ item.title }}
+      </div>
+    </div>
+  </div>
+</div>
