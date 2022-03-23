@@ -22,6 +22,12 @@ export class ProjectsService {
     }) as Observable<ifProject>;
   }
 
+  update(token: string, id: string, project: ifProject) {
+    return this.http.patch(environment.backUrl + `projects/${id}`, project, {
+      headers: { Authorization: `Bearer ${token}` },
+    }) as Observable<ifProject>;
+  }
+
   create(token: string, project: ifNewProject) {
     return this.http.post(environment.backUrl + 'projects/new', project, {
       headers: { Authorization: `Bearer ${token}` },

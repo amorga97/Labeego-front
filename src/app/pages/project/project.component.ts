@@ -37,6 +37,15 @@ export class ProjectComponent implements OnInit {
         event.previousIndex,
         event.currentIndex
       );
+      this.projects
+        .update(this.userData.token, this.project._id, {
+          ...this.project,
+          toDo: [...this.toDo],
+          done: [...this.done],
+          doing: [...this.doing],
+          toReview: [...this.toReview],
+        })
+        .subscribe();
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -44,8 +53,21 @@ export class ProjectComponent implements OnInit {
         event.previousIndex,
         event.currentIndex
       );
-      console.log(event.container.data[event.currentIndex]);
-      console.log(event.container.id);
+      console.log(this.toDo);
+      console.log(this.doing);
+      console.log(this.toReview);
+      console.log(this.done);
+
+      this.projects
+        .update(this.userData.token, this.project._id, {
+          ...this.project,
+          toDo: [...this.toDo],
+          done: [...this.done],
+          doing: [...this.doing],
+          toReview: [...this.toReview],
+        })
+        .subscribe();
+
       switch (event.container.id) {
         case 'cdk-drop-list-0':
           this.task
@@ -106,18 +128,11 @@ export class ProjectComponent implements OnInit {
       });
     this.projects.getOne(this.userData.token, this.id).subscribe((data) => {
       this.project = data;
-      this.toDo = (this.project.tasks as ifTask[]).filter(
-        (item) => item.status === 'to-do'
-      );
-      this.doing = (this.project.tasks as ifTask[]).filter(
-        (item) => item.status === 'doing'
-      );
-      this.toReview = (this.project.tasks as ifTask[]).filter(
-        (item) => item.status === 'to-review'
-      );
-      this.done = (this.project.tasks as ifTask[]).filter(
-        (item) => item.status === 'done'
-      );
+      console.log(this.project);
+      this.toDo = this.project.toDo as ifTask[];
+      this.doing = this.project.doing as ifTask[];
+      this.toReview = this.project.toReview as ifTask[];
+      this.done = this.project.done as ifTask[];
     });
   }
 }

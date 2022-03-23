@@ -40,20 +40,20 @@ export class ProjectCardComponent implements OnInit {
   }
 
   getRelevantTasks() {
-    this.tasks = (this.project.tasks as ifTask[]).filter(
-      (item) => item.status === 'doing'
-    );
-    const LastDoneTask = (this.project.tasks as ifTask[])
+    this.tasks = this.project.doing as ifTask[];
+    const LastDoneTask = (this.project.done as ifTask[])
       .reverse()
       .find((item) => item.status === 'done');
     if (LastDoneTask) this.tasks.splice(0, 0, LastDoneTask);
   }
 
   getProgress() {
-    const doneTasks = (this.project.tasks as ifTask[]).filter(
-      (item) => item.status === 'done'
-    ).length;
-    const totalTasks = (this.project.tasks as ifTask[]).length;
+    const totalTasks =
+      (this.project.toDo as ifTask[]).length +
+      (this.project.doing as ifTask[]).length +
+      (this.project.toReview as ifTask[]).length +
+      (this.project.done as ifTask[]).length;
+    const doneTasks = (this.project.done as ifTask[]).length;
     this.progress = Math.floor((doneTasks / totalTasks) * 100);
   }
 
