@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ifProject, ifTask, UserStore } from 'src/app/interfaces/interfaces';
 
@@ -15,7 +16,10 @@ export class ProjectCardComponent implements OnInit {
   progress!: number;
   userData!: UserStore;
   appointmentDate!: string;
-  constructor(private store: Store<{ user: UserStore }>) {}
+  constructor(
+    private store: Store<{ user: UserStore }>,
+    private router: Router
+  ) {}
 
   getLastUpdate() {
     if (new Date(this.project.lastUpdate).getDate() === new Date().getDate()) {
@@ -59,6 +63,10 @@ export class ProjectCardComponent implements OnInit {
         this.project.appointment
       ).toLocaleDateString();
     }
+  }
+
+  handleClick() {
+    this.router.navigate([`project/${this.project._id}`]);
   }
 
   ngOnInit(): void {

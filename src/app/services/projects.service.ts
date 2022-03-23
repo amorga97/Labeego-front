@@ -17,7 +17,7 @@ export class ProjectsService {
   }
 
   getOne(token: string, id: string) {
-    return this.http.get(environment.backUrl + 'projects' + id, {
+    return this.http.get(environment.backUrl + 'projects/' + id, {
       headers: { Authorization: `Bearer ${token}` },
     }) as Observable<ifProject>;
   }
