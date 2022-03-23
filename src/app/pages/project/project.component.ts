@@ -8,6 +8,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
+import { TasksService } from 'src/app/services/tasks.service';
 
 @Component({
   selector: 'app-project',
@@ -25,7 +26,8 @@ export class ProjectComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private projects: ProjectsService,
-    private store: Store<{ user: UserStore }>
+    private store: Store<{ user: UserStore }>,
+    private task: TasksService
   ) {}
 
   drop(event: CdkDragDrop<ifTask[]>) {
@@ -42,6 +44,56 @@ export class ProjectComponent implements OnInit {
         event.previousIndex,
         event.currentIndex
       );
+      console.log(event.container.data[event.currentIndex]);
+      console.log(event.container.id);
+      switch (event.container.id) {
+        case 'cdk-drop-list-0':
+          this.task
+            .changeStatus(
+              this.userData.token,
+              event.container.data[event.currentIndex]._id,
+              this.project._id,
+              { ...event.container.data[event.currentIndex], status: 'to-do' }
+            )
+            .subscribe();
+          break;
+
+        case 'cdk-drop-list-1':
+          this.task
+            .changeStatus(
+              this.userData.token,
+              event.container.data[event.currentIndex]._id,
+              this.project._id,
+              { ...event.container.data[event.currentIndex], status: 'doing' }
+            )
+            .subscribe();
+          break;
+        case 'cdk-drop-list-2':
+          this.task
+            .changeStatus(
+              this.userData.token,
+              event.container.data[event.currentIndex]._id,
+              this.project._id,
+              {
+                ...event.container.data[event.currentIndex],
+                status: 'to-review',
+              }
+            )
+            .subscribe();
+          break;
+        case 'cdk-drop-list-3':
+          this.task
+            .changeStatus(
+              this.userData.token,
+              event.container.data[event.currentIndex]._id,
+              this.project._id,
+              { ...event.container.data[event.currentIndex], status: 'done' }
+            )
+            .subscribe();
+          break;
+        default:
+          break;
+      }
     }
   }
 

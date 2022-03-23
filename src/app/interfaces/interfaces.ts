@@ -40,7 +40,7 @@ export interface ifPartialUserStore {
 }
 
 export interface ifTask {
-  id?: string;
+  _id: string;
   title: string;
   description: string;
   project: string;
