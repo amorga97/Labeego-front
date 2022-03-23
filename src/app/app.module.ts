@@ -12,6 +12,7 @@ import { UserDashboardModule } from './pages/user-dashboard/user-dashboard.modul
 import { CoreModule } from './core/core.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
+import { ProjectModule } from './pages/project/project.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +26,7 @@ import { environment } from 'src/environments/environment';
     HttpClientModule,
     UserDashboardModule,
     CoreModule,
+    ProjectModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production, // Restrict extension to log-only mode

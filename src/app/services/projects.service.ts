@@ -16,9 +16,27 @@ export class ProjectsService {
     }) as Observable<ifProject[]>;
   }
 
+  getOne(token: string, id: string) {
+    return this.http.get(environment.backUrl + 'projects/' + id, {
+      headers: { Authorization: `Bearer ${token}` },
+    }) as Observable<ifProject>;
+  }
+
+  update(token: string, id: string, project: ifProject) {
+    return this.http.patch(environment.backUrl + `projects/${id}`, project, {
+      headers: { Authorization: `Bearer ${token}` },
+    }) as Observable<ifProject>;
+  }
+
   create(token: string, project: ifNewProject) {
     return this.http.post(environment.backUrl + 'projects/new', project, {
       headers: { Authorization: `Bearer ${token}` },
     }) as Observable<ifProject>;
+  }
+
+  remove(token: string, id: string) {
+    return this.http.delete(environment.backUrl + `projects/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   }
 }

@@ -19,7 +19,10 @@ export interface ifProject {
   status: string;
   appointment: Date;
   lastUpdate: Date;
-  tasks: object;
+  toDo: object;
+  doing: object;
+  toReview: object;
+  done: object;
 }
 
 export interface ifNewProject {
@@ -40,7 +43,7 @@ export interface ifPartialUserStore {
 }
 
 export interface ifTask {
-  id?: string;
+  _id: string;
   title: string;
   description: string;
   project: string;

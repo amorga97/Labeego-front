@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ifProject, ifTask, UserStore } from 'src/app/interfaces/interfaces';
 
@@ -15,7 +16,10 @@ export class ProjectCardComponent implements OnInit {
   progress!: number;
   userData!: UserStore;
   appointmentDate!: string;
-  constructor(private store: Store<{ user: UserStore }>) {}
+  constructor(
+    private store: Store<{ user: UserStore }>,
+    private router: Router
+  ) {}
 
   getLastUpdate() {
     if (new Date(this.project.lastUpdate).getDate() === new Date().getDate()) {
@@ -36,20 +40,20 @@ export class ProjectCardComponent implements OnInit {
   }
 
   getRelevantTasks() {
-    this.tasks = (this.project.tasks as ifTask[]).filter(
-      (item) => item.status === 'doing'
-    );
-    const LastDoneTask = (this.project.tasks as ifTask[])
+    this.tasks = this.project.doing as ifTask[];
+    const LastDoneTask = (this.project.done as ifTask[])
       .reverse()
       .find((item) => item.status === 'done');
     if (LastDoneTask) this.tasks.splice(0, 0, LastDoneTask);
   }
 
   getProgress() {
-    const doneTasks = (this.project.tasks as ifTask[]).filter(
-      (item) => item.status === 'done'
-    ).length;
-    const totalTasks = (this.project.tasks as ifTask[]).length;
+    const totalTasks =
+      (this.project.toDo as ifTask[]).length +
+      (this.project.doing as ifTask[]).length +
+      (this.project.toReview as ifTask[]).length +
+      (this.project.done as ifTask[]).length;
+    const doneTasks = (this.project.done as ifTask[]).length;
     this.progress = Math.floor((doneTasks / totalTasks) * 100);
   }
 
@@ -59,6 +63,10 @@ export class ProjectCardComponent implements OnInit {
         this.project.appointment
       ).toLocaleDateString();
     }
+  }
+
+  handleClick() {
+    this.router.navigate([`project/${this.project._id}`]);
   }
 
   ngOnInit(): void {
