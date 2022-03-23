@@ -57,3 +57,12 @@ export interface ifClient {
   };
   projects: string[];
 }
+
+export interface ifNewClient {
+  name: string;
+  email: string;
+  address: {
+    street: string;
+    number: number;
+  };
+}

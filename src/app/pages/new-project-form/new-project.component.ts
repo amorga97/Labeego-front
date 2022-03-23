@@ -13,6 +13,7 @@ import { ProjectsService } from 'src/app/services/projects.service';
 export class NewProjectFormComponent implements OnInit {
   userId!: string;
   newProjectForm!: FormGroup;
+  newClientForm!: FormGroup;
   token!: string;
   userData!: UserStore;
   clients!: ifClient[];
@@ -41,6 +42,34 @@ export class NewProjectFormComponent implements OnInit {
         ],
       ],
     });
+    this.newClientForm = fb.group({
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
+      street: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
+      number: ['', [Validators.required]],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
+    });
   }
 
   getClients() {
@@ -55,7 +84,7 @@ export class NewProjectFormComponent implements OnInit {
     console.log(this.selectedClientId);
   }
 
-  handleSubmit() {
+  handleProjectSubmit() {
     this.projects
       .create(this.userData.token, {
         ...this.newProjectForm.value,
@@ -64,6 +93,19 @@ export class NewProjectFormComponent implements OnInit {
       .subscribe((data) => {
         console.log(data);
       });
+  }
+
+  handleClientSubmit() {
+    this.clientService
+      .create(this.userData.token, {
+        name: this.newClientForm.value.name as string,
+        email: this.newClientForm.value.email as string,
+        address: {
+          number: +this.newClientForm.value.number,
+          street: this.newClientForm.value.street as string,
+        },
+      })
+      .subscribe((data) => console.log('new client', data));
   }
 
   ngOnInit(): void {
