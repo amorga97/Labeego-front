@@ -20,6 +20,11 @@ const routes: Routes = [
         (m) => m.NewProjectModule
       ),
   },
+  {
+    path: 'project/:id',
+    loadChildren: () =>
+      import('./pages/project/project.module').then((m) => m.ProjectModule),
+  },
 ];
 
 @NgModule({
