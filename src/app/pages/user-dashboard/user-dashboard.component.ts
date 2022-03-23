@@ -5,7 +5,7 @@ import { ProjectsService } from 'src/app/services/projects.service';
 
 @Component({
   selector: 'app-user-dashboard',
-  template: ` <h2 class="dashboard-title">Hola, {{ userData.name }}</h2>
+  template: ` <h2 class="dashboard-title">Hola, {{ name }}</h2>
     <div class="project-cards-wrapper">
       <h3 class="dashboard-subtitle">Proyectos en curso</h3>
       <div class="project-cards-list">
@@ -31,27 +31,35 @@ import { ProjectsService } from 'src/app/services/projects.service';
 })
 export class UserDashboardComponent implements OnInit {
   userData!: UserStore;
+  name: string = '';
   projectsWithAppointment!: ifProject[];
   projectsWithNoAppointment!: ifProject[];
   constructor(
-    private store: Store<{ user: UserStore }>,
-    private projectsServ: ProjectsService
+    public store: Store<{ user: UserStore }>,
+    public projectsServ: ProjectsService
   ) {}
 
   ngOnInit(): void {
+    console.log('Estoy en OnInit');
     this.store
       .select((state) => state.user)
-      .subscribe((data) => {
-        this.userData = data;
+      .subscribe({
+        next: (data: any) => {
+          this.userData = data;
+          this.name = this.userData.name;
+          console.log('Estoy en store.subscribe');
+          this.projectsServ.getAllProjects(this.userData.token).subscribe({
+            next: (data: any[]) => {
+              console.log('Estoy en la getAllProjects');
+              this.projectsWithAppointment = data.filter(
+                (item) => item.appointment && item
+              );
+              this.projectsWithNoAppointment = data.filter(
+                (item) => !item.appointment && item
+              );
+            },
+          });
+        },
       });
-
-    this.projectsServ.getAllProjects(this.userData.token).subscribe((data) => {
-      this.projectsWithAppointment = data.filter(
-        (item) => item.appointment && item
-      );
-      this.projectsWithNoAppointment = data.filter(
-        (item) => !item.appointment && item
-      );
-    });
   }
 }
