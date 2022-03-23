@@ -1,3 +1,16 @@
+<button (click)="handleDelete()">Eliminar este proyecto</button>
+<form (ngSubmit)="handleSubmit()" [formGroup]="projectForm">
+  <input id="title" type="text" formControlName="title" />
+  <textarea
+    type="text-area"
+    id="description"
+    formControlName="description"
+    rows="5"
+    cols="33"
+  ></textarea>
+  <button type="submit" [disabled]="!projectForm.valid">Guardar cambios</button>
+</form>
+
 <div cdkDropListGroup class="tasks">
   <div class="tasks__container">
     <h2>Por hacer</h2>

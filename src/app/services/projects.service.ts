@@ -33,4 +33,10 @@ export class ProjectsService {
       headers: { Authorization: `Bearer ${token}` },
     }) as Observable<ifProject>;
   }
+
+  remove(token: string, id: string) {
+    return this.http.delete(environment.backUrl + `projects/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
 }

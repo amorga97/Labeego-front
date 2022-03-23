@@ -9,6 +9,7 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { TasksService } from 'src/app/services/tasks.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-project',
@@ -23,12 +24,33 @@ export class ProjectComponent implements OnInit {
   doing!: ifTask[];
   toReview!: ifTask[];
   done!: ifTask[];
+  projectForm!: FormGroup;
   constructor(
     private route: ActivatedRoute,
     private projects: ProjectsService,
     private store: Store<{ user: UserStore }>,
-    private task: TasksService
-  ) {}
+    private task: TasksService,
+    private fb: FormBuilder
+  ) {
+    this.projectForm = this.fb.group({
+      title: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
+      description: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(20),
+          Validators.maxLength(300),
+        ],
+      ],
+    });
+  }
 
   drop(event: CdkDragDrop<ifTask[]>) {
     if (event.previousContainer === event.container) {
@@ -115,6 +137,21 @@ export class ProjectComponent implements OnInit {
     }
   }
 
+  handleDelete() {
+    this.projects
+      .remove(this.userData.token, this.project._id)
+      .subscribe((data) => console.log(data));
+  }
+
+  handleSubmit() {
+    this.projects
+      .update(this.userData.token, this.project._id, {
+        ...this.project,
+        ...{ ...this.projectForm.value },
+      })
+      .subscribe();
+  }
+
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') as string;
     this.store
@@ -124,6 +161,8 @@ export class ProjectComponent implements OnInit {
       });
     this.projects.getOne(this.userData.token, this.id).subscribe((data) => {
       this.project = data;
+      this.projectForm.get('title')?.setValue(this.project.title);
+      this.projectForm.get('description')?.setValue(this.project.description);
       this.toDo = this.project.toDo as ifTask[];
       this.doing = this.project.doing as ifTask[];
       this.toReview = this.project.toReview as ifTask[];
