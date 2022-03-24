@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { AuthService } from './services/auth.service';
 import { LocalStorageService } from './services/local-storage.service';
 import { saveUser } from './store/user.actions';
 
@@ -11,13 +13,24 @@ import { saveUser } from './store/user.actions';
 export class AppComponent implements OnInit {
   constructor(
     private localStorageServ: LocalStorageService,
-    private store: Store
+    private store: Store,
+    public auth: AuthService,
+    private router: Router
   ) {}
   title = 'front';
-  ngOnInit(): void {
-    let userData = this.localStorageServ.getDataFromLocalStorage();
-    if (userData) {
-      this.store.dispatch(saveUser({ userData }));
+  async ngOnInit(): Promise<void> {
+    let userToken = this.localStorageServ.getDataFromLocalStorage();
+    if (userToken) {
+      this.auth.loginUser(userToken as string).subscribe({
+        next: (userData) => {
+          this.store.dispatch(saveUser({ userData }));
+        },
+        error: (err) => {
+          //TODO session expired popup
+        },
+      });
+    } else {
+      this.router.navigate(['login']);
     }
   }
 }
