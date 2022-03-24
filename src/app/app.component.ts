@@ -15,13 +15,13 @@ export class AppComponent implements OnInit {
   alertIsActive: boolean = false;
   alertMessage!: string;
   constructor(
-    private localStorageServ: LocalStorageService,
-    private store: Store,
+    public localStorageServ: LocalStorageService,
+    public store: Store,
     public auth: AuthService,
-    private router: Router
+    public router: Router
   ) {}
   title = 'front';
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
     let userToken = this.localStorageServ.getDataFromLocalStorage();
     if (userToken) {
       this.auth.loginUser(userToken as string).subscribe({
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
           this.alertMessage = 'Tu sesión ha expirado, redireccionando...';
           setTimeout(() => {
             this.alertIsActive = false;
-            this.alertIsError = true;
+            this.alertIsError = false;
             this.router.navigate(['login']);
           }, 2000);
         },
