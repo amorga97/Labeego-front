@@ -5,7 +5,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { ifProject } from 'src/app/interfaces/interfaces';
-import { mockGetAllProjectsResponse } from 'src/app/mocks/mocks';
+import {
+  mockGetAllProjectsResponse,
+  mockProject,
+  mockUser,
+} from 'src/app/mocks/mocks';
 import { ProjectsService } from 'src/app/services/projects.service';
 import { NewProjectComponent } from './new-project/new-project.component';
 import { ProjectCardComponent } from './project-card/project-card.component';
@@ -16,11 +20,11 @@ import { UserDashboardComponent } from './user-dashboard.component';
 describe('UserDashboardComponent', () => {
   let component: UserDashboardComponent;
   let fixture: ComponentFixture<UserDashboardComponent>;
-  let projectServ: ProjectsService;
-  const mockService = {
-    getAllProjects: jasmine.createSpy('getAllProjects'),
-  };
-  mockService.getAllProjects.and.returnValue(of(mockGetAllProjectsResponse));
+  // let projectServ: ProjectsService;
+  // const mockService = {
+  //   getAllProjects: jasmine.createSpy('getAllProjects'),
+  // };
+  // mockService.getAllProjects.and.returnValue(of(mockGetAllProjectsResponse));
 
   beforeEach(async () => {
     let initialState = {
@@ -45,24 +49,32 @@ describe('UserDashboardComponent', () => {
         ]),
         HttpClientTestingModule,
       ],
-      providers: [
-        provideMockStore({ initialState }),
-        { provide: ProjectsService, useValue: mockService },
-      ],
+      providers: [provideMockStore({ initialState })],
     }).compileComponents();
   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(UserDashboardComponent);
-    projectServ = TestBed.inject(ProjectsService);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  // beforeEach(() => {
+  //   fixture = TestBed.createComponent(UserDashboardComponent);
+  //   projectServ = TestBed.inject(ProjectsService);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  // });
 
   describe('When instanciating UserDashboardComponent', () => {
     it('Should call projectServ.getAllProjects', () => {
-      expect(component).toBeTruthy();
-      // expect(component.projectsServ.getAllProjects).toHaveBeenCalled();
+      const fixture = TestBed.createComponent(UserDashboardComponent);
+      // projectServ = TestBed.inject(ProjectsService);
+      spyOn(
+        fixture.componentInstance.localStorage,
+        'getDataFromLocalStorage'
+      ).and.returnValue(mockUser);
+      spyOn(
+        fixture.componentInstance.projectsServ,
+        'getAllProjects'
+      ).and.returnValue(mockGetAllProjectsResponse);
+      fixture.detectChanges();
+      expect(fixture.componentInstance).toBeTruthy();
+      expect(component.projectsServ.getAllProjects).toHaveBeenCalled();
     });
   });
 });

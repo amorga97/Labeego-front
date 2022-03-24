@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ifProject, UserStore } from 'src/app/interfaces/interfaces';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { ProjectsService } from 'src/app/services/projects.service';
 
 @Component({
@@ -36,30 +37,25 @@ export class UserDashboardComponent implements OnInit {
   projectsWithNoAppointment!: ifProject[];
   constructor(
     public store: Store<{ user: UserStore }>,
-    public projectsServ: ProjectsService
+    public projectsServ: ProjectsService,
+    public localStorage: LocalStorageService
   ) {}
 
   ngOnInit(): void {
-    console.log('Estoy en OnInit');
-    this.store
-      .select((state) => state.user)
-      .subscribe({
-        next: (data: any) => {
-          this.userData = data;
-          this.name = this.userData.name;
-          console.log('Estoy en store.subscribe');
-          this.projectsServ.getAllProjects(this.userData.token).subscribe({
-            next: (data: any[]) => {
-              console.log('Estoy en la getAllProjects');
-              this.projectsWithAppointment = data.filter(
-                (item) => item.appointment && item
-              );
-              this.projectsWithNoAppointment = data.filter(
-                (item) => !item.appointment && item
-              );
-            },
-          });
-        },
-      });
+    this.userData = this.localStorage.getDataFromLocalStorage();
+    console.log('Mocked data', this.userData);
+    this.name = this.userData.name;
+
+    this.projectsServ.getAllProjects(this.userData.token).subscribe({
+      next: (data: any[]) => {
+        console.log('Estoy en la getAllProjects');
+        this.projectsWithAppointment = data.filter(
+          (item) => item.appointment && item
+        );
+        this.projectsWithNoAppointment = data.filter(
+          (item) => !item.appointment && item
+        );
+      },
+    });
   }
 }
