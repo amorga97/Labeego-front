@@ -11,6 +11,15 @@ import { RouterTestingModule } from '@angular/router/testing';
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let initialState = {
+    id: '4f4f4f4f4f4f4f4',
+    teamLeader: 'test',
+    userName: 'test',
+    name: 'test',
+    admin: false,
+    mail: 'test',
+    token: '8k8k8k8k8k8',
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -21,7 +30,7 @@ describe('LoginComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
       ],
-      providers: [provideMockStore()],
+      providers: [provideMockStore({ initialState })],
     }).compileComponents();
   });
 

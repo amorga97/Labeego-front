@@ -6,7 +6,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { CoreModule } from 'src/app/core/core.module';
 import { mockGetAllProjectsResponse, mockUser } from 'src/app/mocks/mocks';
-import { initialState } from 'src/app/store/user.reducer';
 import { NewProjectComponent } from './new-project/new-project.component';
 import { ProjectCardComponent } from './project-card/project-card.component';
 import { UserDashboardComponent } from './user-dashboard.component';

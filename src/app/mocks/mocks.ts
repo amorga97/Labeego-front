@@ -5,6 +5,14 @@ export const mockGetAllProjectsResponse = new Observable<ifProject[]>(() => {
   [mockProject];
 });
 
+export const mockTask = {
+  _id: '623b056b50b6ab73f6fd3493',
+  title: 'estudio del cliente',
+  description: '¿qué desea? ¿con que presupuesto se siente cómodo?',
+  project: '623b056b50b6ab73f6fd3491',
+  status: 'done',
+};
+
 export const mockProject: ifProject = {
   _id: '12345',
   title: 'test',
@@ -15,10 +23,10 @@ export const mockProject: ifProject = {
   status: 'test',
   appointment: new Date(),
   lastUpdate: new Date(),
-  toDo: [],
-  doing: [],
+  toDo: [mockTask],
+  doing: [mockTask],
   toReview: [],
-  done: [],
+  done: [mockTask, mockTask],
 };
 
 export const mockUser: UserStore = {
@@ -30,4 +38,16 @@ export const mockUser: UserStore = {
   admin: true,
   mail: 'test@test.com',
   token: '123456784342geshrtw',
+};
+
+export const mockInitialState = {
+  user: {
+    id: '4f4f4f4f4f4f4f4',
+    teamLeader: 'test',
+    userName: 'test',
+    name: 'test',
+    admin: true,
+    mail: 'test',
+    token: '8k8k8k8k8k8',
+  },
 };
