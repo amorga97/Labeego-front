@@ -16,9 +16,7 @@ export const initialState = {
 export const UserReducer = createReducer(
   initialState,
   on(user.saveUser, (state: UserStore, { userData }) => {
-    const storedData =
-      LocalStorageService.prototype.saveDataToLocalStorage(userData);
-    return { ...state, ...storedData };
+    return { ...state, ...userData };
   }),
   on(user.logout, (state: UserStore) => {
     LocalStorageService.prototype.clearLocalStorage();

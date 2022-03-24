@@ -20,10 +20,20 @@ export class AuthService {
     ) as Observable<UserStore>;
   }
 
-  loginUser(loginData: { userName: string; password: string }) {
-    return this.http.post(
-      this.url + 'login',
-      loginData
-    ) as Observable<UserStore>;
+  loginUser(
+    token?: string,
+    loginData?: { userName: string; password: string }
+  ) {
+    if (token) {
+      return this.http.post(
+        this.url + 'login',
+        { hasToken: true },
+        { headers: { Authorization: `Bearer ${token}` } }
+      ) as Observable<UserStore>;
+    }
+    return this.http.post(this.url + 'login', {
+      ...loginData,
+      hasToken: false,
+    }) as Observable<UserStore>;
   }
 }

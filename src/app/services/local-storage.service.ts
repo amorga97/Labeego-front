@@ -5,21 +5,20 @@ import { UserStore } from '../interfaces/interfaces';
   providedIn: 'root',
 })
 export class LocalStorageService {
-  dataKey: string = 'app-user-info';
-  getDataFromLocalStorage() {
-    if (localStorage.getItem('app-user-info')) {
-      return JSON.parse(localStorage.getItem('app-user-info') as string);
+  getDataFromLocalStorage(): string | null {
+    if (localStorage.getItem('user-token')) {
+      return JSON.parse(localStorage.getItem('user-token') as string);
     }
     return null;
   }
 
-  saveDataToLocalStorage(data: UserStore) {
-    if (!localStorage.getItem('app-user-info')) {
-      localStorage.setItem('app-user-info', JSON.stringify(data));
+  saveDataToLocalStorage(data: string) {
+    if (!localStorage.getItem('user-token')) {
+      return localStorage.setItem('user-token', JSON.stringify(data));
     } else return this.getDataFromLocalStorage();
   }
 
   clearLocalStorage() {
-    localStorage.removeItem('app-user-info');
+    localStorage.removeItem('user-token');
   }
 }

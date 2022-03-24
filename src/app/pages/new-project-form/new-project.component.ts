@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ifClient, UserStore } from 'src/app/interfaces/interfaces';
 import { ClientsService } from 'src/app/services/clients.service';
@@ -20,6 +21,7 @@ export class NewProjectFormComponent implements OnInit {
   selectedClientId!: string;
   constructor(
     private fb: FormBuilder,
+    private router: Router,
     private store: Store<{ user: UserStore }>,
     private clientService: ClientsService,
     private projects: ProjectsService
@@ -85,14 +87,21 @@ export class NewProjectFormComponent implements OnInit {
   }
 
   handleProjectSubmit() {
-    this.projects
-      .create(this.userData.token, {
-        ...this.newProjectForm.value,
-        client: this.selectedClientId,
-      })
-      .subscribe((data) => {
-        console.log(data);
-      });
+    if (this.newProjectForm.valid && this.newProjectForm.controls['client']) {
+      this.projects
+        .create(this.userData.token, {
+          ...this.newProjectForm.value,
+          client: this.selectedClientId,
+        })
+        .subscribe({
+          next: (data) => {
+            //TODO success or error popup
+            this.router.navigate([`project/${data._id}`]);
+          },
+        });
+    } else {
+      //TODO success or error popup
+    }
   }
 
   handleClientSubmit() {
@@ -105,16 +114,21 @@ export class NewProjectFormComponent implements OnInit {
           street: this.newClientForm.value.street as string,
         },
       })
-      .subscribe((data) => console.log('new client', data));
+      .subscribe({
+        next: (data) => {
+          //TODO success or error popup
+        },
+      });
   }
 
   ngOnInit(): void {
     this.store
       .select((state) => state.user)
-      .subscribe((data) => {
-        this.userData = data;
+      .subscribe({
+        next: (data) => {
+          this.userData = data;
+        },
       });
     this.getClients();
-    console.log('clients', this.clients);
   }
 }
