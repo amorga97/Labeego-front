@@ -27,6 +27,8 @@ export class AppComponent implements OnInit {
         },
         error: (err) => {
           //TODO session expired popup
+          console.log(err);
+          this.router.navigate(['login']);
         },
       });
     } else {
