@@ -31,11 +31,11 @@ export class ProjectComponent implements OnInit {
   alertMessage!: string;
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private projects: ProjectsService,
-    private store: Store<{ user: UserStore }>,
+    public router: Router,
+    public projects: ProjectsService,
+    public store: Store<{ user: UserStore }>,
     public localStorage: LocalStorageService,
-    private task: TasksService,
+    public task: TasksService,
     private fb: FormBuilder
   ) {
     this.projectForm = this.fb.group({
@@ -216,6 +216,17 @@ export class ProjectComponent implements OnInit {
           this.doing = this.project.doing as ifTask[];
           this.toReview = this.project.toReview as ifTask[];
           this.done = this.project.done as ifTask[];
+        },
+        error: () => {
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage = 'Ha habido un problema cargando el proyecto';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+            this.alertMessage = '';
+            this.router.navigate(['user-dash']);
+          }, 2000);
         },
       });
   }

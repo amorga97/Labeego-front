@@ -14,7 +14,7 @@ const generateDate = (hoursAgo: number, daysAgo: number) => {
   return new Date(currentDateArray.join(' '));
 };
 
-fdescribe('ProjectCardComponent', () => {
+describe('ProjectCardComponent', () => {
   let component: ProjectCardComponent;
   let fixture: ComponentFixture<ProjectCardComponent>;
   let initialState = mockInitialState;
