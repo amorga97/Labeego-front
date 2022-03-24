@@ -11,6 +11,9 @@ import { saveUser } from './store/user.actions';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
   constructor(
     private localStorageServ: LocalStorageService,
     private store: Store,
@@ -26,9 +29,14 @@ export class AppComponent implements OnInit {
           this.store.dispatch(saveUser({ userData }));
         },
         error: (err) => {
-          //TODO session expired popup
-          console.log(err);
-          this.router.navigate(['login']);
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage = 'Tu sesión ha expirado, redireccionando...';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = true;
+            this.router.navigate(['login']);
+          }, 2000);
         },
       });
     } else {
