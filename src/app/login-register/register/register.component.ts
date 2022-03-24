@@ -3,18 +3,23 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as user from '../../store/user.actions';
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   regForm: FormGroup;
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
   constructor(
     private fb: FormBuilder,
     public auth: AuthService,
-    private store: Store
+    private store: Store,
+    public router: Router
   ) {
     this.regForm = this.fb.group({
       userName: [
@@ -54,12 +59,39 @@ export class RegisterComponent implements OnInit {
   }
 
   handleSubmit() {
-    this.auth.registerUser(this.regForm.value).subscribe((data) => {
-      this.store.dispatch(user.saveUser({ userData: { ...data } }));
-    });
-  }
-
-  ngOnInit(): void {
-    console.log('Form loaded');
+    if (this.regForm.valid) {
+      this.auth.registerUser(this.regForm.value).subscribe({
+        next: (data) => {
+          this.store.dispatch(user.saveUser({ userData: { ...data } }));
+          this.alertIsActive = true;
+          this.alertMessage = 'Te has registrado con éxito';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertMessage = '';
+            this.router.navigate(['user-dash']);
+          }, 1500);
+        },
+        error: () => {
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage = 'Ha ocurrido un problema, prueba de nuevo';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+            this.alertMessage = '';
+          }, 2000);
+        },
+      });
+    } else {
+      this.alertIsActive = true;
+      this.alertIsError = true;
+      this.alertMessage =
+        'Introduce datos válidos en todos los campos del formulario';
+      setTimeout(() => {
+        this.alertIsActive = false;
+        this.alertIsError = false;
+        this.alertMessage = '';
+      }, 2000);
+    }
   }
 }

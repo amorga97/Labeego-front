@@ -2,19 +2,25 @@ import { CommonModule } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { RegisterComponent } from './register.component';
 
-describe('RegisterComponent', () => {
+fdescribe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RegisterComponent],
-      imports: [CommonModule, ReactiveFormsModule, HttpClientTestingModule],
+      imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        HttpClientTestingModule,
+        RouterTestingModule,
+      ],
       providers: [provideMockStore()],
     }).compileComponents();
   });
@@ -23,6 +29,11 @@ describe('RegisterComponent', () => {
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    jasmine.clock().install();
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
   });
 
   it('should create', () => {
@@ -43,14 +54,34 @@ describe('RegisterComponent', () => {
         })
       );
 
-      component.regForm.controls['userName'].setValue('test');
-      component.regForm.controls['name'].setValue('test');
-      component.regForm.controls['password'].setValue('test');
-      component.regForm.controls['mail'].setValue('test');
+      component.regForm.controls['userName'].setValue('testUserName');
+      component.regForm.controls['name'].setValue('testName');
+      component.regForm.controls['password'].setValue('testpassword');
+      component.regForm.controls['mail'].setValue('test@test.test');
 
       component.handleSubmit();
 
       expect(component.auth.registerUser).toHaveBeenCalled();
+    });
+  });
+  describe('When calling handleSubmit with invalid form values', () => {
+    it('Should display an alarm', () => {
+      spyOn(component.auth, 'registerUser').and.returnValue(
+        new Observable(() => {
+          throw new Error('test error');
+        })
+      );
+
+      component.regForm.controls['userName'].setValue('');
+      component.regForm.controls['name'].setValue('');
+      component.regForm.controls['password'].setValue('');
+      component.regForm.controls['mail'].setValue('test');
+
+      component.handleSubmit();
+
+      expect(component.alertIsActive).toBeTrue;
+
+      jasmine.clock().tick(2500);
     });
   });
 });
