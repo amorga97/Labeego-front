@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
   regForm: FormGroup;
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
+    public auth: AuthService,
     private store: Store
   ) {
     this.regForm = this.fb.group({
