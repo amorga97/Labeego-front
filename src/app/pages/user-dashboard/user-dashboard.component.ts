@@ -48,7 +48,7 @@ export class UserDashboardComponent implements OnInit {
     public store: Store<{ user: UserStore }>,
     public projectsServ: ProjectsService,
     public localStorage: LocalStorageService,
-    private router: Router
+    public router: Router
   ) {}
 
   ngOnInit(): void {
@@ -57,14 +57,14 @@ export class UserDashboardComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.userData = data;
-          this.name = this.userData.name;
+          this.name = this.userData?.name;
         },
       });
 
     this.projectsServ
       .getAllProjects(this.localStorage.getDataFromLocalStorage() as string)
       .subscribe({
-        next: (data: any[]) => {
+        next: (data: ifProject[]) => {
           this.projectsWithAppointment = data.filter(
             (item) => item.appointment && item
           );
