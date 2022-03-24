@@ -4,3 +4,8 @@
   <button type="submit">Login</button>
 </form>
 <button (click)="handleLogout()">Logout</button>
+<app-alerts
+  [active]="alertIsActive"
+  [isError]="alertIsError"
+  [message]="alertMessage"
+></app-alerts>

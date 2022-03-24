@@ -13,6 +13,9 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +49,18 @@ export class LoginComponent implements OnInit {
       next: (data) => {
         this.store.dispatch(user.saveUser({ userData: { ...data } }));
         this.localStorage.saveDataToLocalStorage(data.token);
-        this.router.navigate(['user-dash']);
+        this.alertIsActive = true;
+        this.alertMessage = 'Login successful';
+        setTimeout(() => {
+          this.alertIsActive = false;
+          this.router.navigate(['user-dash']);
+        }, 1500);
+      },
+      error: (err) => {
+        this.alertIsActive = true;
+        this.alertIsError = true;
+        this.alertMessage = 'Usuario o contraseña incorrectos';
+        setTimeout(() => {}, 2000);
       },
     });
   }

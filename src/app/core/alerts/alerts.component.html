@@ -1,9 +1,5 @@
-<div class="alert">
-  <h2
-    *ngIf="active"
-    [ngClass]="{ 'alert--error': isError }"
-    class="alert__message"
-  >
+<div *ngIf="active" class="alert">
+  <h2 [ngClass]="{ 'alert--error': isError }" class="alert__message">
     {{ message }}
   </h2>
 </div>
