@@ -61,4 +61,31 @@ fdescribe('LoginComponent', () => {
       expect(component.auth.loginUser).toHaveBeenCalled();
     });
   });
+
+  describe('When handleSubmit is called with an invalid form value', () => {
+    it('Then it should show an alert', () => {
+      spyOn(component.auth, 'loginUser').and.returnValue(
+        new Observable(() => {
+          throw new Error('test error');
+        })
+      );
+      component.loginForm.controls['userName'].setValue('testUser');
+      component.loginForm.controls['password'].setValue('12345');
+
+      component.handleSubmit();
+      expect(component.alertIsActive).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+    });
+  });
+
+  describe('When handleLogout is called', () => {
+    it('Should logOut the user', () => {
+      spyOn(component.store, 'dispatch').and.resolveTo();
+      component.handleLogout();
+      expect(component.store.dispatch).toHaveBeenCalled();
+    });
+  });
 });
