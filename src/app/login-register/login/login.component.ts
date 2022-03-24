@@ -38,8 +38,10 @@ export class LoginComponent implements OnInit {
   }
 
   handleSubmit() {
-    this.auth.loginUser(this.loginForm.value).subscribe((data) => {
-      this.store.dispatch(user.saveUser({ userData: { ...data } }));
+    this.auth.loginUser(undefined, this.loginForm.value).subscribe({
+      next: (data) => {
+        this.store.dispatch(user.saveUser({ userData: { ...data } }));
+      },
     });
   }
 
