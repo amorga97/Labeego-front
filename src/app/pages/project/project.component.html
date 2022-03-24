@@ -11,6 +11,12 @@
   <button type="submit" [disabled]="!projectForm.valid">Guardar cambios</button>
 </form>
 
+<app-alerts
+  [active]="alertIsActive"
+  [isError]="alertIsError"
+  [message]="alertMessage"
+></app-alerts>
+
 <div cdkDropListGroup class="tasks">
   <div class="tasks__container">
     <h2>Por hacer</h2>

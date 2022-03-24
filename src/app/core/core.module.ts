@@ -1,15 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserBarComponent } from './user-bar/user-bar.component';
-
-
+import { AlertsComponent } from './alerts/alerts.component';
 
 @NgModule({
-  declarations: [
-    UserBarComponent
-  ],
-  imports: [
-    CommonModule
-  ]
+  declarations: [UserBarComponent, AlertsComponent],
+  imports: [CommonModule],
+  exports: [CommonModule, UserBarComponent, AlertsComponent],
 })
-export class CoreModule { }
+export class CoreModule {}

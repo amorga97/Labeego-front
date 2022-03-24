@@ -4,6 +4,7 @@ import * as user from '../../store/user.actions';
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +13,15 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
 
   constructor(
     private fb: FormBuilder,
     private store: Store,
     public auth: AuthService,
+    private router: Router,
     public localStorage: LocalStorageService
   ) {
     this.loginForm = this.fb.group({
@@ -44,6 +49,18 @@ export class LoginComponent implements OnInit {
       next: (data) => {
         this.store.dispatch(user.saveUser({ userData: { ...data } }));
         this.localStorage.saveDataToLocalStorage(data.token);
+        this.alertIsActive = true;
+        this.alertMessage = 'Login successful';
+        setTimeout(() => {
+          this.alertIsActive = false;
+          this.router.navigate(['user-dash']);
+        }, 1500);
+      },
+      error: (err) => {
+        this.alertIsActive = true;
+        this.alertIsError = true;
+        this.alertMessage = 'Usuario o contraseña incorrectos';
+        setTimeout(() => {}, 2000);
       },
     });
   }

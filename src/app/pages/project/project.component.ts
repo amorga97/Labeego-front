@@ -26,6 +26,9 @@ export class ProjectComponent implements OnInit {
   toReview!: ifTask[];
   done!: ifTask[];
   projectForm!: FormGroup;
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -143,8 +146,22 @@ export class ProjectComponent implements OnInit {
   handleDelete() {
     this.projects.remove(this.userData.token, this.project._id).subscribe({
       next: () => {
-        //TODO popup success or error
-        this.router.navigate(['user-dash']);
+        this.alertIsActive = true;
+        this.alertMessage = 'Has eliminado este proyecto';
+        setTimeout(() => {
+          this.alertIsActive = false;
+          this.alertIsError = false;
+          this.router.navigate(['user-dash']);
+        }, 1500);
+      },
+      error: () => {
+        this.alertIsActive = true;
+        this.alertIsError = true;
+        this.alertMessage = 'Ha ocurrido un problema eliminando tu proyecto';
+        setTimeout(() => {
+          this.alertIsActive = false;
+          this.alertIsError = false;
+        }, 2000);
       },
     });
   }
@@ -157,7 +174,22 @@ export class ProjectComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          //TODO popup success or error
+          this.alertIsActive = true;
+          this.alertMessage = 'Has actualizado este proyecto';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+          }, 1500);
+        },
+        error: () => {
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage =
+            'Ha ocurrido un problema actualizando tu proyecto';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+          }, 2000);
         },
       });
   }
