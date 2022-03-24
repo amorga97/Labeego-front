@@ -42,8 +42,15 @@ export class UserDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userData = this.localStorage.getDataFromLocalStorage();
-    console.log('Mocked data', this.userData);
+    this.store
+      .select((state) => state.user)
+      .subscribe({
+        next: (data) => {
+          this.userData = data;
+        },
+        //TODO error ?
+      });
+
     this.name = this.userData.name;
 
     this.projectsServ.getAllProjects(this.userData.token).subscribe({

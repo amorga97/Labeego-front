@@ -14,7 +14,7 @@ export class LocalStorageService {
 
   saveDataToLocalStorage(data: UserStore) {
     if (!localStorage.getItem('user-token')) {
-      localStorage.setItem('user-token', JSON.stringify(data));
+      return localStorage.setItem('user-token', JSON.stringify(data));
     } else return this.getDataFromLocalStorage();
   }
 
