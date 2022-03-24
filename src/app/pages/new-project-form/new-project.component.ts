@@ -19,6 +19,9 @@ export class NewProjectFormComponent implements OnInit {
   userData!: UserStore;
   clients!: ifClient[];
   selectedClientId!: string;
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -87,7 +90,8 @@ export class NewProjectFormComponent implements OnInit {
   }
 
   handleProjectSubmit() {
-    if (this.newProjectForm.valid && this.newProjectForm.controls['client']) {
+    console.log(this.selectedClientId);
+    if (this.newProjectForm.valid && this.selectedClientId) {
       this.projects
         .create(this.userData.token, {
           ...this.newProjectForm.value,
@@ -95,12 +99,32 @@ export class NewProjectFormComponent implements OnInit {
         })
         .subscribe({
           next: (data) => {
-            //TODO success or error popup
-            this.router.navigate([`project/${data._id}`]);
+            this.alertIsActive = true;
+            this.alertMessage = '¡Proyecto creado!';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertIsError = false;
+              this.router.navigate([`project/${data._id}`]);
+            }, 2000);
+          },
+          error: () => {
+            this.alertIsActive = true;
+            this.alertIsError = true;
+            this.alertMessage = 'Ha ocurrido un problema creando tu proyecto';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertIsError = false;
+            }, 2000);
           },
         });
     } else {
-      //TODO success or error popup
+      this.alertIsActive = true;
+      this.alertIsError = true;
+      this.alertMessage = 'Completa todos los campos obligatorios';
+      setTimeout(() => {
+        this.alertIsActive = false;
+        this.alertIsError = false;
+      }, 2000);
     }
   }
 
@@ -116,7 +140,21 @@ export class NewProjectFormComponent implements OnInit {
       })
       .subscribe({
         next: (data) => {
-          //TODO success or error popup
+          this.alertIsActive = true;
+          this.alertMessage = 'Cliente añadido';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+          }, 1500);
+        },
+        error: () => {
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage = 'Ha ocurrido un problema añadiendo tu cliente';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+          }, 2000);
         },
       });
   }
