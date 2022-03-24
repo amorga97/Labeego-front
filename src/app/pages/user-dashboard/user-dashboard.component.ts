@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ifProject, UserStore } from 'src/app/interfaces/interfaces';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -7,6 +8,11 @@ import { ProjectsService } from 'src/app/services/projects.service';
 @Component({
   selector: 'app-user-dashboard',
   template: ` <h2 class="dashboard-title">Hola, {{ name }}</h2>
+    <app-alerts
+      [active]="alertIsActive"
+      [isError]="alertIsError"
+      [message]="alertMessage"
+    ></app-alerts>
     <div class="project-cards-wrapper">
       <h3 class="dashboard-subtitle">Proyectos en curso</h3>
       <div class="project-cards-list">
@@ -35,10 +41,14 @@ export class UserDashboardComponent implements OnInit {
   name: string = '';
   projectsWithAppointment!: ifProject[];
   projectsWithNoAppointment!: ifProject[];
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
   constructor(
     public store: Store<{ user: UserStore }>,
     public projectsServ: ProjectsService,
-    public localStorage: LocalStorageService
+    public localStorage: LocalStorageService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -49,14 +59,12 @@ export class UserDashboardComponent implements OnInit {
           this.userData = data;
           this.name = this.userData.name;
         },
-        //TODO error ?
       });
 
     this.projectsServ
       .getAllProjects(this.localStorage.getDataFromLocalStorage() as string)
       .subscribe({
         next: (data: any[]) => {
-          console.log('Estoy en la getAllProjects');
           this.projectsWithAppointment = data.filter(
             (item) => item.appointment && item
           );
@@ -65,8 +73,14 @@ export class UserDashboardComponent implements OnInit {
           );
         },
         error: (err) => {
-          console.log(err);
-          //TODO expired session popup
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage = 'Tu sesión ha expirado, redireccionando...';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = true;
+            this.router.navigate(['login']);
+          }, 2000);
         },
       });
   }
