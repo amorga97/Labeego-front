@@ -4,6 +4,7 @@ import * as user from '../../store/user.actions';
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/services/auth.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store,
     public auth: AuthService,
+    private router: Router,
     public localStorage: LocalStorageService
   ) {
     this.loginForm = this.fb.group({
@@ -44,6 +46,7 @@ export class LoginComponent implements OnInit {
       next: (data) => {
         this.store.dispatch(user.saveUser({ userData: { ...data } }));
         this.localStorage.saveDataToLocalStorage(data.token);
+        this.router.navigate(['user-dash']);
       },
     });
   }
