@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { NewProjectComponent } from './new-project.component';
 
@@ -8,9 +9,9 @@ describe('NewProjectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewProjectComponent ]
-    })
-    .compileComponents();
+      declarations: [NewProjectComponent],
+      imports: [RouterTestingModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +22,13 @@ describe('NewProjectComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('When clicking on the component', () => {
+    it('Should call router.navigate', () => {
+      spyOn(component.router, 'navigate');
+      component.handleClick();
+      expect(component.router.navigate).toHaveBeenCalled();
+    });
   });
 });
