@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as user from '../../store/user.actions';
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/services/auth.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    public auth: AuthService
+    public auth: AuthService,
+    public localStorage: LocalStorageService
   ) {
     this.loginForm = this.fb.group({
       userName: [
@@ -41,6 +43,7 @@ export class LoginComponent implements OnInit {
     this.auth.loginUser(undefined, this.loginForm.value).subscribe({
       next: (data) => {
         this.store.dispatch(user.saveUser({ userData: { ...data } }));
+        this.localStorage.saveDataToLocalStorage(data.token);
       },
     });
   }

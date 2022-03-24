@@ -47,22 +47,27 @@ export class UserDashboardComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.userData = data;
+          this.name = this.userData.name;
         },
         //TODO error ?
       });
 
-    this.name = this.userData.name;
-
-    this.projectsServ.getAllProjects(this.userData.token).subscribe({
-      next: (data: any[]) => {
-        console.log('Estoy en la getAllProjects');
-        this.projectsWithAppointment = data.filter(
-          (item) => item.appointment && item
-        );
-        this.projectsWithNoAppointment = data.filter(
-          (item) => !item.appointment && item
-        );
-      },
-    });
+    this.projectsServ
+      .getAllProjects(this.localStorage.getDataFromLocalStorage() as string)
+      .subscribe({
+        next: (data: any[]) => {
+          console.log('Estoy en la getAllProjects');
+          this.projectsWithAppointment = data.filter(
+            (item) => item.appointment && item
+          );
+          this.projectsWithNoAppointment = data.filter(
+            (item) => !item.appointment && item
+          );
+        },
+        error: (err) => {
+          console.log(err);
+          //TODO expired session popup
+        },
+      });
   }
 }

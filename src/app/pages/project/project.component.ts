@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ifProject, ifTask, UserStore } from 'src/app/interfaces/interfaces';
 import { ProjectsService } from 'src/app/services/projects.service';
@@ -10,6 +10,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { TasksService } from 'src/app/services/tasks.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-project',
@@ -27,8 +28,10 @@ export class ProjectComponent implements OnInit {
   projectForm!: FormGroup;
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private projects: ProjectsService,
     private store: Store<{ user: UserStore }>,
+    public localStorage: LocalStorageService,
     private task: TasksService,
     private fb: FormBuilder
   ) {
@@ -138,9 +141,12 @@ export class ProjectComponent implements OnInit {
   }
 
   handleDelete() {
-    this.projects
-      .remove(this.userData.token, this.project._id)
-      .subscribe((data) => console.log(data));
+    this.projects.remove(this.userData.token, this.project._id).subscribe({
+      next: () => {
+        //TODO popup success or error
+        this.router.navigate(['user-dash']);
+      },
+    });
   }
 
   handleSubmit() {
@@ -149,24 +155,36 @@ export class ProjectComponent implements OnInit {
         ...this.project,
         ...{ ...this.projectForm.value },
       })
-      .subscribe();
+      .subscribe({
+        next: () => {
+          //TODO popup success or error
+        },
+      });
   }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') as string;
     this.store
       .select((state) => state.user)
-      .subscribe((data) => {
-        this.userData = data;
+      .subscribe({
+        next: (data) => {
+          this.userData = data;
+        },
       });
-    this.projects.getOne(this.userData.token, this.id).subscribe((data) => {
-      this.project = data;
-      this.projectForm.get('title')?.setValue(this.project.title);
-      this.projectForm.get('description')?.setValue(this.project.description);
-      this.toDo = this.project.toDo as ifTask[];
-      this.doing = this.project.doing as ifTask[];
-      this.toReview = this.project.toReview as ifTask[];
-      this.done = this.project.done as ifTask[];
-    });
+    this.projects
+      .getOne(this.localStorage.getDataFromLocalStorage() as string, this.id)
+      .subscribe({
+        next: (data) => {
+          this.project = data;
+          this.projectForm.get('title')?.setValue(this.project.title);
+          this.projectForm
+            .get('description')
+            ?.setValue(this.project.description);
+          this.toDo = this.project.toDo as ifTask[];
+          this.doing = this.project.doing as ifTask[];
+          this.toReview = this.project.toReview as ifTask[];
+          this.done = this.project.done as ifTask[];
+        },
+      });
   }
 }
