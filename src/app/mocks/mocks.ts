@@ -29,6 +29,15 @@ export const mockProject: ifProject = {
   done: [mockTask, mockTask],
 };
 
+export const mockClient = {
+  _id: '623ad8099b77229a92739534',
+  name: 'Test',
+  phone: ['123456'],
+  email: 'test@test.com',
+  address: { street: 'test', number: 1 },
+  projects: ['1234556'],
+};
+
 export const mockUser: UserStore = {
   id: '12334',
   teamLeader: '123434',
