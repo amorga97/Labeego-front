@@ -21,7 +21,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     public store: Store,
     public auth: AuthService,
-    private router: Router,
+    public router: Router,
     public localStorage: LocalStorageService
   ) {
     this.loginForm = this.fb.group({

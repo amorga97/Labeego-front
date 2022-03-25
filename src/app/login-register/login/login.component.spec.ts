@@ -62,12 +62,19 @@ describe('LoginComponent', () => {
           token: '8k8k8k8k8k8',
         })
       );
+      spyOn(component.router, 'navigate');
       component.loginForm.controls['userName'].setValue('testUser');
       component.loginForm.controls['password'].setValue('12345');
 
       component.handleSubmit();
 
       expect(component.auth.loginUser).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+      expect(component.alertIsError).toBeFalse();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.router.navigate).toHaveBeenCalled();
     });
   });
 
