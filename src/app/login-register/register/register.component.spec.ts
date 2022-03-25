@@ -53,6 +53,7 @@ describe('RegisterComponent', () => {
           token: '8k8k8k8k8k8',
         })
       );
+      spyOn(component.router, 'navigate');
 
       component.regForm.controls['userName'].setValue('testUserName');
       component.regForm.controls['name'].setValue('testName');
@@ -62,8 +63,16 @@ describe('RegisterComponent', () => {
       component.handleSubmit();
 
       expect(component.auth.registerUser).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+      expect(component.alertIsError).toBeFalse();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.router.navigate).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeFalse();
     });
   });
+
   describe('When calling handleSubmit with invalid form values', () => {
     it('Should display an alarm', () => {
       spyOn(component.auth, 'registerUser').and.returnValue(
@@ -82,6 +91,33 @@ describe('RegisterComponent', () => {
       expect(component.alertIsActive).toBeTrue;
 
       jasmine.clock().tick(2500);
+    });
+  });
+
+  describe('When calling handleSubmit with valid form values but api fails', () => {
+    it('should register the user', () => {
+      spyOn(component.auth, 'registerUser').and.returnValue(
+        new Observable(() => {
+          throw new Error('Test');
+        })
+      );
+      spyOn(component.router, 'navigate');
+
+      component.regForm.controls['userName'].setValue('testUserName');
+      component.regForm.controls['name'].setValue('testName');
+      component.regForm.controls['password'].setValue('testpassword');
+      component.regForm.controls['mail'].setValue('test@test.test');
+
+      component.handleSubmit();
+
+      expect(component.auth.registerUser).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+      expect(component.alertIsError).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.router.navigate).not.toHaveBeenCalled();
+      expect(component.alertIsActive).toBeFalse();
     });
   });
 });
