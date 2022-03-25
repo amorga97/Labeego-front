@@ -5,10 +5,18 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { CoreModule } from 'src/app/core/core.module';
-import { mockGetAllProjectsResponse, mockUser } from 'src/app/mocks/mocks';
+import { ifProject } from 'src/app/interfaces/interfaces';
+import {
+  mockGetAllProjectsResponse,
+  mockProject,
+  mockUser,
+} from 'src/app/mocks/mocks';
 import { NewProjectComponent } from './new-project/new-project.component';
 import { ProjectCardComponent } from './project-card/project-card.component';
 import { UserDashboardComponent } from './user-dashboard.component';
+
+const projWithtoutAppointment = { ...mockProject };
+delete projWithtoutAppointment.appointment;
 
 describe('UserDashboardComponent', () => {
   let component: UserDashboardComponent;
@@ -62,6 +70,24 @@ describe('UserDashboardComponent', () => {
         fixture.componentInstance.projectsServ,
         'getAllProjects'
       ).and.returnValue(mockGetAllProjectsResponse);
+      fixture.detectChanges();
+      expect(
+        fixture.componentInstance.projectsServ.getAllProjects
+      ).toHaveBeenCalled();
+    });
+  });
+
+  describe('When instanciating UserDashboardComponent with a valid token', () => {
+    it('Should call projectServ.getAllProjects', () => {
+      const fixture = TestBed.createComponent(UserDashboardComponent);
+      spyOn(
+        fixture.componentInstance.localStorage,
+        'getDataFromLocalStorage'
+      ).and.returnValue('token');
+      spyOn(
+        fixture.componentInstance.projectsServ,
+        'getAllProjects'
+      ).and.returnValue(of([mockProject, projWithtoutAppointment]));
       fixture.detectChanges();
       expect(
         fixture.componentInstance.projectsServ.getAllProjects
