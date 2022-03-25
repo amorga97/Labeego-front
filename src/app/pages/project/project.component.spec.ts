@@ -9,12 +9,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
+import { CoreModule } from 'src/app/core/core.module';
 import { ifTask } from 'src/app/interfaces/interfaces';
 import { mockInitialState, mockProject, mockTask } from 'src/app/mocks/mocks';
 
 import { ProjectComponent } from './project.component';
 
-describe('ProjectComponent', () => {
+fdescribe('ProjectComponent', () => {
   let component: ProjectComponent;
   let fixture: ComponentFixture<ProjectComponent>;
   let initialState = mockInitialState;
@@ -29,6 +30,7 @@ describe('ProjectComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         DragDropModule,
+        CoreModule,
       ],
       providers: [provideMockStore({ initialState })],
     }).compileComponents();
@@ -84,19 +86,19 @@ describe('ProjectComponent', () => {
     });
   });
 
-  describe('When dropping a task on the done column', () => {
+  describe('When dropping a task on the same column', () => {
     it('Should call on the api to update the data', () => {
       const fixture = TestBed.createComponent(ProjectComponent);
       const component = fixture.componentInstance;
-      const document = fixture.nativeElement as HTMLElement;
       spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
       fixture.detectChanges();
       spyOn(component.projects, 'update').and.returnValue(of(mockProject));
+      const container = { data: ['data', 'data'] };
       component.drop({
-        container: { data: { container: 1 } },
+        container: container,
         previousIndex: 0,
         currentIndex: 1,
-        previousContainer: { data: { container: 2 } },
+        previousContainer: container,
       } as unknown as CdkDragDrop<ifTask[]>);
       expect(component.projects.update).toHaveBeenCalledWith(
         '8k8k8k8k8k8',
@@ -133,6 +135,56 @@ describe('ProjectComponent', () => {
         { ...component.project }
       );
       expect(component.task.changeStatus).toHaveBeenCalled();
+
+      component.drop({
+        currentIndex: 1,
+        container: {
+          data: [{ container: 3 }, { _id: 1 }],
+          id: 'cdk-drop-list-2',
+        },
+        previousIndex: 0,
+        previousContainer: {
+          data: [{ container: 1 }, { _id: 1 }],
+          id: 'cdk-drop-list-1',
+        },
+      } as unknown as CdkDragDrop<ifTask[]>);
+
+      component.drop({
+        currentIndex: 1,
+        container: {
+          data: [{ container: 3 }, { _id: 1 }],
+          id: 'cdk-drop-list-1',
+        },
+        previousIndex: 0,
+        previousContainer: {
+          data: [{ container: 1 }, { _id: 1 }],
+          id: 'cdk-drop-list-1',
+        },
+      } as unknown as CdkDragDrop<ifTask[]>);
+      component.drop({
+        currentIndex: 1,
+        container: {
+          data: [{ container: 3 }, { _id: 1 }],
+          id: 'cdk-drop-list-0',
+        },
+        previousIndex: 0,
+        previousContainer: {
+          data: [{ container: 1 }, { _id: 1 }],
+          id: 'cdk-drop-list-1',
+        },
+      } as unknown as CdkDragDrop<ifTask[]>);
+      component.drop({
+        currentIndex: 1,
+        container: {
+          data: [{ container: 3 }, { _id: 1 }],
+          id: 'test',
+        },
+        previousIndex: 0,
+        previousContainer: {
+          data: [{ container: 1 }, { _id: 1 }],
+          id: 'cdk-drop-list-1',
+        },
+      } as unknown as CdkDragDrop<ifTask[]>);
     });
   });
 

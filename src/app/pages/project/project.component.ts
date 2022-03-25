@@ -73,7 +73,9 @@ export class ProjectComponent implements OnInit {
           doing: [...this.doing],
           toReview: [...this.toReview],
         })
-        .subscribe();
+        .subscribe(() => {
+          console.log('hola');
+        });
     } else {
       transferArrayItem(
         event.previousContainer.data,
