@@ -16,6 +16,7 @@ export class NewUserComponent implements OnInit {
   userData!: UserStore;
   newUserForm: FormGroup;
   isHovering = false;
+  userImage: string = '';
   constructor(
     public store: Store<{ user: UserStore }>,
     public router: Router,
@@ -47,7 +48,6 @@ export class NewUserComponent implements OnInit {
           Validators.maxLength(15),
         ],
       ],
-      userImage: [''],
       mail: [
         '',
         [
@@ -66,13 +66,28 @@ export class NewUserComponent implements OnInit {
     const image = files.files[0];
     console.log('logging on button call', files.files[0]);
     const imageRef = ref(storage, `${Math.random() * 10000}${image.name}`);
-    let imageUrl: string;
     uploadBytes(imageRef, image).then(() => {
       getDownloadURL(imageRef).then((url) => {
-        imageUrl = url;
-        console.log(imageUrl);
+        this.userImage = url;
+        console.log(this.userImage);
       });
     });
+  }
+
+  handleSubmit() {
+    if (this.newUserForm.valid) {
+      this.user
+        .create(this.userData.token, {
+          ...this.newUserForm.value,
+          userImage: this.userImage,
+        })
+        .subscribe({
+          next: (data) => {
+            console.log(data);
+          },
+          error: () => {},
+        });
+    }
   }
 
   ngOnInit(): void {
