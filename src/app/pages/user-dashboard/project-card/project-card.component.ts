@@ -13,12 +13,13 @@ export class ProjectCardComponent implements OnInit {
   @Input() hasAppointment!: boolean;
   lastUpdate!: Object;
   tasks!: ifTask[];
+  admin: boolean = false;
   progress!: number;
   userData!: UserStore;
   appointmentDate!: string;
   constructor(
     private store: Store<{ user: UserStore }>,
-    private router: Router
+    public router: Router
   ) {}
 
   getLastUpdate() {
@@ -40,11 +41,12 @@ export class ProjectCardComponent implements OnInit {
   }
 
   getRelevantTasks() {
-    this.tasks = this.project.doing as ifTask[];
-    const LastDoneTask = (this.project.done as ifTask[])
+    this.tasks = [...(this.project.doing as ifTask[])];
+    const LastDoneTask = [...(this.project.done as ifTask[])]
       .reverse()
-      .find((item) => item.status === 'done');
-    if (LastDoneTask) this.tasks.splice(0, 0, LastDoneTask);
+      .slice(0, 1);
+
+    if (LastDoneTask) this.tasks.splice(0, 0, LastDoneTask[0]);
   }
 
   getProgress() {
@@ -60,7 +62,7 @@ export class ProjectCardComponent implements OnInit {
   getAppointmentDate() {
     if (this.hasAppointment) {
       this.appointmentDate = new Date(
-        this.project.appointment
+        this.project.appointment as Date
       ).toLocaleDateString();
     }
   }
@@ -72,8 +74,11 @@ export class ProjectCardComponent implements OnInit {
   ngOnInit(): void {
     this.store
       .select((state) => state.user)
-      .subscribe((data) => {
-        this.userData = data;
+      .subscribe({
+        next: (data) => {
+          this.userData = data;
+          this.admin = this.userData.admin;
+        },
       });
     this.getLastUpdate();
     this.getRelevantTasks();

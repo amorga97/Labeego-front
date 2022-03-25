@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   loginForm!: FormGroup;
   alertIsError: boolean = false;
   alertIsActive: boolean = false;
@@ -19,9 +19,9 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private store: Store,
+    public store: Store,
     public auth: AuthService,
-    private router: Router,
+    public router: Router,
     public localStorage: LocalStorageService
   ) {
     this.loginForm = this.fb.group({
@@ -60,16 +60,16 @@ export class LoginComponent implements OnInit {
         this.alertIsActive = true;
         this.alertIsError = true;
         this.alertMessage = 'Usuario o contraseña incorrectos';
-        setTimeout(() => {}, 2000);
+        setTimeout(() => {
+          this.alertIsActive = false;
+          this.alertIsError = false;
+          this.alertMessage = '';
+        }, 2000);
       },
     });
   }
 
   handleLogout() {
     this.store.dispatch(user.logout());
-  }
-
-  ngOnInit(): void {
-    console.log('Form loaded');
   }
 }

@@ -24,10 +24,10 @@ export class NewProjectFormComponent implements OnInit {
   alertMessage!: string;
   constructor(
     private fb: FormBuilder,
-    private router: Router,
+    public router: Router,
     private store: Store<{ user: UserStore }>,
-    private clientService: ClientsService,
-    private projects: ProjectsService
+    public clientService: ClientsService,
+    public projects: ProjectsService
   ) {
     this.newProjectForm = fb.group({
       title: [
@@ -78,7 +78,6 @@ export class NewProjectFormComponent implements OnInit {
   }
 
   getClients() {
-    console.log(this.userData.token);
     this.clientService.getAllClients(this.userData.token).subscribe((data) => {
       this.clients = data;
     });
@@ -86,11 +85,9 @@ export class NewProjectFormComponent implements OnInit {
 
   handleClick(item: ifClient) {
     this.selectedClientId = item._id;
-    console.log(this.selectedClientId);
   }
 
   handleProjectSubmit() {
-    console.log(this.selectedClientId);
     if (this.newProjectForm.valid && this.selectedClientId) {
       this.projects
         .create(this.userData.token, {
@@ -129,34 +126,44 @@ export class NewProjectFormComponent implements OnInit {
   }
 
   handleClientSubmit() {
-    this.clientService
-      .create(this.userData.token, {
-        name: this.newClientForm.value.name as string,
-        email: this.newClientForm.value.email as string,
-        address: {
-          number: +this.newClientForm.value.number,
-          street: this.newClientForm.value.street as string,
-        },
-      })
-      .subscribe({
-        next: (data) => {
-          this.alertIsActive = true;
-          this.alertMessage = 'Cliente añadido';
-          setTimeout(() => {
-            this.alertIsActive = false;
-            this.alertIsError = false;
-          }, 1500);
-        },
-        error: () => {
-          this.alertIsActive = true;
-          this.alertIsError = true;
-          this.alertMessage = 'Ha ocurrido un problema añadiendo tu cliente';
-          setTimeout(() => {
-            this.alertIsActive = false;
-            this.alertIsError = false;
-          }, 2000);
-        },
-      });
+    if (this.newClientForm.valid) {
+      this.clientService
+        .create(this.userData.token, {
+          name: this.newClientForm.value.name as string,
+          email: this.newClientForm.value.email as string,
+          address: {
+            number: +this.newClientForm.value.number,
+            street: this.newClientForm.value.street as string,
+          },
+        })
+        .subscribe({
+          next: (data) => {
+            this.alertIsActive = true;
+            this.alertMessage = 'Cliente añadido';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertIsError = false;
+            }, 1500);
+          },
+          error: () => {
+            this.alertIsActive = true;
+            this.alertIsError = true;
+            this.alertMessage = 'Ha ocurrido un problema añadiendo tu cliente';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertIsError = false;
+            }, 2000);
+          },
+        });
+    } else {
+      this.alertIsActive = true;
+      this.alertIsError = true;
+      this.alertMessage = 'Completa todos los campos obligatorios';
+      setTimeout(() => {
+        this.alertIsActive = false;
+        this.alertIsError = false;
+      }, 2000);
+    }
   }
 
   ngOnInit(): void {

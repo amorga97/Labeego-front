@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./new-project.component.scss'],
 })
 export class NewProjectComponent {
-  constructor(private router: Router) {}
+  constructor(public router: Router) {}
   handleClick() {
     return this.router.navigate(['new-project']);
   }

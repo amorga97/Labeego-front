@@ -4,27 +4,24 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
+import { CoreModule } from 'src/app/core/core.module';
 import { ifProject } from 'src/app/interfaces/interfaces';
 import {
   mockGetAllProjectsResponse,
   mockProject,
   mockUser,
 } from 'src/app/mocks/mocks';
-import { ProjectsService } from 'src/app/services/projects.service';
 import { NewProjectComponent } from './new-project/new-project.component';
 import { ProjectCardComponent } from './project-card/project-card.component';
-import { UserDashboardRoutingModule } from './user-dashboar-routing.module';
-
 import { UserDashboardComponent } from './user-dashboard.component';
+
+const projWithtoutAppointment = { ...mockProject };
+delete projWithtoutAppointment.appointment;
 
 describe('UserDashboardComponent', () => {
   let component: UserDashboardComponent;
   let fixture: ComponentFixture<UserDashboardComponent>;
-  // let projectServ: ProjectsService;
-  // const mockService = {
-  //   getAllProjects: jasmine.createSpy('getAllProjects'),
-  // };
-  // mockService.getAllProjects.and.returnValue(of(mockGetAllProjectsResponse));
+  let mockObj: jasmine.SpyObj<{}>;
 
   beforeEach(async () => {
     let initialState = {
@@ -48,33 +45,84 @@ describe('UserDashboardComponent', () => {
           { path: 'user-dash', component: UserDashboardComponent },
         ]),
         HttpClientTestingModule,
+        CoreModule,
       ],
       providers: [provideMockStore({ initialState })],
     }).compileComponents();
   });
 
-  // beforeEach(() => {
-  //   fixture = TestBed.createComponent(UserDashboardComponent);
-  //   projectServ = TestBed.inject(ProjectsService);
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
-  // });
+  beforeEach(() => {
+    jasmine.clock().install();
+    mockObj = jasmine.createSpyObj('getDataMock', ['subscribe']);
+  });
 
-  describe('When instanciating UserDashboardComponent', () => {
+  afterEach(() => {
+    jasmine.clock().uninstall();
+  });
+  describe('When instanciating UserDashboardComponent with a valid token', () => {
     it('Should call projectServ.getAllProjects', () => {
       const fixture = TestBed.createComponent(UserDashboardComponent);
-      // projectServ = TestBed.inject(ProjectsService);
       spyOn(
         fixture.componentInstance.localStorage,
         'getDataFromLocalStorage'
-      ).and.returnValue(mockUser);
+      ).and.returnValue('token');
       spyOn(
         fixture.componentInstance.projectsServ,
         'getAllProjects'
       ).and.returnValue(mockGetAllProjectsResponse);
       fixture.detectChanges();
+      expect(
+        fixture.componentInstance.projectsServ.getAllProjects
+      ).toHaveBeenCalled();
+    });
+  });
+
+  describe('When instanciating UserDashboardComponent with a valid token', () => {
+    it('Should call projectServ.getAllProjects', () => {
+      const fixture = TestBed.createComponent(UserDashboardComponent);
+      spyOn(
+        fixture.componentInstance.localStorage,
+        'getDataFromLocalStorage'
+      ).and.returnValue('token');
+      spyOn(
+        fixture.componentInstance.projectsServ,
+        'getAllProjects'
+      ).and.returnValue(of([mockProject, projWithtoutAppointment]));
+      fixture.detectChanges();
+      expect(
+        fixture.componentInstance.projectsServ.getAllProjects
+      ).toHaveBeenCalled();
+    });
+  });
+
+  describe('When instanciating UserDashboardComponent with an expired token', () => {
+    it('Should call router.navigate', () => {
+      const fixture = TestBed.createComponent(UserDashboardComponent);
+
+      spyOn(
+        fixture.componentInstance.localStorage,
+        'getDataFromLocalStorage'
+      ).and.returnValue('token');
+
+      spyOn(
+        fixture.componentInstance.projectsServ,
+        'getAllProjects'
+      ).and.returnValue(
+        new Observable(() => {
+          throw new Error('test error');
+        })
+      );
+
+      spyOn(fixture.componentInstance.router, 'navigate').and.resolveTo();
+      fixture.detectChanges();
       expect(fixture.componentInstance).toBeTruthy();
-      expect(component.projectsServ.getAllProjects).toHaveBeenCalled();
+      expect(
+        fixture.componentInstance.projectsServ.getAllProjects
+      ).toHaveBeenCalled();
+
+      jasmine.clock().tick(2500);
+
+      expect(fixture.componentInstance.router.navigate).toHaveBeenCalled();
     });
   });
 });
