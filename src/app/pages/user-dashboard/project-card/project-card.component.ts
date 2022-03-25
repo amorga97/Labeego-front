@@ -45,7 +45,6 @@ export class ProjectCardComponent implements OnInit {
     const LastDoneTask = [...(this.project.done as ifTask[])]
       .reverse()
       .slice(0, 1);
-
     if (LastDoneTask) this.tasks.splice(0, 0, LastDoneTask[0]);
   }
 

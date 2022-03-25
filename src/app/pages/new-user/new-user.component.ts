@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { UserStore } from 'src/app/interfaces/interfaces';
 import { UserService } from 'src/app/services/user.service';
+import { storage } from 'src/app/utils/firebase';
 
 @Component({
   selector: 'app-new-user',
@@ -13,6 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 export class NewUserComponent implements OnInit {
   userData!: UserStore;
   newUserForm: FormGroup;
+  isHovering = false;
   constructor(
     public store: Store<{ user: UserStore }>,
     public router: Router,
@@ -57,7 +60,20 @@ export class NewUserComponent implements OnInit {
     });
   }
 
-  handleSubmit() {}
+  @ViewChild('fileDropRef', { static: false }) fileDropEl!: ElementRef;
+  files: any;
+  fileBrowseHandler(files: any) {
+    const image = files.files[0];
+    console.log('logging on button call', files.files[0]);
+    const imageRef = ref(storage, `${Math.random() * 10000}${image.name}`);
+    let imageUrl: string;
+    uploadBytes(imageRef, image).then(() => {
+      getDownloadURL(imageRef).then((url) => {
+        imageUrl = url;
+        console.log(imageUrl);
+      });
+    });
+  }
 
   ngOnInit(): void {
     this.store

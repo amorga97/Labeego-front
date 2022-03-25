@@ -13,10 +13,11 @@ import { CoreModule } from './core/core.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { ProjectModule } from './pages/project/project.module';
-import { DropzoneDirective } from './directives/dropzone.directive';
+// import { DropzoneDirective } from './directives/dropzone.directive';
+import { NewUserModule } from './pages/new-user/new-user.module';
 
 @NgModule({
-  declarations: [AppComponent, DropzoneDirective],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -28,6 +29,7 @@ import { DropzoneDirective } from './directives/dropzone.directive';
     UserDashboardModule,
     CoreModule,
     ProjectModule,
+    NewUserModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production, // Restrict extension to log-only mode
