@@ -15,7 +15,7 @@ import { mockInitialState, mockProject, mockTask } from 'src/app/mocks/mocks';
 
 import { ProjectComponent } from './project.component';
 
-fdescribe('ProjectComponent', () => {
+describe('ProjectComponent', () => {
   let component: ProjectComponent;
   let fixture: ComponentFixture<ProjectComponent>;
   let initialState = mockInitialState;

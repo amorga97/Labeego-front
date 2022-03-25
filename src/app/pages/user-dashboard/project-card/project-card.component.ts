@@ -19,7 +19,7 @@ export class ProjectCardComponent implements OnInit {
   appointmentDate!: string;
   constructor(
     private store: Store<{ user: UserStore }>,
-    private router: Router
+    public router: Router
   ) {}
 
   getLastUpdate() {

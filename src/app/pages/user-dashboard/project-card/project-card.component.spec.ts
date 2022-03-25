@@ -117,4 +117,17 @@ describe('ProjectCardComponent', () => {
       expect(document.querySelector('.project-card__user-image')).toBeNull();
     });
   });
+
+  describe('When clicking on the card', () => {
+    it('Should call router.navigate', () => {
+      const fixture = TestBed.createComponent(ProjectCardComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      component.project = { ...mockProject, lastUpdate: generateDate(0, 2) };
+      fixture.detectChanges();
+      spyOn(component.router, 'navigate');
+      component.handleClick();
+      expect(component.router.navigate).toHaveBeenCalled();
+    });
+  });
 });
