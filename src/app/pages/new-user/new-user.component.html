@@ -1,0 +1,25 @@
+<form [formGroup]="newUserForm" (ngSubmit)="handleSubmit()">
+  value: {{ newUserForm.value | json }}
+  <input type="text" placeholder="user name" formControlName="userName" />
+  <input type="text" placeholder="name" formControlName="name" />
+  <input type="text" placeholder="email" formControlName="mail" />
+  <input
+    type="password"
+    placeholder="password"
+    id=""
+    formControlName="password"
+  />
+  <button type="submit">Create new user</button>
+</form>
+<div class="container">
+  <input
+    type="file"
+    #fileDropRef
+    id="fileDropRef"
+    multiple
+    (change)="fileBrowseHandler($event.target)"
+  />
+  <h3>Drag and drop file here</h3>
+  <h3>or</h3>
+  <label for="fileDropRef">Browse for file</label>
+</div>

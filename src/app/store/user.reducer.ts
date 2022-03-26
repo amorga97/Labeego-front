@@ -8,7 +8,7 @@ export const initialState = {
   teamLeader: '',
   userName: '',
   name: '',
-  admin: false,
+  admin: true,
   mail: '',
   token: '',
 };
