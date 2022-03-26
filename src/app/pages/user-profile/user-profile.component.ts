@@ -21,7 +21,11 @@ export class UserProfileComponent implements OnInit {
   userData!: UserStore;
   userDataForm!: FormGroup;
   userImage!: string;
+  imageToUpload: string | undefined = undefined;
   imageRef!: string;
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
   constructor(
     public store: Store<{ user: UserStore }>,
     private fb: FormBuilder,
@@ -63,7 +67,7 @@ export class UserProfileComponent implements OnInit {
     const imageRef = ref(storage, `${Math.random() * 10000}${image.name}`);
     uploadBytes(imageRef, image).then(() => {
       getDownloadURL(imageRef).then((url) => {
-        this.userImage = url;
+        this.imageToUpload = url;
       });
     });
   }
@@ -86,33 +90,74 @@ export class UserProfileComponent implements OnInit {
               },
             })
           );
+          this.alertIsActive = true;
+          this.alertMessage = 'Datos actualizados';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertMessage = '';
+          }, 1500);
         },
-        error: () => {},
+        error: () => {
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage = 'Ha ocurrido un error actualizando tus datos';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+            this.alertMessage = '';
+          }, 1500);
+        },
       });
   }
 
   handleImageUpdate() {
-    this.user
-      .update(
-        this.userData.token,
-        { userImage: this.userImage },
-        this.userData.id
-      )
-      .subscribe({
-        next: (data: any) => {
-          this.store.dispatch(
-            updateUser({
-              userData: {
-                userImage: data.userImage,
-              },
-            })
-          );
-        },
-        error: () => {},
-      });
-    try {
-      deleteObject(ref(storage, this.imageRef));
-    } catch (err) {}
+    if (this.imageToUpload) {
+      this.user
+        .update(
+          this.userData.token,
+          { userImage: this.imageToUpload as string },
+          this.userData.id
+        )
+        .subscribe({
+          next: (data: any) => {
+            this.store.dispatch(
+              updateUser({
+                userData: {
+                  userImage: data.userImage,
+                },
+              })
+            );
+            this.alertIsActive = true;
+            this.alertMessage = 'Imagen actualizada';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertMessage = '';
+            }, 1500);
+          },
+          error: () => {
+            this.alertIsActive = true;
+            this.alertIsError = true;
+            this.alertMessage = 'Ha ocurrido un error actualizando tu imagen';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertIsError = false;
+              this.alertMessage = '';
+            }, 1500);
+          },
+        });
+      try {
+        deleteObject(ref(storage, this.imageRef));
+      } catch (err) {}
+    } else {
+      this.alertIsActive = true;
+      this.alertIsError = true;
+      this.alertMessage = 'Sube una imagen para actualizar';
+      setTimeout(() => {
+        this.alertIsActive = false;
+        this.alertIsError = false;
+        this.alertMessage = '';
+      }, 1500);
+    }
   }
 
   getPathStorageFromUrl(url: String) {
