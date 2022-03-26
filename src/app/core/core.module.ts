@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { TeamComponent } from './team/team.component';
 
 @NgModule({
-  declarations: [UserBarComponent, AlertsComponent, SidebarComponent],
+  declarations: [UserBarComponent, AlertsComponent, SidebarComponent, TeamComponent],
   imports: [CommonModule],
   exports: [CommonModule, UserBarComponent, AlertsComponent],
 })
