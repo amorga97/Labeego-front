@@ -1,1 +1,6 @@
-<p>team works!</p>
+<ul class="team">
+  <li *ngFor="let item of team">
+    <img [src]="item.userImage" alt="" srcset="" />
+    <p>{{ item.name }}</p>
+  </li>
+</ul>
