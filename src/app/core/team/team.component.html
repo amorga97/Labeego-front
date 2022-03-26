@@ -1,4 +1,5 @@
 <ul class="team">
+  <li><p (click)="handleNewUser()">New user</p></li>
   <li *ngFor="let item of team">
     <img [src]="item.userImage" alt="" srcset="" />
     <p>{{ item.name }}</p>
