@@ -198,6 +198,7 @@ export class ProjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') as string;
+    console.log(this.route);
     this.store
       .select((state) => state.user)
       .subscribe({

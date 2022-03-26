@@ -8,33 +8,35 @@ import { ProjectsService } from 'src/app/services/projects.service';
 @Component({
   selector: 'app-user-dashboard',
   template: `
-    <h2 class="dashboard-title">Hola, {{ name }}</h2>
-    <app-alerts
-      [active]="alertIsActive"
-      [isError]="alertIsError"
-      [message]="alertMessage"
-    ></app-alerts>
-    <div class="project-cards-wrapper">
-      <h3 class="dashboard-subtitle">Proyectos en curso</h3>
-      <div class="project-cards-list">
-        <app-new-project></app-new-project>
-        <app-project-card
-          *ngFor="let item of projectsWithNoAppointment"
-          class="project list"
-          [hasAppointment]="false"
-          [project]="item"
-        ></app-project-card>
+    <app-layout>
+      <h2 class="dashboard-title">Hola, {{ name }}</h2>
+      <app-alerts
+        [active]="alertIsActive"
+        [isError]="alertIsError"
+        [message]="alertMessage"
+      ></app-alerts>
+      <div class="project-cards-wrapper">
+        <h3 class="dashboard-subtitle">Proyectos en curso</h3>
+        <div class="project-cards-list">
+          <app-new-project></app-new-project>
+          <app-project-card
+            *ngFor="let item of projectsWithNoAppointment"
+            class="project list"
+            [hasAppointment]="false"
+            [project]="item"
+          ></app-project-card>
+        </div>
+        <h3 class="dashboard-subtitle">Esperando aprobación</h3>
+        <div class="project-cards-list">
+          <app-project-card
+            *ngFor="let item of projectsWithAppointment"
+            class="project list"
+            [hasAppointment]="true"
+            [project]="item"
+          ></app-project-card>
+        </div>
       </div>
-      <h3 class="dashboard-subtitle">Esperando aprobación</h3>
-      <div class="project-cards-list">
-        <app-project-card
-          *ngFor="let item of projectsWithAppointment"
-          class="project list"
-          [hasAppointment]="true"
-          [project]="item"
-        ></app-project-card>
-      </div>
-    </div>
+    </app-layout>
   `,
   styleUrls: ['./user-dashboard.component.scss'],
 })
