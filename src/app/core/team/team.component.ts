@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserStore } from 'src/app/interfaces/interfaces';
 
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
-  styleUrls: ['./team.component.scss']
+  styleUrls: ['./team.component.scss'],
 })
-export class TeamComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class TeamComponent {
+  @Input() team!: Partial<UserStore>[];
+  constructor() {}
 }

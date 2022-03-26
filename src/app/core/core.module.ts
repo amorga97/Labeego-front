@@ -9,8 +9,16 @@ import { LayoutComponent } from './layout/layout.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @NgModule({
-  declarations: [UserBarComponent, AlertsComponent, SidebarComponent, TeamComponent, ProjectListComponent, LayoutComponent, NavBarComponent],
+  declarations: [
+    UserBarComponent,
+    AlertsComponent,
+    SidebarComponent,
+    TeamComponent,
+    ProjectListComponent,
+    LayoutComponent,
+    NavBarComponent,
+  ],
   imports: [CommonModule],
-  exports: [CommonModule, UserBarComponent, AlertsComponent],
+  exports: [CommonModule, UserBarComponent, AlertsComponent, LayoutComponent],
 })
 export class CoreModule {}

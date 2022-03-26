@@ -7,7 +7,8 @@ import { ProjectsService } from 'src/app/services/projects.service';
 
 @Component({
   selector: 'app-user-dashboard',
-  template: ` <h2 class="dashboard-title">Hola, {{ name }}</h2>
+  template: `
+    <h2 class="dashboard-title">Hola, {{ name }}</h2>
     <app-alerts
       [active]="alertIsActive"
       [isError]="alertIsError"
@@ -33,7 +34,8 @@ import { ProjectsService } from 'src/app/services/projects.service';
           [project]="item"
         ></app-project-card>
       </div>
-    </div>`,
+    </div>
+  `,
   styleUrls: ['./user-dashboard.component.scss'],
 })
 export class UserDashboardComponent implements OnInit {

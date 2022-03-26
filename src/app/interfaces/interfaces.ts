@@ -4,6 +4,7 @@ export interface UserStore {
   userName: string;
   userImage?: string;
   name: string;
+  team: Partial<UserStore>[];
   admin: boolean;
   mail: string;
   token: string;

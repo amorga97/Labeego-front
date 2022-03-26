@@ -9,6 +9,7 @@ export const initialState = {
   userName: '',
   name: '',
   admin: true,
+  team: [] as Partial<UserStore>[],
   mail: '',
   token: '',
 };
