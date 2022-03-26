@@ -1,1 +1,6 @@
-<p>user-bar works!</p>
+<div class="user-bar">
+  <img class="user-bar__image" [src]="user.userImage" alt="user" />
+  <h2 class="user-bar__name">{{ user.name }}</h2>
+  <img class="user-bar__options" src="./assets/settings.svg" />
+  <p class="user-bar__edit">Edit profile</p>
+</div>
