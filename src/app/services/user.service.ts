@@ -15,4 +15,10 @@ export class UserService {
       headers: { Authorization: `Bearer ${token}` },
     }) as Observable<UserStore>;
   }
+
+  update(token: string, user: Partial<UserStore>, id: string) {
+    return this.http.patch(environment.backUrl + `users/${id}`, user, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
 }

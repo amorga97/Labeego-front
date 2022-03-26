@@ -13,8 +13,8 @@ import { CoreModule } from './core/core.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { ProjectModule } from './pages/project/project.module';
-// import { DropzoneDirective } from './directives/dropzone.directive';
 import { NewUserModule } from './pages/new-user/new-user.module';
+import { UserProfileModule } from './pages/user-profile/user-profile.module';
 
 @NgModule({
   declarations: [AppComponent],

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserStore } from 'src/app/interfaces/interfaces';
 
 @Component({
@@ -8,5 +9,9 @@ import { UserStore } from 'src/app/interfaces/interfaces';
 })
 export class UserBarComponent {
   @Input() user!: UserStore;
-  constructor() {}
+  constructor(public router: Router) {}
+
+  handleClick() {
+    this.router.navigate(['profile']);
+  }
 }
