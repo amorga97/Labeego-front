@@ -1,1 +1,20 @@
-<p>project-list works!</p>
+<h2>Proyectos</h2>
+<ul class="project-list">
+  <li
+    (click)="handleClick(item)"
+    class="project-list__item"
+    *ngFor="let item of projectsWithAppointment"
+  >
+    <p class="project-list__title">{{ item.title }}</p>
+    <p class="project-list__date">
+      {{ item.appointment?.toLocaleDateString() }}
+    </p>
+  </li>
+  <li
+    (click)="handleClick(item)"
+    class="project-list__item"
+    *ngFor="let item of projectsWithoutAppointment"
+  >
+    <p class="project-list__title">{{ item.title }}</p>
+  </li>
+</ul>
