@@ -60,6 +60,8 @@ describe('LoginComponent', () => {
           admin: false,
           mail: 'test',
           token: '8k8k8k8k8k8',
+          team: [],
+          userImage: 'someurl',
         })
       );
       spyOn(component.router, 'navigate');

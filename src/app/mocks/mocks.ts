@@ -45,6 +45,7 @@ export const mockUser: UserStore = {
   userImage: 'image-url',
   name: 'Antonio',
   admin: true,
+  team: [] as Partial<UserStore>[],
   mail: 'test@test.com',
   token: '123456784342geshrtw',
 };

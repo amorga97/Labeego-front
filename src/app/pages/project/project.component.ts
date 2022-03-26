@@ -73,9 +73,7 @@ export class ProjectComponent implements OnInit {
           doing: [...this.doing],
           toReview: [...this.toReview],
         })
-        .subscribe(() => {
-          console.log('hola');
-        });
+        .subscribe(() => {});
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -198,7 +196,6 @@ export class ProjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') as string;
-    console.log(this.route);
     this.store
       .select((state) => state.user)
       .subscribe({

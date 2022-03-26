@@ -24,13 +24,10 @@ export class ProjectListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.projects);
-
     this.projectsService
       .getAllProjects(this.localStorage.getDataFromLocalStorage() as string)
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.projects = data;
           this.projectsWithAppointment = this.projects?.filter(
             (item) => item.appointment && item

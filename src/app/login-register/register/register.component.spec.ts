@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
+import { mockUser } from 'src/app/mocks/mocks';
 
 import { RegisterComponent } from './register.component';
 
@@ -42,17 +43,7 @@ describe('RegisterComponent', () => {
 
   describe('When calling handleSubmit with valid form values', () => {
     it('should register the user', () => {
-      spyOn(component.auth, 'registerUser').and.returnValue(
-        of({
-          id: '4f4f4f4f4f4f4f4',
-          teamLeader: 'test',
-          userName: 'test',
-          name: 'test',
-          admin: false,
-          mail: 'test',
-          token: '8k8k8k8k8k8',
-        })
-      );
+      spyOn(component.auth, 'registerUser').and.returnValue(of(mockUser));
       spyOn(component.router, 'navigate');
 
       component.regForm.controls['userName'].setValue('testUserName');
