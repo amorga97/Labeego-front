@@ -2,7 +2,7 @@ export interface UserStore {
   id: string;
   teamLeader: string;
   userName: string;
-  userImage?: string;
+  userImage: string;
   name: string;
   team: Partial<UserStore>[];
   admin: boolean;

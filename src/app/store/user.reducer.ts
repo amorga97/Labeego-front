@@ -10,6 +10,7 @@ export const initialState = {
   name: '',
   admin: true,
   team: [] as Partial<UserStore>[],
+  userImage: '',
   mail: '',
   token: '',
 };
@@ -22,5 +23,8 @@ export const UserReducer = createReducer(
   on(user.logout, (state: UserStore) => {
     LocalStorageService.prototype.clearLocalStorage();
     return initialState;
+  }),
+  on(user.updateUser, (state: UserStore, { userData }) => {
+    return { ...state, ...userData };
   })
 );
