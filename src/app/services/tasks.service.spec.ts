@@ -15,7 +15,6 @@ describe('TasksService', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    service = TestBed.inject(TasksService);
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TasksService);
   });
