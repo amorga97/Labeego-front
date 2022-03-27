@@ -65,10 +65,17 @@ export class ProjectCardComponent implements OnInit {
         });
       }
     } else {
-      this.tasks = (this.project.toReview as ifTask[]).map((item) => ({
-        task: item,
-        icon: '/assets/in-progress.svg',
-      }));
+      (this.project.toReview as ifTask[]).length <= 3
+        ? (this.tasks = (this.project.toReview as ifTask[]).map((item) => ({
+            task: item,
+            icon: '/assets/in-progress.svg',
+          })))
+        : (this.tasks = (this.project.toReview as ifTask[])
+            .slice(0, 3)
+            .map((item) => ({
+              task: item,
+              icon: '/assets/in-progress.svg',
+            })));
     }
   }
 

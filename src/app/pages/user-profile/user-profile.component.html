@@ -1,28 +1,30 @@
-<img [src]="userData.userImage" alt="user" />
-<form [formGroup]="userDataForm" (ngSubmit)="handleSubmit()">
-  value: {{ userDataForm.value | json }}
-  <input type="text" placeholder="user name" formControlName="userName" />
-  <input type="text" placeholder="name" formControlName="name" />
-  <input type="text" placeholder="email" formControlName="mail" />
-  <button type="submit">Create new user</button>
-</form>
-<app-alerts
-  [active]="alertIsActive"
-  [isError]="alertIsError"
-  [message]="alertMessage"
-></app-alerts>
-<div class="container">
-  <input
-    type="file"
-    #fileDropRef
-    id="fileDropRef"
-    multiple
-    (change)="fileBrowseHandler($event.target)"
-  />
-  <h3>Drag and drop file here</h3>
-  <h3>or</h3>
-  <label for="fileDropRef">Browse for file</label>
-</div>
-<button (click)="handleImageUpdate()" class="image-update">
-  Actualizar imagen
-</button>
+<app-layout>
+  <img [src]="userData.userImage" alt="user" />
+  <form [formGroup]="userDataForm" (ngSubmit)="handleSubmit()">
+    value: {{ userDataForm.value | json }}
+    <input type="text" placeholder="user name" formControlName="userName" />
+    <input type="text" placeholder="name" formControlName="name" />
+    <input type="text" placeholder="email" formControlName="mail" />
+    <button type="submit">Create new user</button>
+  </form>
+  <app-alerts
+    [active]="alertIsActive"
+    [isError]="alertIsError"
+    [message]="alertMessage"
+  ></app-alerts>
+  <div class="container">
+    <input
+      type="file"
+      #fileDropRef
+      id="fileDropRef"
+      multiple
+      (change)="fileBrowseHandler($event.target)"
+    />
+    <h3>Drag and drop file here</h3>
+    <h3>or</h3>
+    <label for="fileDropRef">Browse for file</label>
+  </div>
+  <button (click)="handleImageUpdate()" class="image-update">
+    Actualizar imagen
+  </button>
+</app-layout>
