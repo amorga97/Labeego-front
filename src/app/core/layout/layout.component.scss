@@ -1,0 +1,13 @@
+main {
+  display: flex;
+  height: 100%;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 25vw;
+  box-shadow: 10px 0px 20px 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
