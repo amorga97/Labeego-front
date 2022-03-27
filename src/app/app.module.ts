@@ -16,15 +16,6 @@ import { ProjectModule } from './pages/project/project.module';
 import { NewUserModule } from './pages/new-user/new-user.module';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage/';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyCFoNdju5Y2lBTbG0YLSZdsKy7phVBlVcs',
-  authDomain: 'final-isdi-coders.firebaseapp.com',
-  projectId: 'final-isdi-coders',
-  storageBucket: 'final-isdi-coders.appspot.com',
-  messagingSenderId: '649528423764',
-  appId: '1:649528423764:web:92f3c8ba54d724bcb5c4c1',
-};
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -39,7 +30,7 @@ const firebaseConfig = {
     CoreModule,
     ProjectModule,
     NewUserModule,
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25,

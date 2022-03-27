@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { getDownloadURL, ref, deleteObject } from 'firebase/storage';
+import { getDownloadURL, ref } from 'firebase/storage';
 import { UserStore } from 'src/app/interfaces/interfaces';
 import { UserService } from 'src/app/services/user.service';
 import { updateUser } from 'src/app/store/user.actions';
@@ -60,11 +60,12 @@ export class UserProfileComponent implements OnInit {
   fileBrowseHandler(files: any) {
     const image = files.files[0];
     const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
-    const imageRef = this.storage.ref(filePath);
     this.storage.upload(filePath, image).then(() => {
-      getDownloadURL(ref(this.storage.storage, filePath)).then((url) => {
-        this.imageToUpload = url;
-      });
+      try {
+        getDownloadURL(ref(this.storage.storage, filePath)).then((url) => {
+          this.imageToUpload = url;
+        });
+      } catch (err) {}
     });
   }
 
@@ -144,14 +145,7 @@ export class UserProfileComponent implements OnInit {
           },
         });
       try {
-        this.storage
-          .refFromURL(this.userData.userImage)
-          .delete()
-          .subscribe({
-            next: (data) => {
-              console.log('Image successfully deleted', data);
-            },
-          });
+        this.storage.refFromURL(this.userData.userImage).delete().subscribe();
       } catch (err) {}
     } else {
       this.alertIsActive = true;

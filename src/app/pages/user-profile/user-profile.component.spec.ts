@@ -7,11 +7,14 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { CoreModule } from 'src/app/core/core.module';
 import { mockInitialState, mockUser } from 'src/app/mocks/mocks';
-import * as firebase from 'firebase/storage';
 
 import { UserProfileComponent } from './user-profile.component';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFireModule } from '@angular/fire/compat';
+import { environment } from 'src/environments/environment';
+import { ref } from 'firebase/storage';
 
-fdescribe('UserProfileComponent', () => {
+describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
   let fixture: ComponentFixture<UserProfileComponent>;
   const initialState = mockInitialState;
@@ -24,6 +27,8 @@ fdescribe('UserProfileComponent', () => {
         ReactiveFormsModule,
         HttpClientTestingModule,
         RouterTestingModule,
+        AngularFireStorageModule,
+        AngularFireModule.initializeApp(environment.firebase),
         CoreModule,
       ],
       providers: [provideMockStore({ initialState })],
@@ -120,22 +125,39 @@ fdescribe('UserProfileComponent', () => {
     });
   });
 
-  describe('When calling fileBrowseHandler', () => {
-    it('Should call on the api and dispatch an update action', () => {
-      spyOn(component.user, 'update').and.returnValue(of(mockUser));
+  describe('When calling handleImageUpdate having uploaded an image but having api problems', () => {
+    it('Should show an alert', () => {
+      spyOn(component.user, 'update').and.returnValue(
+        new Observable(() => {
+          throw new Error('test');
+        })
+      );
       spyOn(component.store, 'dispatch');
-      spyOnProperty(firebase, 'uploadBytes');
+      spyOn(component.storage, 'refFromURL').and.returnValue((() => {
+        new Observable(() => {});
+      }) as any);
       component.imageToUpload = 'url';
-      component.fileBrowseHandler({
-        files: [new File(['this is a test'], 'test')],
-      });
-      expect(firebase.uploadBytes).toHaveBeenCalled();
-      expect(component.store.dispatch).toHaveBeenCalled();
+      component.handleImageUpdate();
+      expect(component.user.update).toHaveBeenCalled();
+      expect(component.store.dispatch).not.toHaveBeenCalled();
       expect(component.alertIsActive).toBeTrue();
 
       jasmine.clock().tick(2500);
 
       expect(component.alertIsActive).toBeFalse();
+    });
+  });
+
+  describe('When calling fileBrowseHandler', () => {
+    it('Should call on the api and dispatch an update action', () => {
+      spyOn(component.user, 'update').and.returnValue(of(mockUser));
+      spyOn(component.store, 'dispatch');
+      spyOn(component.storage, 'upload').and.resolveTo();
+      component.imageToUpload = 'url';
+      component.fileBrowseHandler({
+        files: [new File(['this is a test'], 'test')],
+      });
+      expect(component.storage.upload).toHaveBeenCalled();
     });
   });
 });
