@@ -130,3 +130,8 @@ Thumbs.db
 
 # Sonarqube files
 .scannerwork
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json

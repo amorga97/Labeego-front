@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { UserStore } from 'src/app/interfaces/interfaces';
 import { UserService } from 'src/app/services/user.service';
-import { storage } from 'src/app/utils/firebase';
 
 @Component({
   selector: 'app-new-user',
@@ -21,7 +21,8 @@ export class NewUserComponent implements OnInit {
     public store: Store<{ user: UserStore }>,
     public router: Router,
     public user: UserService,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    public storage: AngularFireStorage
   ) {
     this.newUserForm = fb.group({
       userName: [
@@ -64,9 +65,10 @@ export class NewUserComponent implements OnInit {
   files: any;
   fileBrowseHandler(files: any) {
     const image = files.files[0];
-    const imageRef = ref(storage, `${Math.random() * 10000}${image.name}`);
-    uploadBytes(imageRef, image).then(() => {
-      getDownloadURL(imageRef).then((url) => {
+    const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
+    const imageRef = this.storage.ref(filePath);
+    this.storage.upload(filePath, image).then(() => {
+      getDownloadURL(ref(this.storage.storage, filePath)).then((url) => {
         this.userImage = url;
       });
     });

@@ -14,8 +14,17 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { ProjectModule } from './pages/project/project.module';
 import { NewUserModule } from './pages/new-user/new-user.module';
-import { UserProfileModule } from './pages/user-profile/user-profile.module';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage/';
 
+const firebaseConfig = {
+  apiKey: 'AIzaSyCFoNdju5Y2lBTbG0YLSZdsKy7phVBlVcs',
+  authDomain: 'final-isdi-coders.firebaseapp.com',
+  projectId: 'final-isdi-coders',
+  storageBucket: 'final-isdi-coders.appspot.com',
+  messagingSenderId: '649528423764',
+  appId: '1:649528423764:web:92f3c8ba54d724bcb5c4c1',
+};
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -30,6 +39,8 @@ import { UserProfileModule } from './pages/user-profile/user-profile.module';
     CoreModule,
     ProjectModule,
     NewUserModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireStorageModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production, // Restrict extension to log-only mode

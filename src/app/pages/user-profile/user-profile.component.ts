@@ -1,16 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  deleteObject,
-} from 'firebase/storage';
+import { getDownloadURL, ref, deleteObject } from 'firebase/storage';
 import { UserStore } from 'src/app/interfaces/interfaces';
 import { UserService } from 'src/app/services/user.service';
 import { updateUser } from 'src/app/store/user.actions';
-import { storage } from 'src/app/utils/firebase';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,14 +17,14 @@ export class UserProfileComponent implements OnInit {
   userDataForm!: FormGroup;
   userImage!: string;
   imageToUpload: string | undefined = undefined;
-  imageRef!: string;
   alertIsError: boolean = false;
   alertIsActive: boolean = false;
   alertMessage!: string;
   constructor(
     public store: Store<{ user: UserStore }>,
     private fb: FormBuilder,
-    public user: UserService
+    public user: UserService,
+    public storage: AngularFireStorage
   ) {
     this.userDataForm = this.fb.group({
       userName: [
@@ -64,9 +59,10 @@ export class UserProfileComponent implements OnInit {
   files: any;
   fileBrowseHandler(files: any) {
     const image = files.files[0];
-    const imageRef = ref(storage, `${Math.random() * 10000}${image.name}`);
-    uploadBytes(imageRef, image).then(() => {
-      getDownloadURL(imageRef).then((url) => {
+    const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
+    const imageRef = this.storage.ref(filePath);
+    this.storage.upload(filePath, image).then(() => {
+      getDownloadURL(ref(this.storage.storage, filePath)).then((url) => {
         this.imageToUpload = url;
       });
     });
@@ -133,6 +129,7 @@ export class UserProfileComponent implements OnInit {
               this.alertIsActive = false;
               this.alertMessage = '';
             }, 1500);
+            this.imageToUpload = undefined;
           },
           error: () => {
             this.alertIsActive = true;
@@ -143,10 +140,18 @@ export class UserProfileComponent implements OnInit {
               this.alertIsError = false;
               this.alertMessage = '';
             }, 1500);
+            this.imageToUpload = undefined;
           },
         });
       try {
-        deleteObject(ref(storage, this.imageRef));
+        this.storage
+          .refFromURL(this.userData.userImage)
+          .delete()
+          .subscribe({
+            next: (data) => {
+              console.log('Image successfully deleted', data);
+            },
+          });
       } catch (err) {}
     } else {
       this.alertIsActive = true;
@@ -160,17 +165,6 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  getPathStorageFromUrl(url: String) {
-    const baseUrl =
-      'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/';
-    let imagePath: string = url.replace(baseUrl, '');
-    const indexOfEndPath = imagePath.indexOf('?');
-    imagePath = imagePath.substring(0, indexOfEndPath);
-    imagePath = imagePath.replace('%2F', '/');
-
-    return imagePath;
-  }
-
   ngOnInit(): void {
     this.store
       .select((store) => store.user)
@@ -179,9 +173,6 @@ export class UserProfileComponent implements OnInit {
           this.userData = data;
           const { name, userName, mail } = this.userData;
           this.userDataForm.setValue({ name, userName, mail });
-          this.imageRef = this.getPathStorageFromUrl(
-            this.userData.userImage as string
-          );
         },
       });
   }

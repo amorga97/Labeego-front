@@ -5,7 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
+import { CoreModule } from 'src/app/core/core.module';
 import { mockInitialState, mockUser } from 'src/app/mocks/mocks';
+import * as firebase from 'firebase/storage';
 
 import { UserProfileComponent } from './user-profile.component';
 
@@ -22,6 +24,7 @@ fdescribe('UserProfileComponent', () => {
         ReactiveFormsModule,
         HttpClientTestingModule,
         RouterTestingModule,
+        CoreModule,
       ],
       providers: [provideMockStore({ initialState })],
     }).compileComponents();
@@ -31,6 +34,11 @@ fdescribe('UserProfileComponent', () => {
     fixture = TestBed.createComponent(UserProfileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    jasmine.clock().install();
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
   });
 
   it('should create', () => {
@@ -47,6 +55,11 @@ fdescribe('UserProfileComponent', () => {
       component.handleSubmit();
       expect(component.user.update).toHaveBeenCalled();
       expect(component.store.dispatch).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
     });
   });
 
@@ -64,16 +77,65 @@ fdescribe('UserProfileComponent', () => {
       component.handleSubmit();
       expect(component.user.update).toHaveBeenCalled();
       expect(component.store.dispatch).not.toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+      expect(component.alertIsError).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+      expect(component.alertIsError).toBeFalse();
     });
   });
 
-  describe('When calling uploading an image and handleImageUpdate with valid params', () => {
-    it('Should call on the api and dispatch an update action', () => {
+  describe('When calling handleImageUpdate without uploading an image', () => {
+    it('Should throw an alert', () => {
       spyOn(component.user, 'update').and.returnValue(of(mockUser));
       spyOn(component.store, 'dispatch');
       component.handleImageUpdate();
+      expect(component.user.update).not.toHaveBeenCalled();
+      expect(component.store.dispatch).not.toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+      expect(component.alertIsError).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+      expect(component.alertIsError).toBeFalse();
+    });
+  });
+
+  describe('When calling handleImageUpdate having uploaded an image', () => {
+    it('Should call on the api and dispatch an update action', () => {
+      spyOn(component.user, 'update').and.returnValue(of(mockUser));
+      spyOn(component.store, 'dispatch');
+      component.imageToUpload = 'url';
+      component.handleImageUpdate();
       expect(component.user.update).toHaveBeenCalled();
       expect(component.store.dispatch).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+    });
+  });
+
+  describe('When calling fileBrowseHandler', () => {
+    it('Should call on the api and dispatch an update action', () => {
+      spyOn(component.user, 'update').and.returnValue(of(mockUser));
+      spyOn(component.store, 'dispatch');
+      spyOnProperty(firebase, 'uploadBytes');
+      component.imageToUpload = 'url';
+      component.fileBrowseHandler({
+        files: [new File(['this is a test'], 'test')],
+      });
+      expect(firebase.uploadBytes).toHaveBeenCalled();
+      expect(component.store.dispatch).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
     });
   });
 });
