@@ -14,8 +14,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { ProjectModule } from './pages/project/project.module';
 import { NewUserModule } from './pages/new-user/new-user.module';
-import { UserProfileModule } from './pages/user-profile/user-profile.module';
-
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage/';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -30,6 +30,8 @@ import { UserProfileModule } from './pages/user-profile/user-profile.module';
     CoreModule,
     ProjectModule,
     NewUserModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireStorageModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production, // Restrict extension to log-only mode

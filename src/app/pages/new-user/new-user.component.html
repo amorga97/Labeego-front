@@ -12,6 +12,11 @@
     />
     <button type="submit">Create new user</button>
   </form>
+  <app-alerts
+    [active]="alertIsActive"
+    [isError]="alertIsError"
+    [message]="alertMessage"
+  ></app-alerts>
   <div class="container">
     <input
       type="file"

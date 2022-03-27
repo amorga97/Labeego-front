@@ -1,16 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  deleteObject,
-} from 'firebase/storage';
+import { getDownloadURL, ref } from 'firebase/storage';
 import { UserStore } from 'src/app/interfaces/interfaces';
 import { UserService } from 'src/app/services/user.service';
 import { updateUser } from 'src/app/store/user.actions';
-import { storage } from 'src/app/utils/firebase';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
   selector: 'app-user-profile',
@@ -21,11 +16,15 @@ export class UserProfileComponent implements OnInit {
   userData!: UserStore;
   userDataForm!: FormGroup;
   userImage!: string;
-  imageRef!: string;
+  imageToUpload: string | undefined = undefined;
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
   constructor(
     public store: Store<{ user: UserStore }>,
     private fb: FormBuilder,
-    public user: UserService
+    public user: UserService,
+    public storage: AngularFireStorage
   ) {
     this.userDataForm = this.fb.group({
       userName: [
@@ -60,12 +59,10 @@ export class UserProfileComponent implements OnInit {
   files: any;
   fileBrowseHandler(files: any) {
     const image = files.files[0];
-    console.log('logging on button call', files.files[0]);
-    const imageRef = ref(storage, `${Math.random() * 10000}${image.name}`);
-    uploadBytes(imageRef, image).then(() => {
-      getDownloadURL(imageRef).then((url) => {
-        this.userImage = url;
-        console.log(this.userImage);
+    const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
+    this.storage.upload(filePath, image).then((data) => {
+      data.ref.getDownloadURL().then((url) => {
+        this.imageToUpload = url;
       });
     });
   }
@@ -88,44 +85,76 @@ export class UserProfileComponent implements OnInit {
               },
             })
           );
+          this.alertIsActive = true;
+          this.alertMessage = 'Datos actualizados';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertMessage = '';
+          }, 1500);
         },
-        error: () => {},
+        error: () => {
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage = 'Ha ocurrido un error actualizando tus datos';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+            this.alertMessage = '';
+          }, 1500);
+        },
       });
   }
 
   handleImageUpdate() {
-    this.user
-      .update(
-        this.userData.token,
-        { userImage: this.userImage },
-        this.userData.id
-      )
-      .subscribe({
-        next: (data: any) => {
-          this.store.dispatch(
-            updateUser({
-              userData: {
-                userImage: data.userImage,
-              },
-            })
-          );
-        },
-        error: () => {},
-      });
-    try {
-      deleteObject(ref(storage, this.imageRef));
-    } catch (err) {}
-  }
-
-  getPathStorageFromUrl(url: String) {
-    const baseUrl =
-      'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/';
-    let imagePath: string = url.replace(baseUrl, '');
-    const indexOfEndPath = imagePath.indexOf('?');
-    imagePath = imagePath.substring(0, indexOfEndPath);
-    imagePath = imagePath.replace('%2F', '/');
-
-    return imagePath;
+    if (this.imageToUpload) {
+      this.user
+        .update(
+          this.userData.token,
+          { userImage: this.imageToUpload as string },
+          this.userData.id
+        )
+        .subscribe({
+          next: (data: any) => {
+            this.store.dispatch(
+              updateUser({
+                userData: {
+                  userImage: data.userImage,
+                },
+              })
+            );
+            this.alertIsActive = true;
+            this.alertMessage = 'Imagen actualizada';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertMessage = '';
+            }, 1500);
+            this.imageToUpload = undefined;
+          },
+          error: () => {
+            this.alertIsActive = true;
+            this.alertIsError = true;
+            this.alertMessage = 'Ha ocurrido un error actualizando tu imagen';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertIsError = false;
+              this.alertMessage = '';
+            }, 1500);
+            this.imageToUpload = undefined;
+          },
+        });
+      try {
+        this.storage.refFromURL(this.userData.userImage).delete().subscribe();
+      } catch (err) {}
+    } else {
+      this.alertIsActive = true;
+      this.alertIsError = true;
+      this.alertMessage = 'Sube una imagen para actualizar';
+      setTimeout(() => {
+        this.alertIsActive = false;
+        this.alertIsError = false;
+        this.alertMessage = '';
+      }, 1500);
+    }
   }
 
   ngOnInit(): void {
@@ -136,9 +165,6 @@ export class UserProfileComponent implements OnInit {
           this.userData = data;
           const { name, userName, mail } = this.userData;
           this.userDataForm.setValue({ name, userName, mail });
-          this.imageRef = this.getPathStorageFromUrl(
-            this.userData.userImage as string
-          );
         },
       });
   }
