@@ -9,33 +9,35 @@ import { ProjectsService } from 'src/app/services/projects.service';
   selector: 'app-user-dashboard',
   template: `
     <app-layout>
-      <h2 class="dashboard-title">Hola, {{ name }}</h2>
       <app-alerts
+        class="alert"
         [active]="alertIsActive"
         [isError]="alertIsError"
         [message]="alertMessage"
       ></app-alerts>
       <div class="project-cards-wrapper">
-        <h3 class="dashboard-subtitle">Proyectos en curso</h3>
-        <div class="project-cards-list">
-          <app-new-project></app-new-project>
-          <app-project-card
-            *ngFor="let item of projectsWithNoAppointment; let i = index"
-            class="project list"
-            [index]="i"
-            [hasAppointment]="false"
-            [project]="item"
-          ></app-project-card>
+        <div className="projects projects--no-appointment">
+          <h2 class="projects__title">Proyectos en curso</h2>
+          <div class="projects__list-container">
+            <app-new-project></app-new-project>
+            <app-project-card
+              *ngFor="let item of projectsWithNoAppointment; let i = index"
+              [index]="i"
+              [hasAppointment]="false"
+              [project]="item"
+            ></app-project-card>
+          </div>
         </div>
-        <h3 class="dashboard-subtitle">Esperando aprobación</h3>
-        <div class="project-cards-list">
-          <app-project-card
-            *ngFor="let item of projectsWithAppointment; let i = index"
-            class="project list"
-            [index]="i"
-            [hasAppointment]="true"
-            [project]="item"
-          ></app-project-card>
+        <div className="projects projects--no-appointment">
+          <h2 class="projects__title">Esperando aprobación</h2>
+          <div class="projects__list-container">
+            <app-project-card
+              *ngFor="let item of projectsWithAppointment; let i = index"
+              [index]="i"
+              [hasAppointment]="true"
+              [project]="item"
+            ></app-project-card>
+          </div>
         </div>
       </div>
     </app-layout>

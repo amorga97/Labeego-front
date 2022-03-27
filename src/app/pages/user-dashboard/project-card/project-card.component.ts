@@ -14,7 +14,7 @@ export class ProjectCardComponent implements OnInit {
   @Input() hasAppointment!: boolean;
   @Input() index!: number;
   lastUpdate!: Object;
-  tasks!: ifTask[];
+  tasks: { task: ifTask; icon: string }[] = [];
   admin: boolean = false;
   progress!: number;
   userData!: UserStore;
@@ -43,9 +43,32 @@ export class ProjectCardComponent implements OnInit {
   }
 
   getRelevantTasks() {
-    this.tasks = [...(this.project.done as ifTask[])].slice(0, 2);
-    if (!this.tasks.length) {
-      this.tasks = (this.project.toDo as ifTask[]).slice(0, 2);
+    if (!this.hasAppointment) {
+      if ((this.project.toDo as ifTask[]).length > 0) {
+        this.tasks.push({
+          task: (this.project.toDo as ifTask[]).slice(0, 1)[0],
+          icon: '/assets/to-do.svg',
+        });
+      }
+
+      if ((this.project.doing as ifTask[]).length > 0) {
+        this.tasks.push({
+          task: (this.project.doing as ifTask[]).slice(0, 1)[0],
+          icon: '/assets/in-progress.svg',
+        });
+      }
+
+      if ((this.project.done as ifTask[]).length > 0) {
+        this.tasks.push({
+          task: (this.project.done as ifTask[]).slice(0, 1)[0],
+          icon: '/assets/check.svg',
+        });
+      }
+    } else {
+      this.tasks = (this.project.toReview as ifTask[]).map((item) => ({
+        task: item,
+        icon: '/assets/in-progress.svg',
+      }));
     }
   }
 

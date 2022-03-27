@@ -21,12 +21,8 @@
     </div>
     <ul class="project-card__task-list">
       <li *ngFor="let item of tasks" class="project-card__task">
-        <img
-          class="project-card__task-icon"
-          src="/assets/to-do.svg"
-          alt="to-do"
-        />
-        <p class="project-card__task-title">{{ item?.title }}</p>
+        <img class="project-card__task-icon" [src]="item.icon" alt="to-do" />
+        <p class="project-card__task-title">{{ item?.task?.title }}</p>
       </li>
     </ul>
   </div>
