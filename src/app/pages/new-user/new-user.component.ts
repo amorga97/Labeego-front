@@ -3,7 +3,6 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { UserStore } from 'src/app/interfaces/interfaces';
 import { UserService } from 'src/app/services/user.service';
 
@@ -16,7 +15,10 @@ export class NewUserComponent implements OnInit {
   userData!: UserStore;
   newUserForm: FormGroup;
   isHovering = false;
-  userImage: string = '';
+  alertIsError: boolean = false;
+  alertIsActive: boolean = false;
+  alertMessage!: string;
+  imageToUpload: undefined | string = undefined;
   constructor(
     public store: Store<{ user: UserStore }>,
     public router: Router,
@@ -66,25 +68,53 @@ export class NewUserComponent implements OnInit {
   fileBrowseHandler(files: any) {
     const image = files.files[0];
     const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
-    const imageRef = this.storage.ref(filePath);
-    this.storage.upload(filePath, image).then(() => {
-      getDownloadURL(ref(this.storage.storage, filePath)).then((url) => {
-        this.userImage = url;
+    this.storage.upload(filePath, image).then((data) => {
+      data.ref.getDownloadURL().then((url) => {
+        this.imageToUpload = url;
       });
     });
   }
 
   handleSubmit() {
     if (this.newUserForm.valid) {
+      if (this.imageToUpload === undefined) {
+        this.imageToUpload =
+          'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/UserImages%2Fdef-user.png?alt=media&token=8d581c44-e983-4a54-a78d-39adef2ab5d9';
+      }
       this.user
         .create(this.userData.token, {
           ...this.newUserForm.value,
-          userImage: this.userImage,
+          userImage: this.imageToUpload,
         })
         .subscribe({
-          next: (data) => {},
-          error: () => {},
+          next: (data) => {
+            this.alertIsActive = true;
+            this.alertMessage = 'Usuario creado con éxito';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertMessage = '';
+            }, 1500);
+          },
+          error: () => {
+            this.alertIsActive = true;
+            this.alertIsError = true;
+            this.alertMessage = 'Ha ocurrido un error creando el usuario';
+            setTimeout(() => {
+              this.alertIsActive = false;
+              this.alertIsError = false;
+              this.alertMessage = '';
+            }, 1500);
+          },
         });
+    } else {
+      this.alertIsActive = true;
+      this.alertIsError = true;
+      this.alertMessage = 'Completa todos los campos';
+      setTimeout(() => {
+        this.alertIsActive = false;
+        this.alertIsError = false;
+        this.alertMessage = '';
+      }, 1500);
     }
   }
 

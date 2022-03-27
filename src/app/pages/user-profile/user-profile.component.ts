@@ -60,12 +60,10 @@ export class UserProfileComponent implements OnInit {
   fileBrowseHandler(files: any) {
     const image = files.files[0];
     const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
-    this.storage.upload(filePath, image).then(() => {
-      try {
-        getDownloadURL(ref(this.storage.storage, filePath)).then((url) => {
-          this.imageToUpload = url;
-        });
-      } catch (err) {}
+    this.storage.upload(filePath, image).then((data) => {
+      data.ref.getDownloadURL().then((url) => {
+        this.imageToUpload = url;
+      });
     });
   }
 
