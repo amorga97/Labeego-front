@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AuthService } from './services/auth.service';
 import { LocalStorageService } from './services/local-storage.service';
-import { saveUser } from './store/user.actions';
+import { logout, saveUser } from './store/user.actions';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
           this.store.dispatch(saveUser({ userData }));
         },
         error: (err) => {
+          this.store.dispatch(logout());
           this.alertIsActive = true;
           this.alertIsError = true;
           this.alertMessage = 'Tu sesión ha expirado, redireccionando...';
