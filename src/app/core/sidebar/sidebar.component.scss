@@ -1,0 +1,10 @@
+.item-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  overflow: auto;
+  height: 100%;
+  padding-top: 70px;
+  padding-left: 20px;
+  padding-right: 20px;
+}

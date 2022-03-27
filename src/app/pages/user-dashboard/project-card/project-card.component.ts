@@ -61,7 +61,7 @@ export class ProjectCardComponent implements OnInit {
   getAppointmentDate() {
     if (this.hasAppointment) {
       this.appointmentDate = new Date(
-        this.project.appointment as Date
+        this.project.appointment as string
       ).toLocaleDateString();
     }
   }

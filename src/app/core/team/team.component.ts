@@ -9,6 +9,7 @@ import { UserStore } from 'src/app/interfaces/interfaces';
 })
 export class TeamComponent {
   @Input() team!: Partial<UserStore>[];
+  @Input() admin!: boolean;
   constructor(public router: Router) {}
 
   handleNewUser() {

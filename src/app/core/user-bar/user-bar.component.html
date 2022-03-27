@@ -1,17 +1,18 @@
 <div class="user-bar">
   <div class="user-bar__data">
-    <div class="user-bar__data-img-wrapper">
+    <div class="user-bar__data-img-wrapper" (click)="goHome()">
       <img class="user-bar__data-image" [src]="user.userImage" alt="user" />
     </div>
-    <h2 class="user-bar__data-name">{{ user.name }}</h2>
   </div>
   <div class="user-bar__options">
     <img class="user-bar__options-dots" src="./assets/settings.svg" />
     <ul class="user-bar__options-list">
-      <li (click)="handleClick()" class="user-bar__options-item">
+      <li (click)="handleClick('profile')" class="user-bar__options-item">
         Edit profile
       </li>
-      <li (click)="handleClick()" class="user-bar__options-item">Logout</li>
+      <li (click)="handleClick('logout')" class="user-bar__options-item">
+        Logout
+      </li>
     </ul>
   </div>
 </div>

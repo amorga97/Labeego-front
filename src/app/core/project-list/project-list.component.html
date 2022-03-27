@@ -1,20 +1,19 @@
-<h2>Proyectos</h2>
 <ul class="project-list">
   <li
     (click)="handleClick(item)"
-    class="project-list__item"
+    class="project-list__item project-list__item--with-appointment"
     *ngFor="let item of projectsWithAppointment"
   >
-    <p class="project-list__title">{{ item.title }}</p>
+    <p class="project-list__item-title">{{ item.title }}</p>
     <p class="project-list__date">
-      {{ item.appointment?.toLocaleDateString() }}
+      {{ item.appointment }}
     </p>
   </li>
   <li
     (click)="handleClick(item)"
-    class="project-list__item"
+    class="project-list__item project-list__item--without-appointment"
     *ngFor="let item of projectsWithoutAppointment"
   >
-    <p class="project-list__title">{{ item.title }}</p>
+    <p class="project-list__item-title">{{ item.title }}</p>
   </li>
 </ul>
