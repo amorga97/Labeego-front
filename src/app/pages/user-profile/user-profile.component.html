@@ -1,28 +1,62 @@
 <app-layout>
-  <img [src]="userData.userImage" alt="user" />
-  <form [formGroup]="userDataForm" (ngSubmit)="handleSubmit()">
-    value: {{ userDataForm.value | json }}
-    <input type="text" placeholder="user name" formControlName="userName" />
-    <input type="text" placeholder="name" formControlName="name" />
-    <input type="text" placeholder="email" formControlName="mail" />
-    <button type="submit">Create new user</button>
-  </form>
   <app-alerts
     [active]="alertIsActive"
     [isError]="alertIsError"
     [message]="alertMessage"
   ></app-alerts>
-  <div class="container">
+  <div class="user-data">
+    <div class="user-data__wrapper">
+      <form
+        class="user-data__form"
+        [formGroup]="userDataForm"
+        (ngSubmit)="handleSubmit()"
+      >
+        <input
+          class="user-data__form-field"
+          type="text"
+          placeholder="user name"
+          formControlName="userName"
+        />
+        <input
+          class="user-data__form-field"
+          type="text"
+          placeholder="name"
+          formControlName="name"
+        />
+        <input
+          class="user-data__form-field"
+          type="text"
+          placeholder="email"
+          formControlName="mail"
+        />
+        <button class="user-data__form-field" type="submit">
+          Guardar cambios
+        </button>
+      </form>
+      <div class="user-data__image-wrapper">
+        <img
+          class="user-data__image-preview"
+          [src]="userData.userImage"
+          alt="user"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    id="dropzone
+  "
+    class="container"
+  >
     <input
       type="file"
       #fileDropRef
       id="fileDropRef"
       multiple
-      (change)="fileBrowseHandler($event.target)"
+      (dragend)="fileBrowseHandler($event.target)"
     />
-    <h3>Drag and drop file here</h3>
-    <h3>or</h3>
-    <label for="fileDropRef">Browse for file</label>
+    <p>Arrastra tu foto aquí</p>
+    <p>o</p>
+    <label for="fileDropRef">Busca un archivo</label>
   </div>
   <button (click)="handleImageUpdate()" class="image-update">
     Actualizar imagen

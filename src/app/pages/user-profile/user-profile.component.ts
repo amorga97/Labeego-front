@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { getDownloadURL, ref } from 'firebase/storage';
 import { UserStore } from 'src/app/interfaces/interfaces';
 import { UserService } from 'src/app/services/user.service';
 import { updateUser } from 'src/app/store/user.actions';
@@ -63,6 +62,9 @@ export class UserProfileComponent implements OnInit {
     this.storage.upload(filePath, image).then((data) => {
       data.ref.getDownloadURL().then((url) => {
         this.imageToUpload = url;
+        document
+          .getElementsByClassName('user-data__image-preview')[0]
+          .setAttribute('src', this.imageToUpload);
       });
     });
   }
