@@ -10,7 +10,7 @@ import { ProjectListComponent } from './project-list.component';
 const projWithtoutAppointment = { ...mockProject };
 delete projWithtoutAppointment.appointment;
 
-fdescribe('ProjectListComponent', () => {
+describe('ProjectListComponent', () => {
   let component: ProjectListComponent;
   let fixture: ComponentFixture<ProjectListComponent>;
 

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { TeamComponent } from './team.component';
 
@@ -8,9 +9,9 @@ describe('TeamComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TeamComponent ]
-    })
-    .compileComponents();
+      declarations: [TeamComponent],
+      imports: [RouterTestingModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +20,11 @@ describe('TeamComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('When calling component.handleNewUser', () => {
+    it('Should navigate to the new user form page', () => {
+      spyOn(component.router, 'navigate');
+      component.handleNewUser();
+      expect(component.router.navigate).toHaveBeenCalled();
+    });
   });
 });
