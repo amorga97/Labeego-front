@@ -8,6 +8,7 @@ import { CoreModule } from 'src/app/core/core.module';
 import { ifProject } from 'src/app/interfaces/interfaces';
 import {
   mockGetAllProjectsResponse,
+  mockInitialState,
   mockProject,
   mockUser,
 } from 'src/app/mocks/mocks';
@@ -22,17 +23,9 @@ describe('UserDashboardComponent', () => {
   let component: UserDashboardComponent;
   let fixture: ComponentFixture<UserDashboardComponent>;
   let mockObj: jasmine.SpyObj<{}>;
+  let initialState = mockInitialState;
 
   beforeEach(async () => {
-    let initialState = {
-      id: '4f4f4f4f4f4f4f4',
-      teamLeader: 'test',
-      userName: 'test',
-      name: 'test',
-      admin: false,
-      mail: 'test',
-      token: '8k8k8k8k8k8',
-    };
     await TestBed.configureTestingModule({
       declarations: [
         UserDashboardComponent,
@@ -62,63 +55,50 @@ describe('UserDashboardComponent', () => {
   describe('When instanciating UserDashboardComponent with a valid token', () => {
     it('Should call projectServ.getAllProjects', () => {
       const fixture = TestBed.createComponent(UserDashboardComponent);
-      spyOn(
-        fixture.componentInstance.localStorage,
-        'getDataFromLocalStorage'
-      ).and.returnValue('token');
-      spyOn(
-        fixture.componentInstance.projectsServ,
-        'getAllProjects'
-      ).and.returnValue(mockGetAllProjectsResponse);
+      const component = fixture.componentInstance;
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      spyOn(component.projectsServ, 'getAllProjects').and.returnValue(
+        mockGetAllProjectsResponse
+      );
       fixture.detectChanges();
-      expect(
-        fixture.componentInstance.projectsServ.getAllProjects
-      ).toHaveBeenCalled();
+      expect(component.projectsServ.getAllProjects).toHaveBeenCalled();
     });
   });
 
   describe('When instanciating UserDashboardComponent with a valid token', () => {
     it('Should call projectServ.getAllProjects', () => {
       const fixture = TestBed.createComponent(UserDashboardComponent);
-      spyOn(
-        fixture.componentInstance.localStorage,
-        'getDataFromLocalStorage'
-      ).and.returnValue('token');
-      spyOn(
-        fixture.componentInstance.projectsServ,
-        'getAllProjects'
-      ).and.returnValue(of([mockProject, projWithtoutAppointment]));
+      const component = fixture.componentInstance;
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      spyOn(component.projectsServ, 'getAllProjects').and.returnValue(
+        of([mockProject, projWithtoutAppointment])
+      );
       fixture.detectChanges();
-      expect(
-        fixture.componentInstance.projectsServ.getAllProjects
-      ).toHaveBeenCalled();
+      expect(component.projectsServ.getAllProjects).toHaveBeenCalled();
     });
   });
 
   describe('When instanciating UserDashboardComponent with an expired token', () => {
     it('Should call router.navigate', () => {
       const fixture = TestBed.createComponent(UserDashboardComponent);
+      const component = fixture.componentInstance;
 
-      spyOn(
-        fixture.componentInstance.localStorage,
-        'getDataFromLocalStorage'
-      ).and.returnValue('token');
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
 
-      spyOn(
-        fixture.componentInstance.projectsServ,
-        'getAllProjects'
-      ).and.returnValue(
+      spyOn(component.projectsServ, 'getAllProjects').and.returnValue(
         new Observable(() => {
           throw new Error('test error');
         })
       );
-
-      spyOn(fixture.componentInstance.router, 'navigate').and.resolveTo();
+      spyOn(component.router, 'navigate').and.resolveTo();
       fixture.detectChanges();
-      expect(fixture.componentInstance).toBeTruthy();
-      expect(
-        fixture.componentInstance.projectsServ.getAllProjects
-      ).toHaveBeenCalled();
+      expect(component.projectsServ.getAllProjects).toHaveBeenCalled();
 
       jasmine.clock().tick(2500);
 
