@@ -29,10 +29,10 @@ export class ProjectListComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.projects = data;
-          this.projectsWithAppointment = this.projects?.filter(
+          this.projectsWithAppointment = this.projects.filter(
             (item) => item.appointment && item
           );
-          this.projectsWithoutAppointment = this.projects?.filter(
+          this.projectsWithoutAppointment = this.projects.filter(
             (item) => !item.appointment && item
           );
         },

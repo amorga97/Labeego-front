@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 import * as firebase from 'firebase/storage';
 import { NewUserComponent } from './new-user.component';
 
-fdescribe('NewUserComponent', () => {
+describe('NewUserComponent', () => {
   let component: NewUserComponent;
   let fixture: ComponentFixture<NewUserComponent>;
   let initialState = mockInitialState;
