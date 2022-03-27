@@ -7,7 +7,7 @@ import { mockUser } from '../mocks/mocks';
 
 import { UserService } from './user.service';
 
-fdescribe('UsersService', () => {
+describe('UsersService', () => {
   let service: UserService;
   let httpTestingController: HttpTestingController;
 
