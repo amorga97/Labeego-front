@@ -19,7 +19,10 @@
         [alt]="project.user.name"
       />
     </div>
-    <ul class="project-card__task-list">
+    <ul
+      class="project-card__task-list"
+      [ngClass]="{ 'project-card__task-list--moved': !admin }"
+    >
       <li *ngFor="let item of tasks" class="project-card__task">
         <img class="project-card__task-icon" [src]="item.icon" alt="to-do" />
         <p class="project-card__task-title">{{ item?.task?.title }}</p>
