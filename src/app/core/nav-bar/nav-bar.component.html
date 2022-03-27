@@ -1,1 +1,17 @@
-<p>nav-bar works!</p>
+<div class="wrapper">
+  <img
+    class="hamburger"
+    src="/src/assets/hamburger.svg"
+    alt="nav"
+    (click)="toggleActive()"
+  />
+  <ul *ngIf="active" class="nav">
+    <li
+      *ngFor="let item of routes"
+      (click)="handleClick(item.path)"
+      class="nav__item"
+    >
+      {{ item.label }}
+    </li>
+  </ul>
+</div>

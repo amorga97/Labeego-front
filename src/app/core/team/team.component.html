@@ -1,7 +1,11 @@
 <ul class="team">
-  <li class="team__new"><p (click)="handleNewUser()">New user</p></li>
+  <li *ngIf="admin" class="team__new">
+    <p (click)="handleNewUser()">New user</p>
+  </li>
   <li class="team__member" *ngFor="let item of team">
-    <img [src]="item.userImage" alt="" srcset="" />
-    <p>{{ item.name }}</p>
+    <div class="team__member-wrapper">
+      <img class="team__member-image" [src]="item.userImage" alt="" srcset="" />
+    </div>
+    <p class="team__member-name">{{ item.name }}</p>
   </li>
 </ul>

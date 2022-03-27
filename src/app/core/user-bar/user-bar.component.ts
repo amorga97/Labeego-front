@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { UserStore } from 'src/app/interfaces/interfaces';
+import { logout } from 'src/app/store/user.actions';
 
 @Component({
   selector: 'app-user-bar',
@@ -9,9 +11,18 @@ import { UserStore } from 'src/app/interfaces/interfaces';
 })
 export class UserBarComponent {
   @Input() user!: UserStore;
-  constructor(public router: Router) {}
+  constructor(public router: Router, public store: Store) {}
 
-  handleClick() {
-    this.router.navigate(['profile']);
+  handleClick(type: string) {
+    type === 'logout'
+      ? (() => {
+          this.store.dispatch(logout());
+          this.router.navigate(['login']);
+        })()
+      : this.router.navigate(['profile']);
+  }
+
+  goHome() {
+    this.router.navigate(['user-dash']);
   }
 }
