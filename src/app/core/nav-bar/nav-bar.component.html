@@ -1,1 +1,9 @@
-<p>nav-bar works!</p>
+<ul class="nav">
+  <li
+    *ngFor="let item of routes"
+    (click)="handleClick(item.path)"
+    class="nav__item"
+  >
+    {{ item.label }}
+  </li>
+</ul>
