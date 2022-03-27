@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -11,6 +12,7 @@ import { ifProject, ifTask, UserStore } from 'src/app/interfaces/interfaces';
 export class ProjectCardComponent implements OnInit {
   @Input() project!: ifProject;
   @Input() hasAppointment!: boolean;
+  @Input() index!: number;
   lastUpdate!: Object;
   tasks!: ifTask[];
   admin: boolean = false;
@@ -41,11 +43,10 @@ export class ProjectCardComponent implements OnInit {
   }
 
   getRelevantTasks() {
-    this.tasks = [...(this.project.doing as ifTask[])];
-    const LastDoneTask = [...(this.project.done as ifTask[])]
-      .reverse()
-      .slice(0, 1);
-    if (LastDoneTask) this.tasks.splice(0, 0, LastDoneTask[0]);
+    this.tasks = [...(this.project.done as ifTask[])].slice(0, 2);
+    if (!this.tasks.length) {
+      this.tasks = (this.project.toDo as ifTask[]).slice(0, 2);
+    }
   }
 
   getProgress() {
@@ -56,6 +57,13 @@ export class ProjectCardComponent implements OnInit {
       (this.project.done as ifTask[]).length;
     const doneTasks = (this.project.done as ifTask[]).length;
     this.progress = Math.floor((doneTasks / totalTasks) * 100);
+    setTimeout(() => {
+      const progressBar = document.getElementById(
+        this.index.toString() + this.hasAppointment
+      );
+      progressBar!.style.width = `${this.progress.toString()}%`;
+      console.log(progressBar, this.progress);
+    }, 100);
   }
 
   getAppointmentDate() {
@@ -79,9 +87,9 @@ export class ProjectCardComponent implements OnInit {
           this.admin = this.userData.admin;
         },
       });
+    this.getProgress();
     this.getLastUpdate();
     this.getRelevantTasks();
-    this.getProgress();
     this.getAppointmentDate();
   }
 }

@@ -20,8 +20,9 @@ import { ProjectsService } from 'src/app/services/projects.service';
         <div class="project-cards-list">
           <app-new-project></app-new-project>
           <app-project-card
-            *ngFor="let item of projectsWithNoAppointment"
+            *ngFor="let item of projectsWithNoAppointment; let i = index"
             class="project list"
+            [index]="i"
             [hasAppointment]="false"
             [project]="item"
           ></app-project-card>
@@ -29,8 +30,9 @@ import { ProjectsService } from 'src/app/services/projects.service';
         <h3 class="dashboard-subtitle">Esperando aprobación</h3>
         <div class="project-cards-list">
           <app-project-card
-            *ngFor="let item of projectsWithAppointment"
+            *ngFor="let item of projectsWithAppointment; let i = index"
             class="project list"
+            [index]="i"
             [hasAppointment]="true"
             [project]="item"
           ></app-project-card>
