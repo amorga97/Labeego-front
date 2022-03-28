@@ -1,5 +1,5 @@
 <app-layout>
-  <div class="container">
+  <div class="container" [ngClass]="{ blur: dateActive }">
     <app-alerts
       [active]="alertIsActive"
       [isError]="alertIsError"
@@ -61,9 +61,9 @@
         </div>
       </div>
     </div>
-
     <div class="forms">
       <form
+        id="project-form"
         class="project-form"
         (ngSubmit)="handleSubmit()"
         [formGroup]="projectForm"
@@ -177,16 +177,56 @@
             Guardar cambios
           </button>
           <button
-            (click)="createAppointment()"
+            (click)="toggleDate()"
             class="client-form__button"
             type="button"
-            [disabled]="!clientForm.valid"
           >
             <img src="/assets/cross.svg" alt="" />
-            Crear una cita
+            {{ hasAppointment ? "Modificar" : "Crear una cita" }}
           </button>
         </div>
       </form>
     </div>
+  </div>
+  <div *ngIf="dateActive" class="appointment">
+    <form
+      (ngSubmit)="createAppointment()"
+      class="appointment__form"
+      [formGroup]="projectForm"
+    >
+      <div class="appointment__form-title">
+        <label class="appointment__form-label" for="date"
+          >Selecciona una fecha para la cita</label
+        >
+        <img
+          class="appointment__close"
+          width="30px"
+          height="30px"
+          (click)="toggleDate()"
+          src="/assets/close.svg"
+          alt="close"
+        />
+      </div>
+      <input
+        class="appointment__form-date"
+        type="date"
+        name="appointment"
+        formControlName="appointment"
+        form="project-form"
+        id="date"
+      />
+      <div class="appointment__form-buttons">
+        <button class="appointment__form-button" type="submit">
+          Confirmar cita
+        </button>
+        <p
+          type="button"
+          class="appointment__form-button appointment__form-button--delete"
+          (click)="deleteAppointment()"
+        >
+          Eliminar cita
+        </p>
+      </div>
+    </form>
   </div>
 </app-layout>

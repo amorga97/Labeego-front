@@ -74,10 +74,10 @@ export class UserDashboardComponent implements OnInit {
       .subscribe({
         next: (data: ifProject[]) => {
           this.projectsWithAppointment = data.filter(
-            (item) => item.appointment && item
+            (item) => item.appointment?.length !== 0 && item
           );
           this.projectsWithNoAppointment = data.filter(
-            (item) => !item.appointment && item
+            (item) => item.appointment?.length === 0 && item
           );
         },
         error: (err) => {

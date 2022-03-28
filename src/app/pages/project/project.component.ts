@@ -38,6 +38,7 @@ export class ProjectComponent implements OnInit {
   alertMessage!: string;
   client!: ifClient;
   dateActive = false;
+  hasAppointment = false;
   constructor(
     private route: ActivatedRoute,
     public router: Router,
@@ -65,6 +66,7 @@ export class ProjectComponent implements OnInit {
           Validators.maxLength(300),
         ],
       ],
+      appointment: [new Date()],
     });
 
     this.clientForm = fb.group({
@@ -212,7 +214,7 @@ export class ProjectComponent implements OnInit {
             this.alertIsActive = true;
             this.alertIsError = true;
             this.alertMessage =
-              'Ha habido un problema actualizando los datos del cliente';
+              'Ha ocurrido un problema actualizando los datos del cliente';
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertIsError = false;
@@ -227,7 +229,70 @@ export class ProjectComponent implements OnInit {
     this.dateActive = !this.dateActive;
   }
 
-  createAppointment() {}
+  createAppointment() {
+    this.projects
+      .update(
+        this.localStorage.getDataFromLocalStorage() as string,
+        this.project._id,
+        { appointment: this.projectForm.get('appointment')?.value }
+      )
+      .subscribe({
+        next: (data) => {
+          this.project = data;
+          this.alertIsActive = true;
+          this.alertMessage = 'Has añadido una cita para este proyecto';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertMessage = '';
+            this.toggleDate();
+          }, 1500);
+        },
+        error: () => {
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage = 'Ha ocurrido un problema añadiendo la cita';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+            this.alertMessage = '';
+            this.toggleDate();
+          }, 2000);
+        },
+      });
+  }
+
+  deleteAppointment() {
+    this.projects
+      .removeAppointment(
+        this.localStorage.getDataFromLocalStorage() as string,
+        this.project._id
+      )
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          this.project = data;
+          this.alertIsActive = true;
+          this.alertIsError = false;
+          this.alertMessage = 'Has eliminado la cita';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertMessage = '';
+            this.toggleDate();
+          }, 1500);
+        },
+        error: () => {
+          this.alertIsActive = true;
+          this.alertIsError = true;
+          this.alertMessage = 'Ha ocurrido un problema eliminando la cita';
+          setTimeout(() => {
+            this.alertIsActive = false;
+            this.alertIsError = false;
+            this.alertMessage = '';
+            this.toggleDate();
+          }, 2000);
+        },
+      });
+  }
 
   handleDelete() {
     this.projects.remove(this.userData.token, this.project._id).subscribe({
@@ -293,6 +358,7 @@ export class ProjectComponent implements OnInit {
       .getOne(this.localStorage.getDataFromLocalStorage() as string, this.id)
       .subscribe({
         next: (data) => {
+          console.log(data);
           this.project = data;
           this.projectForm.get('title')?.setValue(this.project.title);
           this.projectForm
@@ -302,6 +368,10 @@ export class ProjectComponent implements OnInit {
           this.doing = this.project.doing as ifTask[];
           this.toReview = this.project.toReview as ifTask[];
           this.done = this.project.done as ifTask[];
+
+          this.project.appointment?.length !== 0
+            ? (this.hasAppointment = true)
+            : (this.hasAppointment = false);
 
           this.clients
             .getOne(
