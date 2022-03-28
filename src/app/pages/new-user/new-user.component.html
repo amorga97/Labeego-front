@@ -24,7 +24,13 @@
         id="password"
         formControlName="password"
       />
-      <button class="form__submit" type="submit">Crear nuevo usuario</button>
+      <button
+        class="form__submit"
+        type="submit"
+        [disabled]="!newUserForm.valid"
+      >
+        Crear nuevo usuario
+      </button>
     </form>
   </div>
   <app-alerts
