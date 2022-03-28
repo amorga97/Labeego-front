@@ -18,7 +18,7 @@ export interface ifProject {
   client: string;
   teamLeader: string;
   status: string;
-  appointment?: string[];
+  appointment: string[];
   lastUpdate: Date;
   toDo: object;
   doing: object;

@@ -39,6 +39,7 @@ export class ProjectComponent implements OnInit {
   client!: ifClient;
   dateActive = false;
   hasAppointment = false;
+  appointment!: string;
   constructor(
     private route: ActivatedRoute,
     public router: Router,
@@ -364,10 +365,17 @@ export class ProjectComponent implements OnInit {
           this.projectForm
             .get('description')
             ?.setValue(this.project.description);
+
           this.toDo = this.project.toDo as ifTask[];
           this.doing = this.project.doing as ifTask[];
           this.toReview = this.project.toReview as ifTask[];
           this.done = this.project.done as ifTask[];
+
+          if (this.project.appointment.length > 0) {
+            this.appointment = new Date(
+              this.project.appointment[0]
+            ).toLocaleDateString();
+          }
 
           this.project.appointment?.length !== 0
             ? (this.hasAppointment = true)

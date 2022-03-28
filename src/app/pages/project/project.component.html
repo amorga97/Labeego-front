@@ -143,6 +143,16 @@
             formControlName="email"
           />
         </div>
+        <div *ngIf="hasAppointment" class="client-form__field">
+          <img
+            height="20px"
+            width="15px"
+            class="client-form__icon"
+            src="/assets/calendar-solid.svg"
+            alt="calendar"
+          />
+          <p class="client-form__info">{{ appointment }}</p>
+        </div>
         <div class="client-form__field">
           <img
             height="20px"
@@ -159,6 +169,7 @@
               type="text"
               formControlName="street"
             />
+            <p>Nº</p>
             <input
               class="client-form__info"
               id="title"
@@ -182,7 +193,7 @@
             type="button"
           >
             <img src="/assets/cross.svg" alt="" />
-            {{ hasAppointment ? "Modificar" : "Crear una cita" }}
+            {{ hasAppointment ? "Modificar cita" : "Crear una cita" }}
           </button>
         </div>
       </form>
@@ -219,13 +230,13 @@
         <button class="appointment__form-button" type="submit">
           Confirmar cita
         </button>
-        <p
+        <button
           type="button"
           class="appointment__form-button appointment__form-button--delete"
           (click)="deleteAppointment()"
         >
           Eliminar cita
-        </p>
+        </button>
       </div>
     </form>
   </div>
