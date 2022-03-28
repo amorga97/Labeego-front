@@ -55,7 +55,7 @@ export class NewUserComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(15),
+          Validators.maxLength(50),
           Validators.email,
         ],
       ],
@@ -65,7 +65,7 @@ export class NewUserComponent implements OnInit {
   handleSubmit() {
     if (this.newUserForm.valid) {
       this.imageToUpload =
-        'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/UserImages%2Fdef-user.png?alt=media&token=8d581c44-e983-4a54-a78d-39adef2ab5d9';
+        'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/UserImages%2Fdef-user.png?alt=media&token=a2616ba2-25c3-4565-a8c0-e6b0c8a098a9';
 
       this.user
         .create(this.userData.token, {
@@ -79,6 +79,7 @@ export class NewUserComponent implements OnInit {
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertMessage = '';
+              this.router.navigate(['user-dash']);
             }, 1500);
           },
           error: () => {

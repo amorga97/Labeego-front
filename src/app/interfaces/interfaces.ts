@@ -55,6 +55,7 @@ export interface ifClient {
   _id: string;
   name: string;
   email: string;
+  phone: string[];
   address: {
     street: string;
     number: number;

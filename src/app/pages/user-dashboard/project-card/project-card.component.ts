@@ -92,7 +92,6 @@ export class ProjectCardComponent implements OnInit {
         this.index.toString() + this.hasAppointment
       );
       progressBar!.style.width = `${this.progress.toString()}%`;
-      console.log(progressBar, this.progress);
     }, 100);
   }
 
