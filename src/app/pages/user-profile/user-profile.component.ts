@@ -16,9 +16,11 @@ export class UserProfileComponent implements OnInit {
   userDataForm!: FormGroup;
   userImage!: string;
   imageToUpload: string | undefined = undefined;
+  active = false;
   alertIsError: boolean = false;
   alertIsActive: boolean = false;
   alertMessage!: string;
+  files: File[] = [];
   constructor(
     public store: Store<{ user: UserStore }>,
     private fb: FormBuilder,
@@ -54,8 +56,27 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  @ViewChild('fileDropRef', { static: false }) fileDropEl!: ElementRef;
-  files: any;
+  toggleActive() {
+    this.active = !this.active;
+  }
+
+  onSelect(event: any) {
+    this.files.push(...event.addedFiles);
+    this.fileBrowseHandler({ files: [...this.files] });
+    this.toggleActive();
+  }
+
+  onRemove(event: any) {
+    try {
+      this.storage.refFromURL(this.userData.userImage).delete().subscribe();
+      this.imageToUpload = undefined;
+      document
+        .getElementsByClassName('user-data__image-preview')[0]
+        .setAttribute('src', this.userData.userImage);
+    } catch (err) {}
+  }
+
+  // @ViewChild('fileDropRef', { static: false }) fileDropEl!: ElementRef;
   fileBrowseHandler(files: any) {
     const image = files.files[0];
     const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
@@ -70,6 +91,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   handleSubmit() {
+    this.handleImageUpdate();
     this.user
       .update(
         this.userData.token,
