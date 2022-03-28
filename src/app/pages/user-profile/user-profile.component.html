@@ -1,11 +1,11 @@
 <app-layout>
-  <app-alerts
-    [active]="alertIsActive"
-    [isError]="alertIsError"
-    [message]="alertMessage"
-  ></app-alerts>
-  <div class="user-data">
-    <div class="user-data__wrapper">
+  <div class="profile-container">
+    <app-alerts
+      [active]="alertIsActive"
+      [isError]="alertIsError"
+      [message]="alertMessage"
+    ></app-alerts>
+    <div class="user-data">
       <form
         class="user-data__form"
         [formGroup]="userDataForm"
@@ -29,36 +29,53 @@
           placeholder="email"
           formControlName="mail"
         />
-        <button class="user-data__form-field" type="submit">
-          Guardar cambios
-        </button>
+        <button class="user-data__submit" type="submit">Guardar cambios</button>
       </form>
-      <div class="user-data__image-wrapper">
+      <div class="user-data__image-controls">
+        <div class="user-data__image-wrapper">
+          <img
+            (click)="toggleActive()"
+            class="user-data__image-preview"
+            [src]="userData.userImage"
+            alt="user"
+          />
+        </div>
+        <div (click)="toggleActive()" class="user-data__image-controls-edit">
+          <img
+            src="/assets/edit.svg"
+            alt=""
+            srcset=""
+            width="14px"
+            height="15px"
+          />
+        </div>
+      </div>
+      <div *ngIf="active" class="user-data__dropzone">
+        <div class="user-data__dropzone-controls">
+          <ngx-dropzone class="dropzone" (change)="onSelect($event)">
+            <ngx-dropzone-label class="dropzone__label"
+              >Arrastra aquí tu foto</ngx-dropzone-label
+            >
+          </ngx-dropzone>
+          <label class="user-data__dropzone-label" for="fileDropRef"
+            >Selecciona una foto</label
+          >
+          <input
+            class="user-data__dropzone-select"
+            type="file"
+            name=""
+            #fileDropRef
+            id="fileDropRef"
+            (change)="fileBrowseHandler($event.target)"
+          />
+        </div>
         <img
-          class="user-data__image-preview"
-          [src]="userData.userImage"
-          alt="user"
+          class="user-data__dropzone-close"
+          src="/assets/close.svg"
+          alt="close"
+          (click)="toggleActive()"
         />
       </div>
     </div>
   </div>
-  <div
-    id="dropzone
-  "
-    class="container"
-  >
-    <input
-      type="file"
-      #fileDropRef
-      id="fileDropRef"
-      multiple
-      (dragend)="fileBrowseHandler($event.target)"
-    />
-    <p>Arrastra tu foto aquí</p>
-    <p>o</p>
-    <label for="fileDropRef">Busca un archivo</label>
-  </div>
-  <button (click)="handleImageUpdate()" class="image-update">
-    Actualizar imagen
-  </button>
 </app-layout>

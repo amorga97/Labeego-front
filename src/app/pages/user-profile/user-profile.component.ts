@@ -61,7 +61,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSelect(event: any) {
-    this.files.push(...event.addedFiles);
+    this.files.unshift(...event.addedFiles);
     this.fileBrowseHandler({ files: [...this.files] });
     this.toggleActive();
   }
