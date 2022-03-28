@@ -9,5 +9,6 @@ import { AlertsComponent } from '../core/alerts/alerts.component';
 @NgModule({
   declarations: [RegisterComponent, LoginComponent],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, CoreModule],
+  exports: [LoginComponent, RegisterComponent],
 })
 export class LoginRegisterModule {}

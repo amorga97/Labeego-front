@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login-register/login/login.component';
 import { RegisterComponent } from './login-register/register/register.component';
+import { LandingComponent } from './pages/landing/landing.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
@@ -37,6 +38,8 @@ const routes: Routes = [
         (m) => m.UserProfileModule
       ),
   },
+  { path: '', component: LandingComponent },
+  { path: 'home', component: LandingComponent },
 ];
 
 @NgModule({
