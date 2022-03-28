@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { ifClient, UserStore } from 'src/app/interfaces/interfaces';
 import { ClientsService } from 'src/app/services/clients.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { ProjectsService } from 'src/app/services/projects.service';
 
 @Component({
@@ -18,15 +18,16 @@ export class NewProjectFormComponent implements OnInit {
   token!: string;
   userData!: UserStore;
   clients!: ifClient[];
-  selectedClientId!: string;
+  selectedClientId!: string | undefined;
+  step = 1;
   alertIsError: boolean = false;
   alertIsActive: boolean = false;
   alertMessage!: string;
   constructor(
     private fb: FormBuilder,
     public router: Router,
-    private store: Store<{ user: UserStore }>,
     public clientService: ClientsService,
+    public localStorage: LocalStorageService,
     public projects: ProjectsService
   ) {
     this.newProjectForm = fb.group({
@@ -78,19 +79,29 @@ export class NewProjectFormComponent implements OnInit {
   }
 
   getClients() {
-    this.clientService.getAllClients(this.userData.token).subscribe((data) => {
-      this.clients = data;
-    });
+    this.clientService
+      .getAllClients(this.localStorage.getDataFromLocalStorage() as string)
+      .subscribe((data) => {
+        this.clients = data;
+      });
   }
 
-  handleClick(item: ifClient) {
-    this.selectedClientId = item._id;
+  handleSelect(item: ifClient) {
+    if (this.selectedClientId === item._id) {
+      this.selectedClientId = undefined;
+    } else {
+      this.selectedClientId = item._id;
+    }
+  }
+
+  moveSteps(forward: boolean) {
+    forward ? this.step++ : this.step--;
   }
 
   handleProjectSubmit() {
     if (this.newProjectForm.valid && this.selectedClientId) {
       this.projects
-        .create(this.userData.token, {
+        .create(this.localStorage.getDataFromLocalStorage() as string, {
           ...this.newProjectForm.value,
           client: this.selectedClientId,
         })
@@ -128,7 +139,7 @@ export class NewProjectFormComponent implements OnInit {
   handleClientSubmit() {
     if (this.newClientForm.valid) {
       this.clientService
-        .create(this.userData.token, {
+        .create(this.localStorage.getDataFromLocalStorage() as string, {
           name: this.newClientForm.value.name as string,
           email: this.newClientForm.value.email as string,
           address: {
@@ -167,13 +178,6 @@ export class NewProjectFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store
-      .select((state) => state.user)
-      .subscribe({
-        next: (data) => {
-          this.userData = data;
-        },
-      });
     this.getClients();
   }
 }
