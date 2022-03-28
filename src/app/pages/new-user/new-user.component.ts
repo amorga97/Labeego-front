@@ -14,11 +14,10 @@ import { UserService } from 'src/app/services/user.service';
 export class NewUserComponent implements OnInit {
   userData!: UserStore;
   newUserForm: FormGroup;
-  isHovering = false;
   alertIsError: boolean = false;
   alertIsActive: boolean = false;
   alertMessage!: string;
-  imageToUpload: undefined | string = undefined;
+  imageToUpload!: string;
   constructor(
     public store: Store<{ user: UserStore }>,
     public router: Router,
@@ -63,24 +62,11 @@ export class NewUserComponent implements OnInit {
     });
   }
 
-  @ViewChild('fileDropRef', { static: false }) fileDropEl!: ElementRef;
-  files: any;
-  fileBrowseHandler(files: any) {
-    const image = files.files[0];
-    const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
-    this.storage.upload(filePath, image).then((data) => {
-      data.ref.getDownloadURL().then((url) => {
-        this.imageToUpload = url;
-      });
-    });
-  }
-
   handleSubmit() {
     if (this.newUserForm.valid) {
-      if (this.imageToUpload === undefined) {
-        this.imageToUpload =
-          'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/UserImages%2Fdef-user.png?alt=media&token=8d581c44-e983-4a54-a78d-39adef2ab5d9';
-      }
+      this.imageToUpload =
+        'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/UserImages%2Fdef-user.png?alt=media&token=8d581c44-e983-4a54-a78d-39adef2ab5d9';
+
       this.user
         .create(this.userData.token, {
           ...this.newUserForm.value,

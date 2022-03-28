@@ -1,32 +1,35 @@
 <app-layout>
-  <form [formGroup]="newUserForm" (ngSubmit)="handleSubmit()">
-    value: {{ newUserForm.value | json }}
-    <input type="text" placeholder="user name" formControlName="userName" />
-    <input type="text" placeholder="name" formControlName="name" />
-    <input type="text" placeholder="email" formControlName="mail" />
-    <input
-      type="password"
-      placeholder="password"
-      id=""
-      formControlName="password"
-    />
-    <button type="submit">Create new user</button>
-  </form>
+  <div class="container">
+    <form class="form" [formGroup]="newUserForm" (ngSubmit)="handleSubmit()">
+      <label class="form__label" for="user-name">Nombre de usuario</label>
+      <input
+        class="form__field"
+        id="user-name"
+        type="text"
+        formControlName="userName"
+      />
+      <label class="form__label" for="name">Nombre</label>
+      <input class="form__field" id="name" type="text" formControlName="name" />
+      <label class="form__label" for="email">Córreo electrónico</label>
+      <input
+        class="form__field"
+        id="email"
+        type="text"
+        formControlName="mail"
+      />
+      <label class="form__label" for="password">Contraseña</label>
+      <input
+        class="form__field"
+        type="password"
+        id="password"
+        formControlName="password"
+      />
+      <button class="form__submit" type="submit">Crear nuevo usuario</button>
+    </form>
+  </div>
   <app-alerts
     [active]="alertIsActive"
     [isError]="alertIsError"
     [message]="alertMessage"
   ></app-alerts>
-  <div class="container">
-    <input
-      type="file"
-      #fileDropRef
-      id="fileDropRef"
-      multiple
-      (change)="fileBrowseHandler($event.target)"
-    />
-    <h3>Drag and drop file here</h3>
-    <h3>or</h3>
-    <label for="fileDropRef">Browse for file</label>
-  </div>
 </app-layout>
