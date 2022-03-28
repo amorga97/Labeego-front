@@ -10,7 +10,7 @@ export class LandingComponent implements OnInit {
   pathLength: any;
   constructor() {
     window.addEventListener('DOMContentLoaded', () => {
-      console.log(document.querySelector('path .line'));
+      console.log(document.querySelector('.line'));
       this.path = document.querySelector('path');
       this.pathLength = this.path?.getTotalLength();
       this.path.style.strokeDasharray = this.pathLength + ' ' + this.pathLength;

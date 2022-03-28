@@ -24,7 +24,6 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage/';
     StoreModule.forRoot({ user: UserReducer }, {}),
     ReactiveFormsModule,
     FormsModule,
-    LoginRegisterModule,
     HttpClientModule,
     UserDashboardModule,
     CoreModule,
