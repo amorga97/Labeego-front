@@ -48,8 +48,6 @@ export class ProjectListComponent implements OnInit {
               ],
             })
           ) as ifProject[];
-          console.log();
-          console.log(this.projectsWithoutAppointment);
         },
         error: () => {},
       });

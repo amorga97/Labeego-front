@@ -257,7 +257,6 @@ export class ProjectComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          console.log(data);
           switch (data.status) {
             case 'to-do':
               this.toDo.unshift(data);
@@ -274,9 +273,7 @@ export class ProjectComponent implements OnInit {
           }
           this.toggleNewTask(status);
         },
-        error: (err) => {
-          console.log(err);
-        },
+        error: (err) => {},
       });
   }
 
@@ -289,7 +286,6 @@ export class ProjectComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          console.log(data);
           switch (data.status) {
             case 'to-do':
               this.toDo = this.toDo.filter((item) => item._id !== data._id);
@@ -307,14 +303,11 @@ export class ProjectComponent implements OnInit {
               break;
           }
         },
-        error: (err) => {
-          console.log(err);
-        },
+        error: (err) => {},
       });
   }
 
   handleClientUpdate() {
-    console.log('i have been clicked');
     if (this.clientForm.valid) {
       this.clients
         .update(
@@ -391,7 +384,6 @@ export class ProjectComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.project = data;
           this.alertIsActive = true;
           this.alertIsError = false;
@@ -480,7 +472,6 @@ export class ProjectComponent implements OnInit {
       .getOne(this.localStorage.getDataFromLocalStorage() as string, this.id)
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.project = data;
           this.projectForm.get('title')?.setValue(this.project.title);
           this.projectForm
