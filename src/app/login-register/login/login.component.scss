@@ -1,0 +1,29 @@
+@use "/src/variables";
+
+.login {
+  display: flex;
+  height: 40px;
+  gap: 20px;
+
+  &__field {
+    border: none;
+    background-color: whitesmoke;
+    font-size: 1rem;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  &__submit {
+    border: none;
+    color: white;
+    font-size: large;
+    background-color: variables.$accent-color;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: ease-in-out 200ms;
+  }
+
+  &__submit:disabled {
+    background-color: black;
+  }
+}

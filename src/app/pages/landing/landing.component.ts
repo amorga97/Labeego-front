@@ -6,16 +6,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./landing.component.scss'],
 })
 export class LandingComponent implements OnInit {
-  path: any;
-  pathLength: any;
+  linePath: any;
+  linePathLength: any;
+  mazePath: any;
+  mazePathLength: any;
+
   constructor() {
     window.addEventListener('DOMContentLoaded', () => {
-      console.log(document.querySelector('.line'));
-      this.path = document.querySelector('path');
-      this.pathLength = this.path?.getTotalLength();
-      this.path.style.strokeDasharray = this.pathLength + ' ' + this.pathLength;
+      this.linePath = document.querySelector('.line');
+      this.linePathLength = this.linePath?.getTotalLength();
+      this.linePath.style.strokeDasharray =
+        this.linePathLength + ' ' + this.linePathLength;
+      this.linePath.style.strokeDashoffset = this.linePathLength;
 
-      this.path.style.strokeDashoffset = this.pathLength;
+      this.mazePath = document.querySelector('.maze');
+      this.mazePathLength = this.mazePath?.getTotalLength();
+      this.mazePath.style.strokeDasharray =
+        this.mazePathLength + ' ' + this.mazePathLength;
+      this.mazePath.style.strokeDashoffset = this.mazePathLength;
     });
 
     window.addEventListener('scroll', () => {
@@ -24,9 +32,14 @@ export class LandingComponent implements OnInit {
         (document.documentElement.scrollHeight -
           document.documentElement.clientHeight);
 
-      let drowLength = this.pathLength * scrollPercentage;
+      let drowLength = this.linePathLength * scrollPercentage;
 
-      this.path.style.strokeDashoffset = this.pathLength - drowLength;
+      this.linePath.style.strokeDashoffset = this.linePathLength - drowLength;
+
+      let mazeDrowLength = this.mazePathLength * (scrollPercentage * 1.7);
+
+      this.mazePath.style.strokeDashoffset =
+        this.mazePathLength - mazeDrowLength;
     });
   }
 

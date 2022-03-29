@@ -1,9 +1,20 @@
-<form [formGroup]="loginForm" (ngSubmit)="handleSubmit()">
-  <input type="text" placeholder="user name" formControlName="userName" />
-  <input type="'password'" placeholder="password" formControlName="password" />
-  <button type="submit">Login</button>
+<form class="login" [formGroup]="loginForm" (ngSubmit)="handleSubmit()">
+  <input
+    class="login__field"
+    type="text"
+    placeholder="user name"
+    formControlName="userName"
+  />
+  <input
+    class="login__field"
+    type="password"
+    placeholder="password"
+    formControlName="password"
+  />
+  <button [disabled]="!loginForm.valid" class="login__submit" type="submit">
+    Login
+  </button>
 </form>
-<button (click)="handleLogout()">Logout</button>
 <app-alerts
   [active]="alertIsActive"
   [isError]="alertIsError"
