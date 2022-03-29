@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class NavBarComponent {
   active = false;
   routes = [
-    { label: 'Home', path: 'user-dash' },
+    { label: 'Home', path: 'dashboard' },
     { label: 'Chat', path: 'chat' },
     { label: 'Perfil', path: 'profile' },
   ];

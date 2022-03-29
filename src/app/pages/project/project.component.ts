@@ -303,7 +303,7 @@ export class ProjectComponent implements OnInit {
         setTimeout(() => {
           this.alertIsActive = false;
           this.alertIsError = false;
-          this.router.navigate(['user-dash']);
+          this.router.navigate(['dashboard']);
         }, 2000);
       },
       error: () => {
@@ -408,7 +408,7 @@ export class ProjectComponent implements OnInit {
                   this.alertIsActive = false;
                   this.alertIsError = false;
                   this.alertMessage = '';
-                  this.router.navigate(['user-dash']);
+                  this.router.navigate(['dashboard']);
                 }, 2000);
               },
             });
@@ -421,7 +421,7 @@ export class ProjectComponent implements OnInit {
             this.alertIsActive = false;
             this.alertIsError = false;
             this.alertMessage = '';
-            this.router.navigate(['user-dash']);
+            this.router.navigate(['dashboard']);
           }, 2000);
         },
       });

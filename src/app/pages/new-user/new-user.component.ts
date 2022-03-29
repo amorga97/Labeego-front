@@ -79,7 +79,7 @@ export class NewUserComponent implements OnInit {
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertMessage = '';
-              this.router.navigate(['user-dash']);
+              this.router.navigate(['dashboard']);
             }, 2000);
           },
           error: () => {
@@ -112,7 +112,7 @@ export class NewUserComponent implements OnInit {
         next: (data) => {
           this.userData = data;
           if (!this.userData.admin) {
-            this.router.navigate(['user-dash']);
+            this.router.navigate(['dashboard']);
           }
         },
       });

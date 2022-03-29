@@ -23,6 +23,6 @@ export class UserBarComponent {
   }
 
   goHome() {
-    this.router.navigate(['user-dash']);
+    this.router.navigate(['dashboard']);
   }
 }
