@@ -13,22 +13,32 @@ export class LandingComponent {
   mazePathLength: any;
 
   constructor(@Inject(DOCUMENT) public document: Document) {
-    window.addEventListener('DOMContentLoaded', this.queryDocument);
+    window.addEventListener('DOMContentLoaded', () => {
+      this.linePath = this.document.querySelector('.line');
+      this.mazePath = document.querySelector('.maze');
+      this.queryDocument(
+        this.linePath,
+        this.linePathLength,
+        this.mazePath,
+        this.mazePathLength
+      );
+    });
     window.addEventListener('scroll', this.configureScrollEffect);
   }
 
-  queryDocument() {
-    this.linePath = this.document.querySelector('.line');
-    this.linePathLength = this.linePath?.getTotalLength();
-    this.linePath.style.strokeDasharray =
-      this.linePathLength + ' ' + this.linePathLength;
-    this.linePath.style.strokeDashoffset = this.linePathLength;
+  queryDocument(
+    linePath: any,
+    linePathLength: any,
+    mazePath: any,
+    mazePathLength: any
+  ) {
+    linePathLength = linePath?.getTotalLength();
+    linePath.style.strokeDasharray = linePathLength + ' ' + linePathLength;
+    linePath.style.strokeDashoffset = linePathLength;
 
-    this.mazePath = document.querySelector('.maze');
-    this.mazePathLength = this.mazePath?.getTotalLength();
-    this.mazePath.style.strokeDasharray =
-      this.mazePathLength + ' ' + this.mazePathLength;
-    this.mazePath.style.strokeDashoffset = this.mazePathLength;
+    mazePathLength = mazePath?.getTotalLength();
+    mazePath.style.strokeDasharray = mazePathLength + ' ' + mazePathLength;
+    mazePath.style.strokeDashoffset = mazePathLength;
   }
 
   configureScrollEffect() {

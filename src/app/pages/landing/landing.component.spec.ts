@@ -8,6 +8,15 @@ import { LoginComponent } from 'src/app/login-register/login/login.component';
 import { RegisterComponent } from 'src/app/login-register/register/register.component';
 import { LandingComponent } from './landing.component';
 
+const mockPath = {
+  style: { strokeDasharray: {} },
+  getTotalLength: () => {
+    'length';
+  },
+};
+
+const mockLenght = 10;
+
 describe('LandingComponent', () => {
   let component: LandingComponent;
   let fixture: ComponentFixture<LandingComponent>;
@@ -34,9 +43,11 @@ describe('LandingComponent', () => {
       spyOn(component.document, 'querySelector').and.returnValue(document);
       console.log(document);
       fixture.detectChanges();
-      expect(document.querySelector('.header')).toBeDefined();
+      component.document.addEventListener('DOMContentLoaded', () => {
+        expect(document.querySelector('.header')).toBeDefined();
+      });
       component.configureScrollEffect();
-      component.queryDocument();
+      component.queryDocument(mockPath, mockLenght, mockPath, mockLenght);
     });
   });
 });
