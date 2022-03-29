@@ -1,10 +1,6 @@
 <app-layout>
   <div class="container" [ngClass]="{ blur: dateActive }">
-    <app-alerts
-      [active]="alertIsActive"
-      [isError]="alertIsError"
-      [message]="alertMessage"
-    ></app-alerts>
+    <div></div>
     <div class="project">
       <div cdkDropListGroup class="tasks">
         <div class="tasks__column">
@@ -14,9 +10,42 @@
             class="tasks__list"
             (cdkDropListDropped)="drop($event)"
           >
-            <h2 class="tasks__list-title">Por hacer</h2>
+            <div class="tasks__list-header">
+              <h2 class="tasks__list-title">Por hacer</h2>
+              <div (click)="toggleNewTask('newToDo')" class="tasks__list-add">
+                <img
+                  height="10rem"
+                  width="10rem"
+                  src="/assets/cross.svg"
+                  alt="add task"
+                />
+              </div>
+            </div>
+            <form
+              id="newToDo"
+              class="tasks__item tasks__item-form tasks__item--hidden"
+              [formGroup]="newTaskForm"
+            >
+              <input
+                formControlName="newToDo"
+                class="tasks__item-form-field"
+                type="text"
+              />
+              <button
+                [disabled]="!newTaskForm.get('newToDo')?.valid"
+                (click)="
+                  createNewTask(newTaskForm.get('newToDo')?.value, 'newToDo')
+                "
+                class="tasks__item-form-add"
+              >
+                Añadir
+              </button>
+            </form>
             <div class="tasks__item" *ngFor="let item of toDo" cdkDrag>
-              {{ item.title }}
+              <p class="tasks__item-title">{{ item.title }}</p>
+              <button (click)="removeTask(item._id)" class="tasks__item-remove">
+                Borrar
+              </button>
             </div>
           </div>
         </div>
@@ -27,9 +56,42 @@
             class="tasks__list"
             (cdkDropListDropped)="drop($event)"
           >
-            <h2 class="tasks__list-title">En proceso</h2>
+            <div class="tasks__list-header">
+              <h2 class="tasks__list-title">En proceso</h2>
+              <div (click)="toggleNewTask('newDoing')" class="tasks__list-add">
+                <img
+                  height="10rem"
+                  width="10rem"
+                  src="/assets/cross.svg"
+                  alt="add task"
+                />
+              </div>
+            </div>
+            <form
+              id="newDoing"
+              class="tasks__item tasks__item-form tasks__item--hidden"
+              [formGroup]="newTaskForm"
+            >
+              <input
+                formControlName="newDoing"
+                class="tasks__item-form-field"
+                type="text"
+              />
+              <button
+                [disabled]="!newTaskForm.get('newDoing')?.valid"
+                (click)="
+                  createNewTask(newTaskForm.get('newDoing')?.value, 'newDoing')
+                "
+                class="tasks__item-form-add"
+              >
+                Añadir
+              </button>
+            </form>
             <div class="tasks__item" *ngFor="let item of doing" cdkDrag>
-              {{ item.title }}
+              <p class="tasks__item-title">{{ item.title }}</p>
+              <button (click)="removeTask(item._id)" class="tasks__item-remove">
+                Borrar
+              </button>
             </div>
           </div>
         </div>
@@ -40,9 +102,48 @@
             class="tasks__list"
             (cdkDropListDropped)="drop($event)"
           >
-            <h2 class="tasks__list-title">Por aprobar</h2>
+            <div class="tasks__list-header">
+              <h2 class="tasks__list-title">Por aprobar</h2>
+              <div
+                (click)="toggleNewTask('newToReview')"
+                class="tasks__list-add"
+              >
+                <img
+                  height="10rem"
+                  width="10rem"
+                  src="/assets/cross.svg"
+                  alt="add task"
+                />
+              </div>
+            </div>
+            <form
+              id="newToReview"
+              class="tasks__item tasks__item-form tasks__item--hidden"
+              [formGroup]="newTaskForm"
+            >
+              <input
+                formControlName="newToReview"
+                class="tasks__item-form-field"
+                type="text"
+              />
+              <button
+                [disabled]="!newTaskForm.get('newToReview')?.valid"
+                (click)="
+                  createNewTask(
+                    newTaskForm.get('newToReview')?.value,
+                    'newToReview'
+                  )
+                "
+                class="tasks__item-form-add"
+              >
+                Añadir
+              </button>
+            </form>
             <div class="tasks__item" *ngFor="let item of toReview" cdkDrag>
-              {{ item.title }}
+              <p class="tasks__item-title">{{ item.title }}</p>
+              <button (click)="removeTask(item._id)" class="tasks__item-remove">
+                Borrar
+              </button>
             </div>
           </div>
         </div>
@@ -53,9 +154,42 @@
             class="tasks__list"
             (cdkDropListDropped)="drop($event)"
           >
-            <h2 class="tasks__list-title">Hecho</h2>
+            <div class="tasks__list-header">
+              <h2 class="tasks__list-title">Hecho</h2>
+              <div (click)="toggleNewTask('newDone')" class="tasks__list-add">
+                <img
+                  height="10rem"
+                  width="10rem"
+                  src="/assets/cross.svg"
+                  alt="add task"
+                />
+              </div>
+            </div>
+            <form
+              id="newDone"
+              class="tasks__item tasks__item-form tasks__item--hidden"
+              [formGroup]="newTaskForm"
+            >
+              <input
+                formControlName="newDone"
+                class="tasks__item-form-field"
+                type="text"
+              />
+              <button
+                [disabled]="!newTaskForm.get('newDone')?.valid"
+                (click)="
+                  createNewTask(newTaskForm.get('newDone')?.value, 'newDone')
+                "
+                class="tasks__item-form-add"
+              >
+                Añadir
+              </button>
+            </form>
             <div class="tasks__item" *ngFor="let item of done" cdkDrag>
-              {{ item.title }}
+              <p class="tasks__item-title">{{ item.title }}</p>
+              <button (click)="removeTask(item._id)" class="tasks__item-remove">
+                Borrar
+              </button>
             </div>
           </div>
         </div>
@@ -199,6 +333,11 @@
       </form>
     </div>
   </div>
+  <app-alerts
+    [active]="alertIsActive"
+    [isError]="alertIsError"
+    [message]="alertMessage"
+  ></app-alerts>
   <div *ngIf="dateActive" class="appointment">
     <form
       (ngSubmit)="createAppointment()"

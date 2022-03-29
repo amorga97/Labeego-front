@@ -20,7 +20,9 @@ export class ProjectListComponent implements OnInit {
   ) {}
 
   handleClick(project: ifProject) {
-    this.router.navigate([`project/${project._id}`]);
+    this.router.navigate([`project/${project._id}`]).then(() => {
+      window.location.reload();
+    });
   }
 
   ngOnInit(): void {
