@@ -65,7 +65,7 @@ export class NewUserComponent implements OnInit {
   handleSubmit() {
     if (this.newUserForm.valid) {
       this.imageToUpload =
-        'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/UserImages%2Fdef-user.png?alt=media&token=a2616ba2-25c3-4565-a8c0-e6b0c8a098a9';
+        'https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png';
 
       this.user
         .create(this.userData.token, {
