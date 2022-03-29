@@ -70,9 +70,6 @@ export class UserProfileComponent implements OnInit {
     try {
       this.storage.refFromURL(this.userData.userImage).delete().subscribe();
       this.imageToUpload = undefined;
-      document
-        .getElementsByClassName('user-data__image-preview')[0]
-        .setAttribute('src', this.userData.userImage);
     } catch (err) {}
   }
 
@@ -154,6 +151,12 @@ export class UserProfileComponent implements OnInit {
               this.alertMessage = '';
             }, 2000);
             this.imageToUpload = undefined;
+            try {
+              this.storage
+                .refFromURL(this.userData.userImage)
+                .delete()
+                .subscribe();
+            } catch (err) {}
           },
           error: () => {
             this.alertMessage = 'Ha ocurrido un error actualizando tu imagen';
@@ -167,9 +170,6 @@ export class UserProfileComponent implements OnInit {
             this.imageToUpload = undefined;
           },
         });
-      try {
-        this.storage.refFromURL(this.userData.userImage).delete().subscribe();
-      } catch (err) {}
     }
   }
 

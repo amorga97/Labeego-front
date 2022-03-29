@@ -361,7 +361,7 @@ export class ProjectComponent implements OnInit {
             this.alertIsActive = false;
             this.alertMessage = '';
             this.toggleDate();
-            window.location.reload();
+            // window.location.reload();
           }, 2000);
         },
         error: () => {
@@ -394,7 +394,7 @@ export class ProjectComponent implements OnInit {
             this.alertIsActive = false;
             this.alertMessage = '';
             this.toggleDate();
-            window.location.reload();
+            // window.location.reload();
           }, 2000);
         },
         error: () => {

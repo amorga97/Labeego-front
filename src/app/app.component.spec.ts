@@ -55,7 +55,10 @@ describe('AppComponent', () => {
         })
       );
       spyOn(component.store, 'dispatch');
-      spyOn(component.router, 'navigate');
+      spyOn(component.router, 'navigate').and.returnValue(
+        new Promise(() => {})
+      );
+
       fixture.detectChanges();
 
       expect(component.store.dispatch).toHaveBeenCalled();

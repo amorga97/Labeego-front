@@ -6,7 +6,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { TeamComponent } from './team/team.component';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { LayoutComponent } from './layout/layout.component';
-import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +15,6 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
     TeamComponent,
     ProjectListComponent,
     LayoutComponent,
-    NavBarComponent,
   ],
   imports: [CommonModule],
   exports: [CommonModule, UserBarComponent, AlertsComponent, LayoutComponent],

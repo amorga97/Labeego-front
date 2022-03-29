@@ -11,9 +11,24 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { CoreModule } from 'src/app/core/core.module';
 import { ifTask } from 'src/app/interfaces/interfaces';
-import { mockInitialState, mockProject, mockTask } from 'src/app/mocks/mocks';
-
+import {
+  mockClient,
+  mockInitialState,
+  mockProject,
+  mockTask,
+} from 'src/app/mocks/mocks';
+import { InjectionToken } from '@angular/core';
 import { ProjectComponent } from './project.component';
+
+let mockAddedTask = { ...mockTask };
+
+const WINDOW = new InjectionToken('Window');
+
+const windowMock = {
+  location: {
+    reload: jasmine.createSpy('reload'),
+  },
+};
 
 describe('ProjectComponent', () => {
   let component: ProjectComponent;
@@ -26,6 +41,7 @@ describe('ProjectComponent', () => {
       imports: [
         RouterTestingModule.withRoutes([
           { path: 'project/:id', component: ProjectComponent },
+          { path: 'dashboard', component: ProjectComponent },
         ]),
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -64,7 +80,9 @@ describe('ProjectComponent', () => {
       spyOn(component.router, 'navigate').and.returnValue(
         new Promise(() => true)
       );
+
       fixture.detectChanges();
+
       expect(component.alertIsActive).toBeTrue();
 
       jasmine.clock().tick(2500);
@@ -78,11 +96,40 @@ describe('ProjectComponent', () => {
       const component = fixture.componentInstance;
       const document = fixture.nativeElement as HTMLElement;
       spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      spyOn(component.clients, 'getOne').and.returnValue(of(mockClient));
       fixture.detectChanges();
+      expect(component.clients.getOne).toHaveBeenCalled();
       expect(component.projectForm.get('title')?.value).toBe('test');
       expect(component.projectForm.get('description')?.value).toBe(
         'test description'
       );
+    });
+  });
+
+  describe('When instanciating the component with a valid id, but client does not exist', () => {
+    it('Should display the title and description of the project', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.router, 'navigate');
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      spyOn(component.clients, 'getOne').and.returnValue(
+        new Observable(() => {
+          throw new Error('test');
+        })
+      );
+      fixture.detectChanges();
+      expect(component.clients.getOne).toHaveBeenCalled();
+      expect(component.projectForm.get('title')?.value).toBe('test');
+      expect(component.projectForm.get('description')?.value).toBe(
+        'test description'
+      );
+      expect(component.alertIsActive).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+      expect(component.router.navigate).toHaveBeenCalled();
     });
   });
 
@@ -268,6 +315,290 @@ describe('ProjectComponent', () => {
       expect(component.alertIsError).toBeTrue();
 
       jasmine.clock().tick(2500);
+      expect(component.alertIsActive).toBeFalse();
+    });
+  });
+
+  describe('When calling component.toggleNewTask', () => {
+    it('Should call document.getelementbyid', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      fixture.detectChanges();
+      spyOn(component.projects, 'update').and.returnValue(
+        new Observable(() => {
+          throw new Error('test');
+        })
+      );
+      component.toggleNewTask('newToDo');
+    });
+  });
+
+  describe('When calling component.toggleDate', () => {
+    it('Should update the state of component.dateActive to true', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      fixture.detectChanges();
+      spyOn(component.projects, 'update').and.returnValue(
+        new Observable(() => {
+          throw new Error('test');
+        })
+      );
+      component.toggleDate();
+      expect(component.dateActive).toBeTrue();
+    });
+  });
+
+  describe('When calling component.createNewTask', () => {
+    it('Should call document.getelementbyid', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      fixture.detectChanges();
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      const spy = spyOn(component.task, 'create').and.returnValue(
+        of(mockAddedTask)
+      );
+
+      component.project = mockProject;
+      component.createNewTask('testing', 'newToDo');
+      expect(component.task.create).toHaveBeenCalled();
+
+      mockAddedTask = { ...mockTask, status: 'doing' };
+      spy.and.returnValue(of(mockAddedTask));
+      component.createNewTask('testing', 'newDoing');
+      expect(component.task.create).toHaveBeenCalled();
+
+      mockAddedTask = { ...mockTask, status: 'to-review' };
+      spy.and.returnValue(of(mockAddedTask));
+      component.createNewTask('testing', 'newToReview');
+      expect(component.task.create).toHaveBeenCalled();
+
+      mockAddedTask = { ...mockTask, status: 'to-do' };
+      spy.and.returnValue(of(mockAddedTask));
+      component.createNewTask('testing', 'newDone');
+      expect(component.task.create).toHaveBeenCalled();
+    });
+  });
+
+  describe('When calling component.removeTask', () => {
+    it('Should call document.task.remove', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      fixture.detectChanges();
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      const spy = spyOn(component.task, 'remove').and.returnValue(
+        of(mockAddedTask)
+      );
+      component.doing.push(mockTask);
+      component.done.push(mockTask);
+      component.toDo.push(mockTask);
+      component.toReview.push(mockTask);
+
+      component.removeTask('id');
+
+      mockAddedTask = { ...mockTask, status: 'to-review' };
+      spy.and.returnValue(of(mockAddedTask));
+      component.removeTask('id');
+
+      mockAddedTask = { ...mockTask, status: 'doing' };
+      spy.and.returnValue(of(mockAddedTask));
+      component.removeTask('id');
+
+      mockAddedTask = { ...mockTask, status: 'done' };
+      spy.and.returnValue(of(mockAddedTask));
+      component.removeTask('id');
+
+      mockAddedTask = { ...mockTask, status: 'to-review' };
+      spy.and.returnValue(
+        new Observable(() => {
+          throw new Error('test');
+        })
+      );
+      component.removeTask('id');
+    });
+  });
+
+  describe('When calling component.handleClientUpdate', () => {
+    it('Should call component.clients.update', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      fixture.detectChanges();
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      spyOn(component.clients, 'update').and.returnValue(of(mockClient));
+      const spy = spyOn(component.task, 'remove').and.returnValue(
+        of(mockAddedTask)
+      );
+
+      component.clientForm.controls['name']?.setValue('testing');
+      component.clientForm.controls['phone']?.setValue('123123123');
+      component.clientForm.controls['email']?.setValue('testing');
+      component.clientForm.controls['street']?.setValue('testing');
+      component.clientForm.controls['number']?.setValue(22);
+
+      component.client = mockClient;
+      component.handleClientUpdate();
+
+      expect(component.clients.update).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+    });
+  });
+
+  describe('When calling component.handleClientUpdate and having api problems', () => {
+    it('Should call component.clients.update and show an alert', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      fixture.detectChanges();
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      spyOn(component.clients, 'update').and.returnValue(
+        new Observable(() => {
+          throw new Error('test');
+        })
+      );
+      const spy = spyOn(component.task, 'remove').and.returnValue(
+        of(mockAddedTask)
+      );
+
+      component.clientForm.controls['name']?.setValue('testing');
+      component.clientForm.controls['phone']?.setValue('123123123');
+      component.clientForm.controls['email']?.setValue('testing');
+      component.clientForm.controls['street']?.setValue('testing');
+      component.clientForm.controls['number']?.setValue(22);
+
+      component.client = mockClient;
+      component.handleClientUpdate();
+
+      expect(component.clients.update).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+      expect(component.alertIsError).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+    });
+  });
+
+  describe('When calling component.createAppointment', () => {
+    it('Should call component.projects.update', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      fixture.detectChanges();
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      spyOn(component.projects, 'update').and.returnValue(of(mockProject));
+
+      component.createAppointment();
+
+      expect(component.projects.update).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+    });
+  });
+
+  describe('When calling component.createAppointment and having api problems', () => {
+    it('Should call component.projects.update and show an error alert', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      fixture.detectChanges();
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      spyOn(component.projects, 'update').and.returnValue(
+        new Observable(() => {
+          throw new Error('test');
+        })
+      );
+
+      component.createAppointment();
+
+      expect(component.projects.update).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+      expect(component.alertIsError).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+    });
+  });
+
+  describe('When calling component.deleteAppointment', () => {
+    it('Should call component.projects.update', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      fixture.detectChanges();
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      spyOn(component.projects, 'removeAppointment').and.returnValue(
+        of(mockProject)
+      );
+
+      component.deleteAppointment();
+
+      expect(component.projects.removeAppointment).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
+      expect(component.alertIsActive).toBeFalse();
+    });
+  });
+
+  describe('When calling component.deleteAppointment and having api problems', () => {
+    it('Should call component.projects.update and show an error alert', () => {
+      const fixture = TestBed.createComponent(ProjectComponent);
+      const component = fixture.componentInstance;
+      const document = fixture.nativeElement as HTMLElement;
+      spyOn(component.projects, 'getOne').and.returnValue(of(mockProject));
+      fixture.detectChanges();
+      spyOn(component.localStorage, 'getDataFromLocalStorage').and.returnValue(
+        'token'
+      );
+      spyOn(component.projects, 'removeAppointment').and.returnValue(
+        new Observable(() => {
+          throw new Error('test');
+        })
+      );
+
+      component.deleteAppointment();
+
+      expect(component.projects.removeAppointment).toHaveBeenCalled();
+      expect(component.alertIsActive).toBeTrue();
+      expect(component.alertIsError).toBeTrue();
+
+      jasmine.clock().tick(2500);
+
       expect(component.alertIsActive).toBeFalse();
     });
   });

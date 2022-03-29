@@ -9,7 +9,10 @@ import { CoreModule } from 'src/app/core/core.module';
 import { mockInitialState, mockUser } from 'src/app/mocks/mocks';
 
 import { UserProfileComponent } from './user-profile.component';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import {
+  AngularFireStorageModule,
+  AngularFireStorageReference,
+} from '@angular/fire/compat/storage';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from 'src/environments/environment';
 import { ref } from 'firebase/storage';
@@ -92,20 +95,43 @@ describe('UserProfileComponent', () => {
     });
   });
 
-  describe('When calling handleImageUpdate without uploading an image', () => {
-    it('Should throw an alert', () => {
+  describe('When calling handleImageUpdate uploading an image', () => {
+    it('Should call storage.refFromUrl', () => {
       spyOn(component.user, 'update').and.returnValue(of(mockUser));
       spyOn(component.store, 'dispatch');
+      spyOn(component.storage, 'refFromURL').and.returnValue({
+        delete: () => {},
+      } as AngularFireStorageReference);
+      component.imageToUpload = 'url';
       component.handleImageUpdate();
-      expect(component.user.update).not.toHaveBeenCalled();
+      expect(component.user.update).toHaveBeenCalled();
+      expect(component.store.dispatch).toHaveBeenCalled();
+      expect(component.storage.refFromURL).toHaveBeenCalled();
+    });
+  });
+
+  describe('When calling handleImageUpdate uploading an image but having api problems', () => {
+    it('Should call storage.refFromUrl', () => {
+      spyOn(component.user, 'update').and.returnValue(
+        new Observable(() => {
+          throw new Error('test');
+        })
+      );
+      spyOn(component.store, 'dispatch');
+      spyOn(component.storage, 'refFromURL').and.returnValue({
+        delete: () => {},
+      } as AngularFireStorageReference);
+      component.imageToUpload = 'url';
+      component.handleImageUpdate();
+      expect(component.user.update).toHaveBeenCalled();
       expect(component.store.dispatch).not.toHaveBeenCalled();
+      expect(component.storage.refFromURL).not.toHaveBeenCalled();
       expect(component.alertIsActive).toBeTrue();
       expect(component.alertIsError).toBeTrue();
 
       jasmine.clock().tick(2500);
 
       expect(component.alertIsActive).toBeFalse();
-      expect(component.alertIsError).toBeFalse();
     });
   });
 
@@ -125,29 +151,6 @@ describe('UserProfileComponent', () => {
     });
   });
 
-  describe('When calling handleImageUpdate having uploaded an image but having api problems', () => {
-    it('Should show an alert', () => {
-      spyOn(component.user, 'update').and.returnValue(
-        new Observable(() => {
-          throw new Error('test');
-        })
-      );
-      spyOn(component.store, 'dispatch');
-      spyOn(component.storage, 'refFromURL').and.returnValue((() => {
-        new Observable(() => {});
-      }) as any);
-      component.imageToUpload = 'url';
-      component.handleImageUpdate();
-      expect(component.user.update).toHaveBeenCalled();
-      expect(component.store.dispatch).not.toHaveBeenCalled();
-      expect(component.alertIsActive).toBeTrue();
-
-      jasmine.clock().tick(2500);
-
-      expect(component.alertIsActive).toBeFalse();
-    });
-  });
-
   describe('When calling fileBrowseHandler', () => {
     it('Should call on the api and dispatch an update action', () => {
       spyOn(component.user, 'update').and.returnValue(of(mockUser));
@@ -158,6 +161,30 @@ describe('UserProfileComponent', () => {
         files: [new File(['this is a test'], 'test')],
       });
       expect(component.storage.upload).toHaveBeenCalled();
+    });
+  });
+
+  describe('When calling component.toggleActive', () => {
+    it('Should toggle the active property', () => {
+      component.toggleActive();
+      expect(component.active).toBeTrue();
+    });
+  });
+
+  describe('When calling component.onSelect', () => {
+    it('Should add the file to the list', () => {
+      component.onSelect({ addedFiles: [new File(['test'], 'test')] });
+      expect(component.active).toBeTrue();
+    });
+  });
+
+  describe('When calling component.onRemove', () => {
+    it('Should delete it from the storage', () => {
+      spyOn(component.storage, 'refFromURL').and.returnValue({
+        delete: () => {},
+      } as AngularFireStorageReference);
+      component.onRemove({ addedFiles: [new File(['test'], 'test')] });
+      expect(component.storage.refFromURL).toHaveBeenCalled();
     });
   });
 });

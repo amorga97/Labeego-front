@@ -49,27 +49,6 @@ describe('NewUserComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('When calling fileBrowseHandler', () => {
-    it('Should call on the api and dispatch an update action', () => {
-      spyOn(component.user, 'update').and.returnValue(of(mockUser));
-      spyOn(component.store, 'dispatch');
-      spyOn(component.storage, 'upload').and.resolveTo(
-        new Promise(() => {
-          const ref = {
-            getDownloadURL: new Promise(() => {
-              'url';
-            }),
-          };
-        }) as any
-      );
-      component.imageToUpload = 'url';
-      component.fileBrowseHandler({
-        files: [new File(['this is a test'], 'test')],
-      });
-      expect(component.storage.upload).toHaveBeenCalled();
-    });
-  });
-
   describe('When calling component.handleSubmit without filling in al fields', () => {
     it('Should show an alert', () => {
       spyOn(component.user, 'create').and.returnValue(of(mockUser));
