@@ -151,6 +151,8 @@ export class NewProjectFormComponent implements OnInit {
           next: (data) => {
             this.alertIsActive = true;
             this.alertMessage = 'Cliente añadido';
+            this.selectedClientId = data._id;
+            this.clients.push(data);
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertIsError = false;

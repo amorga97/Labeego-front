@@ -103,13 +103,16 @@
   &__image-wrapper {
     height: 80px;
     width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
     overflow: hidden;
   }
 
   &__image-preview {
-    max-height: 120px;
-    max-width: 120px;
+    max-height: 80px;
+    max-width: 80px;
   }
 }
 

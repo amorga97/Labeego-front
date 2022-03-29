@@ -112,7 +112,7 @@ export class ProjectComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(3),
+          Validators.minLength(5),
           Validators.maxLength(50),
         ],
       ],
@@ -120,7 +120,7 @@ export class ProjectComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(3),
+          Validators.minLength(5),
           Validators.maxLength(50),
         ],
       ],
@@ -128,7 +128,7 @@ export class ProjectComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(3),
+          Validators.minLength(5),
           Validators.maxLength(50),
         ],
       ],
@@ -136,7 +136,7 @@ export class ProjectComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(3),
+          Validators.minLength(5),
           Validators.maxLength(50),
         ],
       ],
@@ -249,6 +249,7 @@ export class ProjectComponent implements OnInit {
         taskToAdd.status = 'done';
         break;
     }
+    this.newTaskForm.get(status)?.setValue('');
     this.task
       .create(
         this.project._id,
@@ -355,11 +356,12 @@ export class ProjectComponent implements OnInit {
         next: (data) => {
           this.project = data;
           this.alertIsActive = true;
-          this.alertMessage = 'Has añadido una cita para este proyecto';
+          this.alertMessage = 'Has añadido una cita';
           setTimeout(() => {
             this.alertIsActive = false;
             this.alertMessage = '';
             this.toggleDate();
+            window.location.reload();
           }, 2000);
         },
         error: () => {
@@ -392,6 +394,7 @@ export class ProjectComponent implements OnInit {
             this.alertIsActive = false;
             this.alertMessage = '';
             this.toggleDate();
+            window.location.reload();
           }, 2000);
         },
         error: () => {
