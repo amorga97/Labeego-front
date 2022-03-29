@@ -19,7 +19,7 @@ export class UserProfileComponent implements OnInit {
   active = false;
   alertIsError: boolean = false;
   alertIsActive: boolean = false;
-  alertMessage!: string;
+  alertMessage: string = '';
   files: File[] = [];
   constructor(
     public store: Store<{ user: UserStore }>,
@@ -76,7 +76,6 @@ export class UserProfileComponent implements OnInit {
     } catch (err) {}
   }
 
-  // @ViewChild('fileDropRef', { static: false }) fileDropEl!: ElementRef;
   fileBrowseHandler(files: any) {
     const image = files.files[0];
     const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
@@ -91,7 +90,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   handleSubmit() {
-    this.handleImageUpdate();
     this.user
       .update(
         this.userData.token,
@@ -109,12 +107,13 @@ export class UserProfileComponent implements OnInit {
               },
             })
           );
-          this.alertIsActive = true;
           this.alertMessage = 'Datos actualizados';
+          this.alertIsError = false;
+          this.alertIsActive = true;
           setTimeout(() => {
             this.alertIsActive = false;
             this.alertMessage = '';
-          }, 1500);
+          }, 2000);
         },
         error: () => {
           this.alertIsActive = true;
@@ -127,6 +126,7 @@ export class UserProfileComponent implements OnInit {
           }, 1500);
         },
       });
+    this.handleImageUpdate();
   }
 
   handleImageUpdate() {
@@ -146,8 +146,9 @@ export class UserProfileComponent implements OnInit {
                 },
               })
             );
-            this.alertIsActive = true;
             this.alertMessage = 'Imagen actualizada';
+            this.alertIsActive = false;
+            this.alertIsActive = true;
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertMessage = '';
@@ -155,9 +156,9 @@ export class UserProfileComponent implements OnInit {
             this.imageToUpload = undefined;
           },
           error: () => {
+            this.alertMessage = 'Ha ocurrido un error actualizando tu imagen';
             this.alertIsActive = true;
             this.alertIsError = true;
-            this.alertMessage = 'Ha ocurrido un error actualizando tu imagen';
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertIsError = false;
@@ -169,15 +170,6 @@ export class UserProfileComponent implements OnInit {
       try {
         this.storage.refFromURL(this.userData.userImage).delete().subscribe();
       } catch (err) {}
-    } else {
-      this.alertIsActive = true;
-      this.alertIsError = true;
-      this.alertMessage = 'Sube una imagen para actualizar';
-      setTimeout(() => {
-        this.alertIsActive = false;
-        this.alertIsError = false;
-        this.alertMessage = '';
-      }, 1500);
     }
   }
 

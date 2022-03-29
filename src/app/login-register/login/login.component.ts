@@ -53,7 +53,7 @@ export class LoginComponent {
         this.alertMessage = 'Login successful';
         setTimeout(() => {
           this.alertIsActive = false;
-          this.router.navigate(['user-dash']);
+          this.router.navigate(['dashboard']);
         }, 1500);
       },
       error: (err) => {

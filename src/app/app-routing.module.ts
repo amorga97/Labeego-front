@@ -5,10 +5,10 @@ import { RegisterComponent } from './login-register/register/register.component'
 import { LandingComponent } from './pages/landing/landing.component';
 
 const routes: Routes = [
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'register', component: LandingComponent },
+  { path: 'login', component: LandingComponent },
   {
-    path: 'user-dash',
+    path: 'dashboard',
     loadChildren: () =>
       import('./pages/user-dashboard/user-dashboard.module').then(
         (m) => m.UserDashboardModule
