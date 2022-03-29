@@ -96,7 +96,7 @@ describe('UserProfileComponent', () => {
     it('Should throw an alert', () => {
       spyOn(component.user, 'update').and.returnValue(of(mockUser));
       spyOn(component.store, 'dispatch');
-      component.handleImageUpdate();
+      // component.handleImageUpdate();
       expect(component.user.update).not.toHaveBeenCalled();
       expect(component.store.dispatch).not.toHaveBeenCalled();
       expect(component.alertIsActive).toBeTrue();
@@ -114,7 +114,7 @@ describe('UserProfileComponent', () => {
       spyOn(component.user, 'update').and.returnValue(of(mockUser));
       spyOn(component.store, 'dispatch');
       component.imageToUpload = 'url';
-      component.handleImageUpdate();
+      // component.handleImageUpdate();
       expect(component.user.update).toHaveBeenCalled();
       expect(component.store.dispatch).toHaveBeenCalled();
       expect(component.alertIsActive).toBeTrue();
@@ -137,7 +137,7 @@ describe('UserProfileComponent', () => {
         new Observable(() => {});
       }) as any);
       component.imageToUpload = 'url';
-      component.handleImageUpdate();
+      // component.handleImageUpdate();
       expect(component.user.update).toHaveBeenCalled();
       expect(component.store.dispatch).not.toHaveBeenCalled();
       expect(component.alertIsActive).toBeTrue();

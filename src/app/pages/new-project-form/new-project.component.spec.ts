@@ -69,7 +69,7 @@ describe('NewProjectFormComponent', () => {
         'this is the description of a test project'
       );
       spyOn(component.router, 'navigate');
-      component.handleClick(mockClient);
+      component.handleSelect(mockClient);
       component.handleProjectSubmit();
       expect(component.projects.create).toHaveBeenCalled();
       expect(component.alertIsActive).toBeTrue();
@@ -92,7 +92,7 @@ describe('NewProjectFormComponent', () => {
       spyOn(component.projects, 'create').and.returnValue(of(mockProject));
       component.newProjectForm.controls['title'].setValue('');
       component.newProjectForm.controls['description'].setValue('');
-      component.handleClick(mockClient);
+      component.handleSelect(mockClient);
       component.handleProjectSubmit();
       expect(component.projects.create).not.toHaveBeenCalled();
       expect(component.alertIsActive).toBeTrue();
@@ -121,7 +121,7 @@ describe('NewProjectFormComponent', () => {
       component.newProjectForm.controls['description'].setValue(
         'this is the description of a test project'
       );
-      component.handleClick(mockClient);
+      component.handleSelect(mockClient);
       component.handleProjectSubmit();
       expect(component.projects.create).toHaveBeenCalled();
       expect(component.alertIsActive).toBeTrue();

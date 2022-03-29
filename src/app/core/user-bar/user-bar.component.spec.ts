@@ -25,7 +25,7 @@ describe('UserBarComponent', () => {
   describe('When calling component.handleClick', () => {
     it('Should navigate to the profile of the user', () => {
       spyOn(component.router, 'navigate');
-      component.handleClick();
+      component.handleClick('type');
       expect(component.router.navigate).toHaveBeenCalled();
     });
   });

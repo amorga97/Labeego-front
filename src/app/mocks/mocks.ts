@@ -21,7 +21,7 @@ export const mockProject: ifProject = {
   client: 'someClient',
   teamLeader: 'someUser',
   status: 'test',
-  appointment: new Date(),
+  appointment: [new Date().toString()],
   lastUpdate: new Date(),
   toDo: [mockTask],
   doing: [mockTask],
