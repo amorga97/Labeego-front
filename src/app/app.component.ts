@@ -27,7 +27,6 @@ export class AppComponent implements OnInit {
       this.auth.loginUser(userToken as string).subscribe({
         next: (userData) => {
           this.store.dispatch(saveUser({ userData }));
-          this.router.navigate(['dashboard']);
         },
         error: (err) => {
           this.store.dispatch(logout());
@@ -37,7 +36,9 @@ export class AppComponent implements OnInit {
           setTimeout(() => {
             this.alertIsActive = false;
             this.alertIsError = false;
-            this.router.navigate(['home']);
+            this.router.navigate(['home']).then(() => {
+              window.location.reload();
+            });
           }, 2000);
         },
       });

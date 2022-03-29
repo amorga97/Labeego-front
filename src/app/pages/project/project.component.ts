@@ -33,6 +33,7 @@ export class ProjectComponent implements OnInit {
   done!: ifTask[];
   projectForm!: FormGroup;
   clientForm!: FormGroup;
+  newTaskForm!: FormGroup;
   alertIsError: boolean = false;
   alertIsActive: boolean = false;
   alertMessage!: string;
@@ -104,6 +105,41 @@ export class ProjectComponent implements OnInit {
         ],
       ],
       number: ['', [Validators.required, Validators.maxLength(5)]],
+    });
+
+    this.newTaskForm = fb.group({
+      newToDo: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
+      newDoing: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
+      newToReview: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
+      newDone: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
     });
   }
 
@@ -192,8 +228,86 @@ export class ProjectComponent implements OnInit {
     }
   }
 
+  toggleNewTask(id: string) {
+    document.getElementById(id)?.classList.toggle('tasks__item--hidden');
+    (document.getElementById(id)?.children[0] as HTMLFormElement).focus();
+  }
+
+  createNewTask(task: string, status: string) {
+    const taskToAdd = { title: task, status: '' };
+    switch (status) {
+      case 'newToDo':
+        taskToAdd.status = 'to-do';
+        break;
+      case 'newDoing':
+        taskToAdd.status = 'doing';
+        break;
+      case 'newToReview':
+        taskToAdd.status = 'to-review';
+        break;
+      case 'newDone':
+        taskToAdd.status = 'done';
+        break;
+    }
+    this.task
+      .create(
+        this.project._id,
+        this.localStorage.getDataFromLocalStorage() as string,
+        taskToAdd
+      )
+      .subscribe({
+        next: (data) => {
+          switch (data.status) {
+            case 'to-do':
+              this.toDo.unshift(data);
+              break;
+            case 'doing':
+              this.doing.unshift(data);
+              break;
+            case 'to-review':
+              this.toReview.unshift(data);
+              break;
+            case 'done':
+              this.done.unshift(data);
+              break;
+          }
+          this.toggleNewTask(status);
+        },
+        error: (err) => {},
+      });
+  }
+
+  removeTask(taskId: string) {
+    this.task
+      .remove(
+        this.project._id,
+        this.localStorage.getDataFromLocalStorage() as string,
+        taskId
+      )
+      .subscribe({
+        next: (data) => {
+          switch (data.status) {
+            case 'to-do':
+              this.toDo = this.toDo.filter((item) => item._id !== data._id);
+              break;
+            case 'doing':
+              this.doing = this.doing.filter((item) => item._id !== data._id);
+              break;
+            case 'to-review':
+              this.toReview = this.toReview.filter(
+                (item) => item._id !== data._id
+              );
+              break;
+            case 'done':
+              this.done = this.done.filter((item) => item._id !== data._id);
+              break;
+          }
+        },
+        error: (err) => {},
+      });
+  }
+
   handleClientUpdate() {
-    console.log('i have been clicked');
     if (this.clientForm.valid) {
       this.clients
         .update(
@@ -270,7 +384,6 @@ export class ProjectComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.project = data;
           this.alertIsActive = true;
           this.alertIsError = false;
@@ -359,7 +472,6 @@ export class ProjectComponent implements OnInit {
       .getOne(this.localStorage.getDataFromLocalStorage() as string, this.id)
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.project = data;
           this.projectForm.get('title')?.setValue(this.project.title);
           this.projectForm

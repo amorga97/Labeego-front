@@ -19,4 +19,17 @@ export class TasksService {
       }
     ) as Observable<ifTask>;
   }
+
+  create(projectId: string, token: string, task: Partial<ifTask>) {
+    return this.http.post(environment.backUrl + `tasks/${projectId}`, task, {
+      headers: { Authorization: `Bearer ${token}` },
+    }) as Observable<ifTask>;
+  }
+
+  remove(projectId: string, token: string, taskId: string) {
+    return this.http.delete(
+      environment.backUrl + `tasks/${projectId}/${taskId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    ) as Observable<ifTask>;
+  }
 }
