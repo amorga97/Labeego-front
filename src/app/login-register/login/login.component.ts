@@ -54,7 +54,7 @@ export class LoginComponent {
         setTimeout(() => {
           this.alertIsActive = false;
           this.router.navigate(['dashboard']);
-        }, 1500);
+        }, 2000);
       },
       error: (err) => {
         this.alertIsActive = true;

@@ -123,7 +123,7 @@ export class UserProfileComponent implements OnInit {
             this.alertIsActive = false;
             this.alertIsError = false;
             this.alertMessage = '';
-          }, 1500);
+          }, 2000);
         },
       });
     this.handleImageUpdate();
@@ -152,7 +152,7 @@ export class UserProfileComponent implements OnInit {
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertMessage = '';
-            }, 1500);
+            }, 2000);
             this.imageToUpload = undefined;
           },
           error: () => {
@@ -163,7 +163,7 @@ export class UserProfileComponent implements OnInit {
               this.alertIsActive = false;
               this.alertIsError = false;
               this.alertMessage = '';
-            }, 1500);
+            }, 2000);
             this.imageToUpload = undefined;
           },
         });

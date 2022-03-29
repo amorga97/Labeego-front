@@ -154,7 +154,7 @@ export class NewProjectFormComponent implements OnInit {
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertIsError = false;
-            }, 1500);
+            }, 2000);
           },
           error: () => {
             this.alertIsActive = true;

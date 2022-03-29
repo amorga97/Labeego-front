@@ -209,7 +209,7 @@ export class ProjectComponent implements OnInit {
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertMessage = '';
-            }, 1500);
+            }, 2000);
           },
           error: () => {
             this.alertIsActive = true;
@@ -246,7 +246,7 @@ export class ProjectComponent implements OnInit {
             this.alertIsActive = false;
             this.alertMessage = '';
             this.toggleDate();
-          }, 1500);
+          }, 2000);
         },
         error: () => {
           this.alertIsActive = true;
@@ -279,7 +279,7 @@ export class ProjectComponent implements OnInit {
             this.alertIsActive = false;
             this.alertMessage = '';
             this.toggleDate();
-          }, 1500);
+          }, 2000);
         },
         error: () => {
           this.alertIsActive = true;
@@ -304,7 +304,7 @@ export class ProjectComponent implements OnInit {
           this.alertIsActive = false;
           this.alertIsError = false;
           this.router.navigate(['user-dash']);
-        }, 1500);
+        }, 2000);
       },
       error: () => {
         this.alertIsActive = true;
@@ -331,7 +331,7 @@ export class ProjectComponent implements OnInit {
           setTimeout(() => {
             this.alertIsActive = false;
             this.alertIsError = false;
-          }, 1500);
+          }, 2000);
         },
         error: () => {
           this.alertIsActive = true;

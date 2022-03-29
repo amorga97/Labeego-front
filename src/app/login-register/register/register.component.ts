@@ -69,7 +69,7 @@ export class RegisterComponent {
             this.alertIsActive = false;
             this.alertMessage = '';
             this.router.navigate(['user-dash']);
-          }, 1500);
+          }, 2000);
         },
         error: () => {
           this.alertIsActive = true;
