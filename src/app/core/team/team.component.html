@@ -1,5 +1,8 @@
 <ul class="team">
   <li *ngIf="admin" class="team__new">
+    <div class="team__new-cross">
+      <img height="25px" width="25px" src="/assets/cross.svg" alt="" />
+    </div>
     <p (click)="handleNewUser()">New user</p>
   </li>
   <li class="team__member" *ngFor="let item of team">

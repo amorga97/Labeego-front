@@ -14,11 +14,10 @@ import { UserService } from 'src/app/services/user.service';
 export class NewUserComponent implements OnInit {
   userData!: UserStore;
   newUserForm: FormGroup;
-  isHovering = false;
   alertIsError: boolean = false;
   alertIsActive: boolean = false;
   alertMessage!: string;
-  imageToUpload: undefined | string = undefined;
+  imageToUpload!: string;
   constructor(
     public store: Store<{ user: UserStore }>,
     public router: Router,
@@ -56,31 +55,18 @@ export class NewUserComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(15),
+          Validators.maxLength(50),
           Validators.email,
         ],
       ],
     });
   }
 
-  @ViewChild('fileDropRef', { static: false }) fileDropEl!: ElementRef;
-  files: any;
-  fileBrowseHandler(files: any) {
-    const image = files.files[0];
-    const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
-    this.storage.upload(filePath, image).then((data) => {
-      data.ref.getDownloadURL().then((url) => {
-        this.imageToUpload = url;
-      });
-    });
-  }
-
   handleSubmit() {
     if (this.newUserForm.valid) {
-      if (this.imageToUpload === undefined) {
-        this.imageToUpload =
-          'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/UserImages%2Fdef-user.png?alt=media&token=8d581c44-e983-4a54-a78d-39adef2ab5d9';
-      }
+      this.imageToUpload =
+        'https://firebasestorage.googleapis.com/v0/b/final-isdi-coders.appspot.com/o/UserImages%2Fdef-user.png?alt=media&token=a2616ba2-25c3-4565-a8c0-e6b0c8a098a9';
+
       this.user
         .create(this.userData.token, {
           ...this.newUserForm.value,
@@ -93,7 +79,8 @@ export class NewUserComponent implements OnInit {
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertMessage = '';
-            }, 1500);
+              this.router.navigate(['dashboard']);
+            }, 2000);
           },
           error: () => {
             this.alertIsActive = true;
@@ -103,7 +90,7 @@ export class NewUserComponent implements OnInit {
               this.alertIsActive = false;
               this.alertIsError = false;
               this.alertMessage = '';
-            }, 1500);
+            }, 2000);
           },
         });
     } else {
@@ -114,7 +101,7 @@ export class NewUserComponent implements OnInit {
         this.alertIsActive = false;
         this.alertIsError = false;
         this.alertMessage = '';
-      }, 1500);
+      }, 2000);
     }
   }
 
@@ -125,7 +112,7 @@ export class NewUserComponent implements OnInit {
         next: (data) => {
           this.userData = data;
           if (!this.userData.admin) {
-            this.router.navigate(['user-dash']);
+            this.router.navigate(['dashboard']);
           }
         },
       });

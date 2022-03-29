@@ -1,45 +1,114 @@
 <app-layout>
-  <h2>Crear un nuevo proyecto</h2>
-  <form (ngSubmit)="handleProjectSubmit()" [formGroup]="newProjectForm">
-    <label for="title">Título del proyecto</label>
-    <input id="title" type="text" formControlName="title" />
-    <label for="description">Descripción del nuevo proyecto</label>
-    <textarea
-      type="text-area"
-      id="description"
-      formControlName="description"
-      rows="5"
-      cols="33"
-    ></textarea>
-    <h3>Crea un nuevo cliente</h3>
-    <form (ngSubmit)="handleClientSubmit()" [formGroup]="newClientForm">
-      <label for="name">Nombre del cliente</label>
-      <input type="text" id="name" formControlName="name" />
-      <label for="street">Calle</label>
-      <input type="text" id="street" formControlName="street" />
-      <label for="number">Número</label>
-      <input type="text" id="number" formControlName="number" />
-      <label for="email">Correo electrónico</label>
-      <input type="text" id="email" formControlName="email" />
-      <button type="submit" [disabled]="!newClientForm.valid">
-        Crear nuevo cliente
+  <div class="container">
+    <form
+      *ngIf="step <= 1"
+      class="form"
+      (ngSubmit)="moveSteps(true)"
+      [formGroup]="newProjectForm"
+    >
+      <h2>Crear un nuevo proyecto</h2>
+      <label for="title">Título del proyecto</label>
+      <input
+        class="form__field"
+        id="title"
+        type="text"
+        formControlName="title"
+      />
+      <label for="description">Descripción del nuevo proyecto</label>
+      <textarea
+        class="form__field form__field--area"
+        type="text-area"
+        id="description"
+        formControlName="description"
+        rows="5"
+        cols="33"
+      ></textarea>
+      <h3>O elige uno de los clientes ya existentes</h3>
+
+      <button
+        class="form__submit"
+        type="submit"
+        [disabled]="!newProjectForm.valid"
+      >
+        {{ newProjectForm.valid ? "Siguiente" : "Rellena todos los campos" }}
       </button>
     </form>
 
-    <h3>O elige uno de los clientes ya existentes</h3>
-    <ul>
-      <li *ngFor="let item of clients" (click)="handleClick(item)">
-        <p class="client__name">{{ item.name }}</p>
-        <div class="client__address-wrapper">
-          <p class="client__street">{{ item.address.street }}</p>
-          <p class="client__number">{{ item.address.number }}</p>
+    <form
+      *ngIf="step >= 2"
+      class="form"
+      (ngSubmit)="handleClientSubmit()"
+      [formGroup]="newClientForm"
+    >
+      <div class="form__client-choice-title">
+        <h3>Crea un nuevo cliente</h3>
+        <h3>O elige uno de la lista</h3>
+      </div>
+      <div class="form__client-choice">
+        <div class="form__fields">
+          <label for="name">Nombre del cliente</label>
+          <input
+            class="form__field"
+            type="text"
+            id="name"
+            formControlName="name"
+          />
+          <label for="street">Calle</label>
+          <input
+            class="form__field"
+            type="text"
+            id="street"
+            formControlName="street"
+          />
+          <label for="number">Número</label>
+          <input
+            class="form__field"
+            type="text"
+            id="number"
+            formControlName="number"
+          />
+          <label for="email">Correo electrónico</label>
+          <input
+            class="form__field"
+            type="text"
+            id="email"
+            formControlName="email"
+          />
         </div>
-      </li>
-    </ul>
-    <button type="submit" [disabled]="!newProjectForm.valid">
-      Crear nuevo proyecto
-    </button>
-  </form>
+
+        <ul class="form__clients">
+          <li
+            [ngClass]="{
+              'form__clients-item--selected': selectedClientId === item._id
+            }"
+            class="form__clients-item"
+            [id]="item._id"
+            *ngFor="let item of clients"
+            (click)="handleSelect(item)"
+          >
+            <p class="client__name">{{ item.name }}</p>
+          </li>
+        </ul>
+      </div>
+      <div class="form__buttons">
+        <button
+          class="form__submit"
+          type="submit"
+          [disabled]="!newClientForm.valid"
+        >
+          Crear nuevo cliente
+        </button>
+        <button
+          class="form__submit form__submit--project"
+          type="button"
+          (click)="handleProjectSubmit()"
+          [disabled]="!selectedClientId"
+        >
+          Crear nuevo proyecto
+        </button>
+      </div>
+    </form>
+  </div>
   <app-alerts
     [active]="alertIsActive"
     [isError]="alertIsError"

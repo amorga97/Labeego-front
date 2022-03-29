@@ -4,10 +4,10 @@ import { RegisterComponent } from './register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { CoreModule } from '../core/core.module';
-import { AlertsComponent } from '../core/alerts/alerts.component';
 
 @NgModule({
   declarations: [RegisterComponent, LoginComponent],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, CoreModule],
+  exports: [LoginComponent, RegisterComponent],
 })
 export class LoginRegisterModule {}

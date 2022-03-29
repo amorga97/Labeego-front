@@ -1,8 +1,45 @@
 .alert {
-  height: 50px;
-  width: 200px;
-  background-color: green;
+  position: absolute;
+  top: 90%;
+  left: 80%;
+  z-index: 1;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: ease-in-out 200ms;
+  animation: appearance 2000ms alternate;
+  color: white;
+  background-color: rgba(22, 122, 22, 0.616);
+  border-radius: 5px;
+
+  &__message {
+    font-size: large;
+    font-weight: 100;
+  }
+
   &--error {
-    background-color: red;
+    background-color: rgba(187, 0, 0, 0.623);
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes appearance {
+  0% {
+    transform: translateX(500px);
+  }
+
+  20% {
+    transform: translateX(0);
+  }
+  80% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(500px);
   }
 }

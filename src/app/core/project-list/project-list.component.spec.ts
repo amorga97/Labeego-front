@@ -8,7 +8,7 @@ import { mockProject } from 'src/app/mocks/mocks';
 import { ProjectListComponent } from './project-list.component';
 
 const projWithtoutAppointment = { ...mockProject };
-delete projWithtoutAppointment.appointment;
+projWithtoutAppointment.appointment = [];
 
 describe('ProjectListComponent', () => {
   let component: ProjectListComponent;

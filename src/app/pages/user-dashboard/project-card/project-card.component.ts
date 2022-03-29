@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -11,8 +12,9 @@ import { ifProject, ifTask, UserStore } from 'src/app/interfaces/interfaces';
 export class ProjectCardComponent implements OnInit {
   @Input() project!: ifProject;
   @Input() hasAppointment!: boolean;
+  @Input() index!: number;
   lastUpdate!: Object;
-  tasks!: ifTask[];
+  tasks: { task: ifTask; icon: string }[] = [];
   admin: boolean = false;
   progress!: number;
   userData!: UserStore;
@@ -41,11 +43,40 @@ export class ProjectCardComponent implements OnInit {
   }
 
   getRelevantTasks() {
-    this.tasks = [...(this.project.doing as ifTask[])];
-    const LastDoneTask = [...(this.project.done as ifTask[])]
-      .reverse()
-      .slice(0, 1);
-    if (LastDoneTask) this.tasks.splice(0, 0, LastDoneTask[0]);
+    if (!this.hasAppointment) {
+      if ((this.project.toDo as ifTask[]).length > 0) {
+        this.tasks.push({
+          task: (this.project.toDo as ifTask[]).slice(0, 1)[0],
+          icon: '/assets/to-do.svg',
+        });
+      }
+
+      if ((this.project.doing as ifTask[]).length > 0) {
+        this.tasks.push({
+          task: (this.project.doing as ifTask[]).slice(0, 1)[0],
+          icon: '/assets/in-progress.svg',
+        });
+      }
+
+      if ((this.project.done as ifTask[]).length > 0) {
+        this.tasks.push({
+          task: (this.project.done as ifTask[]).slice(0, 1)[0],
+          icon: '/assets/check.svg',
+        });
+      }
+    } else {
+      (this.project.toReview as ifTask[]).length <= 3
+        ? (this.tasks = (this.project.toReview as ifTask[]).map((item) => ({
+            task: item,
+            icon: '/assets/in-progress.svg',
+          })))
+        : (this.tasks = (this.project.toReview as ifTask[])
+            .slice(0, 3)
+            .map((item) => ({
+              task: item,
+              icon: '/assets/in-progress.svg',
+            })));
+    }
   }
 
   getProgress() {
@@ -56,12 +87,18 @@ export class ProjectCardComponent implements OnInit {
       (this.project.done as ifTask[]).length;
     const doneTasks = (this.project.done as ifTask[]).length;
     this.progress = Math.floor((doneTasks / totalTasks) * 100);
+    setTimeout(() => {
+      const progressBar = document.getElementById(
+        this.index.toString() + this.hasAppointment
+      );
+      progressBar!.style.width = `${this.progress.toString()}%`;
+    }, 100);
   }
 
   getAppointmentDate() {
     if (this.hasAppointment) {
       this.appointmentDate = new Date(
-        this.project.appointment as string
+        (this.project.appointment as string[])[0]
       ).toLocaleDateString();
     }
   }
@@ -79,9 +116,9 @@ export class ProjectCardComponent implements OnInit {
           this.admin = this.userData.admin;
         },
       });
+    this.getProgress();
     this.getLastUpdate();
     this.getRelevantTasks();
-    this.getProgress();
     this.getAppointmentDate();
   }
 }

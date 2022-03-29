@@ -1,18 +1,42 @@
-<div (click)="handleClick()" class="project-card">
+<div
+  (click)="handleClick()"
+  class="project-card"
+  [ngClass]="{ 'project-card--black': hasAppointment }"
+>
   <h2 class="project-card__title">{{ project.title }}</h2>
-  <h3 class="project-card__description">{{ project.description }}</h3>
-  <p class="project-card__update-date">{{ lastUpdate }}</p>
-  <p class="project-card__appointment" *ngIf="hasAppointment">
-    {{ appointmentDate }}
-  </p>
-  <img
-    class="project-card__user-image"
-    *ngIf="admin"
-    [src]="project.user.userImage"
-    [alt]="project.user.name"
-  />
-  <ul class="project-card__task-list" *ngFor="let item of tasks">
-    <li class="project-card__task">{{ item?.title }}</li>
-  </ul>
-  <p class="project-card__progress">Progress: {{ progress }}%</p>
+  <div class="project-card__dates">
+    <p class="project-card__dates-update">{{ lastUpdate }}</p>
+    <p class="project-card__dates-appointment" *ngIf="hasAppointment">
+      <img src="/assets/calendar.svg" alt="" /> {{ appointmentDate }}
+    </p>
+  </div>
+  <div class="project-card__tasks">
+    <div class="project-card__user-image-wrapper">
+      <img
+        class="project-card__user-image"
+        *ngIf="admin"
+        [src]="project.user.userImage"
+        [alt]="project.user.name"
+      />
+    </div>
+    <ul
+      class="project-card__task-list"
+      [ngClass]="{ 'project-card__task-list--moved': !admin }"
+    >
+      <li *ngFor="let item of tasks" class="project-card__task">
+        <img class="project-card__task-icon" [src]="item.icon" alt="to-do" />
+        <p class="project-card__task-title">{{ item?.task?.title }}</p>
+      </li>
+    </ul>
+  </div>
+  <div class="project-card__progress">
+    <p class="project-card__progress-title">Progreso</p>
+    <p class="project-card__progress-number">{{ progress }}%</p>
+  </div>
+  <div class="project-card__bar">
+    <div
+      [id]="index.toString() + hasAppointment"
+      class="project-card__bar-progress"
+    ></div>
+  </div>
 </div>

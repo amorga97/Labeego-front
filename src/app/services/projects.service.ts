@@ -22,7 +22,7 @@ export class ProjectsService {
     }) as Observable<ifProject>;
   }
 
-  update(token: string, id: string, project: ifProject) {
+  update(token: string, id: string, project: Partial<ifProject>) {
     return this.http.patch(environment.backUrl + `projects/${id}`, project, {
       headers: { Authorization: `Bearer ${token}` },
     }) as Observable<ifProject>;
@@ -32,6 +32,15 @@ export class ProjectsService {
     return this.http.post(environment.backUrl + 'projects/new', project, {
       headers: { Authorization: `Bearer ${token}` },
     }) as Observable<ifProject>;
+  }
+
+  removeAppointment(token: string, id: string) {
+    return this.http.delete(
+      environment.backUrl + `projects/${id}/appointment`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    ) as Observable<ifProject>;
   }
 
   remove(token: string, id: string) {

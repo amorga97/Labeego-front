@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { getDownloadURL, ref } from 'firebase/storage';
 import { UserStore } from 'src/app/interfaces/interfaces';
 import { UserService } from 'src/app/services/user.service';
 import { updateUser } from 'src/app/store/user.actions';
@@ -17,9 +16,11 @@ export class UserProfileComponent implements OnInit {
   userDataForm!: FormGroup;
   userImage!: string;
   imageToUpload: string | undefined = undefined;
+  active = false;
   alertIsError: boolean = false;
   alertIsActive: boolean = false;
-  alertMessage!: string;
+  alertMessage: string = '';
+  files: File[] = [];
   constructor(
     public store: Store<{ user: UserStore }>,
     private fb: FormBuilder,
@@ -55,14 +56,35 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  @ViewChild('fileDropRef', { static: false }) fileDropEl!: ElementRef;
-  files: any;
+  toggleActive() {
+    this.active = !this.active;
+  }
+
+  onSelect(event: any) {
+    this.files.unshift(...event.addedFiles);
+    this.fileBrowseHandler({ files: [...this.files] });
+    this.toggleActive();
+  }
+
+  onRemove(event: any) {
+    try {
+      this.storage.refFromURL(this.userData.userImage).delete().subscribe();
+      this.imageToUpload = undefined;
+      document
+        .getElementsByClassName('user-data__image-preview')[0]
+        .setAttribute('src', this.userData.userImage);
+    } catch (err) {}
+  }
+
   fileBrowseHandler(files: any) {
     const image = files.files[0];
     const filePath = `UserImages/${Math.random() * 10000}${image.name}`;
     this.storage.upload(filePath, image).then((data) => {
       data.ref.getDownloadURL().then((url) => {
         this.imageToUpload = url;
+        document
+          .getElementsByClassName('user-data__image-preview')[0]
+          .setAttribute('src', this.imageToUpload);
       });
     });
   }
@@ -85,12 +107,13 @@ export class UserProfileComponent implements OnInit {
               },
             })
           );
-          this.alertIsActive = true;
           this.alertMessage = 'Datos actualizados';
+          this.alertIsError = false;
+          this.alertIsActive = true;
           setTimeout(() => {
             this.alertIsActive = false;
             this.alertMessage = '';
-          }, 1500);
+          }, 2000);
         },
         error: () => {
           this.alertIsActive = true;
@@ -100,9 +123,10 @@ export class UserProfileComponent implements OnInit {
             this.alertIsActive = false;
             this.alertIsError = false;
             this.alertMessage = '';
-          }, 1500);
+          }, 2000);
         },
       });
+    this.handleImageUpdate();
   }
 
   handleImageUpdate() {
@@ -122,38 +146,30 @@ export class UserProfileComponent implements OnInit {
                 },
               })
             );
-            this.alertIsActive = true;
             this.alertMessage = 'Imagen actualizada';
+            this.alertIsActive = false;
+            this.alertIsActive = true;
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertMessage = '';
-            }, 1500);
+            }, 2000);
             this.imageToUpload = undefined;
           },
           error: () => {
+            this.alertMessage = 'Ha ocurrido un error actualizando tu imagen';
             this.alertIsActive = true;
             this.alertIsError = true;
-            this.alertMessage = 'Ha ocurrido un error actualizando tu imagen';
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertIsError = false;
               this.alertMessage = '';
-            }, 1500);
+            }, 2000);
             this.imageToUpload = undefined;
           },
         });
       try {
         this.storage.refFromURL(this.userData.userImage).delete().subscribe();
       } catch (err) {}
-    } else {
-      this.alertIsActive = true;
-      this.alertIsError = true;
-      this.alertMessage = 'Sube una imagen para actualizar';
-      setTimeout(() => {
-        this.alertIsActive = false;
-        this.alertIsError = false;
-        this.alertMessage = '';
-      }, 1500);
     }
   }
 

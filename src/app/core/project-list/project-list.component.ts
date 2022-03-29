@@ -30,18 +30,20 @@ export class ProjectListComponent implements OnInit {
         next: (data) => {
           this.projects = data;
           this.projectsWithAppointment = this.projects.filter(
-            (item) => item.appointment && item
+            (item) => item.appointment?.length !== 0 && item
           );
           this.projectsWithoutAppointment = this.projects.filter(
-            (item) => !item.appointment && item
+            (item) => item.appointment?.length === 0 && item
           );
 
           this.projectsWithAppointment = this.projectsWithAppointment.map(
             (item) => ({
               ...item,
-              appointment: new Date(
-                item.appointment as string
-              ).toLocaleDateString(),
+              appointment: [
+                new Date(
+                  (item.appointment as string[])[0] as string
+                ).toLocaleDateString(),
+              ],
             })
           ) as ifProject[];
           console.log();

@@ -1,84 +1,243 @@
 <app-layout>
-  <button (click)="handleDelete()">Eliminar este proyecto</button>
-  <form (ngSubmit)="handleSubmit()" [formGroup]="projectForm">
-    <input id="title" type="text" formControlName="title" />
-    <textarea
-      type="text-area"
-      id="description"
-      formControlName="description"
-      rows="5"
-      cols="33"
-    ></textarea>
-    <button type="submit" [disabled]="!projectForm.valid">
-      Guardar cambios
-    </button>
-  </form>
-
-  <app-alerts
-    [active]="alertIsActive"
-    [isError]="alertIsError"
-    [message]="alertMessage"
-  ></app-alerts>
-
-  <div cdkDropListGroup class="tasks">
-    <div class="tasks__container">
-      <h2>Por hacer</h2>
-
-      <div
-        cdkDropList
-        [cdkDropListData]="toDo"
-        class="tasks__list"
-        (cdkDropListDropped)="drop($event)"
-      >
-        <div class="tasks__item" *ngFor="let item of toDo" cdkDrag>
-          {{ item.title }}
+  <div class="container" [ngClass]="{ blur: dateActive }">
+    <app-alerts
+      [active]="alertIsActive"
+      [isError]="alertIsError"
+      [message]="alertMessage"
+    ></app-alerts>
+    <div class="project">
+      <div cdkDropListGroup class="tasks">
+        <div class="tasks__column">
+          <div
+            cdkDropList
+            [cdkDropListData]="toDo"
+            class="tasks__list"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <h2 class="tasks__list-title">Por hacer</h2>
+            <div class="tasks__item" *ngFor="let item of toDo" cdkDrag>
+              {{ item.title }}
+            </div>
+          </div>
+        </div>
+        <div class="tasks__column">
+          <div
+            cdkDropList
+            [cdkDropListData]="doing"
+            class="tasks__list"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <h2 class="tasks__list-title">En proceso</h2>
+            <div class="tasks__item" *ngFor="let item of doing" cdkDrag>
+              {{ item.title }}
+            </div>
+          </div>
+        </div>
+        <div class="tasks__column">
+          <div
+            cdkDropList
+            [cdkDropListData]="toReview"
+            class="tasks__list"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <h2 class="tasks__list-title">Por aprobar</h2>
+            <div class="tasks__item" *ngFor="let item of toReview" cdkDrag>
+              {{ item.title }}
+            </div>
+          </div>
+        </div>
+        <div class="tasks__column">
+          <div
+            cdkDropList
+            [cdkDropListData]="done"
+            class="tasks__list"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <h2 class="tasks__list-title">Hecho</h2>
+            <div class="tasks__item" *ngFor="let item of done" cdkDrag>
+              {{ item.title }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="tasks__container">
-      <h2>En proceso</h2>
-
-      <div
-        cdkDropList
-        [cdkDropListData]="doing"
-        class="tasks__list"
-        (cdkDropListDropped)="drop($event)"
+    <div class="forms">
+      <form
+        id="project-form"
+        class="project-form"
+        (ngSubmit)="handleSubmit()"
+        [formGroup]="projectForm"
       >
-        <div class="tasks__item" *ngFor="let item of doing" cdkDrag>
-          {{ item.title }}
+        <input
+          class="project-form__title"
+          id="title"
+          type="text"
+          formControlName="title"
+        />
+        <textarea
+          class="project-form__description"
+          type="text-area"
+          id="description"
+          formControlName="description"
+          rows="5"
+          cols="33"
+        ></textarea>
+        <div class="project-form__buttons">
+          <button
+            class="project-form__button"
+            type="submit"
+            [disabled]="!projectForm.valid"
+          >
+            Guardar cambios
+          </button>
+          <button
+            class="project-form__button project-form__button--delete"
+            (click)="handleDelete()"
+          >
+            Eliminar este proyecto
+          </button>
         </div>
-      </div>
-    </div>
-
-    <div class="tasks__container">
-      <h2>Por aprobar</h2>
-
-      <div
-        cdkDropList
-        [cdkDropListData]="toReview"
-        class="tasks__list"
-        (cdkDropListDropped)="drop($event)"
+      </form>
+      <form
+        class="client-form"
+        id="client-form"
+        (ngSubmit)="handleClientUpdate()"
+        [formGroup]="clientForm"
       >
-        <div class="tasks__item" *ngFor="let item of toReview" cdkDrag>
-          {{ item.title }}
+        <input
+          class="client-form__title"
+          id="title"
+          form="client-form"
+          type="text"
+          formControlName="name"
+        />
+        <div class="client-form__field">
+          <img
+            height="15px"
+            width="15px"
+            class="client-form__icon"
+            src="/assets/phone.svg"
+            alt="phone"
+          />
+          <input
+            class="client-form__info"
+            id="title"
+            form="client-form"
+            type="text"
+            formControlName="phone"
+          />
         </div>
-      </div>
-    </div>
-
-    <div class="tasks__container">
-      <h2>Done</h2>
-
-      <div
-        cdkDropList
-        [cdkDropListData]="done"
-        class="tasks__list"
-        (cdkDropListDropped)="drop($event)"
-      >
-        <div class="tasks__item" *ngFor="let item of done" cdkDrag>
-          {{ item.title }}
+        <div class="client-form__field">
+          <img
+            height="15px"
+            width="15px"
+            class="client-form__icon"
+            src="/assets/email.svg"
+            alt="email"
+          />
+          <input
+            class="client-form__info"
+            form="client-form"
+            id="title"
+            type="text"
+            formControlName="email"
+          />
         </div>
-      </div>
+        <div *ngIf="hasAppointment" class="client-form__field">
+          <img
+            height="20px"
+            width="15px"
+            class="client-form__icon"
+            src="/assets/calendar-solid.svg"
+            alt="calendar"
+          />
+          <p class="client-form__info">{{ appointment }}</p>
+        </div>
+        <div class="client-form__field">
+          <img
+            height="20px"
+            width="15px"
+            class="client-form__icon"
+            src="/assets/location.svg"
+            alt=""
+          />
+          <div class="client-form__address">
+            <input
+              class="client-form__info"
+              id="title"
+              form="client-form"
+              type="text"
+              formControlName="street"
+            />
+            <p>Nº</p>
+            <input
+              class="client-form__info"
+              id="title"
+              form="client-form"
+              type="text"
+              formControlName="number"
+            />
+          </div>
+        </div>
+        <div class="client-form__buttons">
+          <button
+            class="client-form__button"
+            type="submit"
+            [disabled]="!clientForm.valid"
+          >
+            Guardar cambios
+          </button>
+          <button
+            (click)="toggleDate()"
+            class="client-form__button"
+            type="button"
+          >
+            <img src="/assets/cross.svg" alt="" />
+            {{ hasAppointment ? "Modificar cita" : "Crear una cita" }}
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
+  <div *ngIf="dateActive" class="appointment">
+    <form
+      (ngSubmit)="createAppointment()"
+      class="appointment__form"
+      [formGroup]="projectForm"
+    >
+      <div class="appointment__form-title">
+        <label class="appointment__form-label" for="date"
+          >Selecciona una fecha para la cita</label
+        >
+        <img
+          class="appointment__close"
+          width="30px"
+          height="30px"
+          (click)="toggleDate()"
+          src="/assets/close.svg"
+          alt="close"
+        />
+      </div>
+      <input
+        class="appointment__form-date"
+        type="date"
+        name="appointment"
+        formControlName="appointment"
+        form="project-form"
+        id="date"
+      />
+      <div class="appointment__form-buttons">
+        <button class="appointment__form-button" type="submit">
+          Confirmar cita
+        </button>
+        <button
+          type="button"
+          class="appointment__form-button appointment__form-button--delete"
+          (click)="deleteAppointment()"
+        >
+          Eliminar cita
+        </button>
+      </div>
+    </form>
   </div>
 </app-layout>

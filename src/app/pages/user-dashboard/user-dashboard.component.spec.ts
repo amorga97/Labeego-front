@@ -17,7 +17,7 @@ import { ProjectCardComponent } from './project-card/project-card.component';
 import { UserDashboardComponent } from './user-dashboard.component';
 
 const projWithtoutAppointment = { ...mockProject };
-delete projWithtoutAppointment.appointment;
+projWithtoutAppointment.appointment = [];
 
 describe('UserDashboardComponent', () => {
   let component: UserDashboardComponent;
@@ -35,7 +35,7 @@ describe('UserDashboardComponent', () => {
       imports: [
         CommonModule,
         RouterTestingModule.withRoutes([
-          { path: 'user-dash', component: UserDashboardComponent },
+          { path: 'dashboard', component: UserDashboardComponent },
         ]),
         HttpClientTestingModule,
         CoreModule,

@@ -5,10 +5,14 @@ import { ifProject, UserStore } from 'src/app/interfaces/interfaces';
 
 @Component({
   selector: 'app-sidebar',
-  template: `<app-user-bar [user]="userData"></app-user-bar>
+  template: `<app-user-bar class="user-bar" [user]="userData"></app-user-bar>
     <div class="item-wrapper">
-      <app-project-list *ngIf="isProjectRoute"></app-project-list>
-      <app-team [admin]="userData.admin" [team]="userData.team"></app-team>
+      <app-project-list class="item" *ngIf="isProjectRoute"></app-project-list>
+      <app-team
+        class="item"
+        [admin]="userData.admin"
+        [team]="userData.team"
+      ></app-team>
     </div>`,
   styleUrls: ['./sidebar.component.scss'],
 })

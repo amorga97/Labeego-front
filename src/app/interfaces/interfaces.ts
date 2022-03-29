@@ -18,7 +18,7 @@ export interface ifProject {
   client: string;
   teamLeader: string;
   status: string;
-  appointment?: string;
+  appointment: string[];
   lastUpdate: Date;
   toDo: object;
   doing: object;
@@ -55,6 +55,7 @@ export interface ifClient {
   _id: string;
   name: string;
   email: string;
+  phone: string[];
   address: {
     street: string;
     number: number;

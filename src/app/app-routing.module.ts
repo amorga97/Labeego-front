@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login-register/login/login.component';
 import { RegisterComponent } from './login-register/register/register.component';
+import { LandingComponent } from './pages/landing/landing.component';
 
 const routes: Routes = [
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'register', component: LandingComponent },
+  { path: 'login', component: LandingComponent },
   {
-    path: 'user-dash',
+    path: 'dashboard',
     loadChildren: () =>
       import('./pages/user-dashboard/user-dashboard.module').then(
         (m) => m.UserDashboardModule
@@ -37,6 +38,8 @@ const routes: Routes = [
         (m) => m.UserProfileModule
       ),
   },
+  { path: '', component: LandingComponent },
+  { path: 'home', component: LandingComponent },
 ];
 
 @NgModule({

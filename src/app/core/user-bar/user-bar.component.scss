@@ -7,7 +7,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 70px;
+    height: 100%;
     padding: 25px;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -15,8 +15,15 @@
     &__data {
       width: 100%;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
+      gap: 20px;
       align-items: center;
+
+      &-name {
+        font-weight: 100;
+        font-size: 1.3rem;
+        text-transform: capitalize;
+      }
 
       &-img-wrapper {
         width: 60px;
@@ -43,6 +50,7 @@
         list-style: none;
         display: none;
         position: fixed;
+        border-radius: 10px;
         background-color: white;
         padding: 10px;
         transform: translateY(57px) translateX(-35px);
@@ -51,11 +59,14 @@
       &-item {
         padding-bottom: 5px;
         padding-top: 5px;
-        border-bottom: 1px solid rgba(128, 128, 128, 0.459);
       }
     }
     &__options:hover .user-bar__options-list {
       display: block;
     }
   }
+}
+
+.hidden {
+  display: none;
 }

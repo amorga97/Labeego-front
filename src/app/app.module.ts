@@ -16,6 +16,7 @@ import { ProjectModule } from './pages/project/project.module';
 import { NewUserModule } from './pages/new-user/new-user.module';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage/';
+import { LandingModule } from './pages/landing/landing.module';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -24,12 +25,12 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage/';
     StoreModule.forRoot({ user: UserReducer }, {}),
     ReactiveFormsModule,
     FormsModule,
-    LoginRegisterModule,
     HttpClientModule,
     UserDashboardModule,
     CoreModule,
     ProjectModule,
     NewUserModule,
+    LandingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     StoreDevtoolsModule.instrument({

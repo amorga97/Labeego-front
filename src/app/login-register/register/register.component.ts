@@ -27,7 +27,7 @@ export class RegisterComponent {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(15),
+          Validators.maxLength(20),
         ],
       ],
       name: [
@@ -35,7 +35,7 @@ export class RegisterComponent {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(15),
+          Validators.maxLength(20),
         ],
       ],
       password: [
@@ -43,7 +43,7 @@ export class RegisterComponent {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(15),
+          Validators.maxLength(20),
         ],
       ],
       mail: [
@@ -51,7 +51,7 @@ export class RegisterComponent {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(15),
+          Validators.maxLength(50),
           Validators.email,
         ],
       ],
@@ -68,8 +68,8 @@ export class RegisterComponent {
           setTimeout(() => {
             this.alertIsActive = false;
             this.alertMessage = '';
-            this.router.navigate(['user-dash']);
-          }, 1500);
+            this.router.navigate(['dashboard']);
+          }, 2000);
         },
         error: () => {
           this.alertIsActive = true;
