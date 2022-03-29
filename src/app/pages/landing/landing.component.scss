@@ -15,6 +15,7 @@
 }
 
 .header {
+  z-index: 1;
   position: fixed;
   display: flex;
   justify-content: space-between;
@@ -36,19 +37,43 @@
   }
 
   &-1 {
-    height: 80vh;
+    height: 100vh;
     align-items: flex-end;
+    padding-bottom: 180px;
   }
 
   &-2 {
-    height: 80vh;
-    align-items: flex-end;
+    height: 100vh;
+    align-items: center;
     justify-content: flex-end;
   }
 
   &-3 {
-    height: 80vh;
-    align-items: flex-end;
-    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    justify-content: flex-start;
+
+    &__container {
+      width: 35%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 35px;
+    }
+
+    &__form {
+      width: 25%;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      justify-self: center;
+      align-items: center;
+    }
+
+    &__subtitle {
+      max-width: 400px;
+    }
   }
 }
