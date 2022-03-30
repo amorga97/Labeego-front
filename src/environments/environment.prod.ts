@@ -8,5 +8,6 @@ export const environment = {
     authDomain: 'final-isdi-coders.firebaseapp.com',
     messagingSenderId: '649528423764',
   },
-  production: true
+  backUrl: 'http://localhost:4600/',
+  production: true,
 };
