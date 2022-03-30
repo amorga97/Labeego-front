@@ -17,7 +17,9 @@ export class UserBarComponent {
     type === 'logout'
       ? (() => {
           this.store.dispatch(logout());
-          this.router.navigate(['login']);
+          this.router.navigate(['login']).then(() => {
+            window.location.reload();
+          });
         })()
       : this.router.navigate(['profile']);
   }

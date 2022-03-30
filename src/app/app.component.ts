@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
             this.alertIsActive = false;
             this.alertIsError = false;
             this.router.navigate(['home']).then(() => {
-              window.location.reload();
+              // window.location.reload();
             });
           }, 2000);
         },

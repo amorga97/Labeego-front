@@ -42,4 +42,42 @@ describe('TasksService', () => {
       req.flush(mockTask);
     });
   });
+
+  describe('When calling service.create', () => {
+    it('Should call httpClient', () => {
+      service.create('projectId', 'token', mockTask).subscribe((res: any) => {
+        expect(res).not.toBeNull();
+        expect(JSON.stringify(res)).toBe(JSON.stringify(mockTask));
+      });
+
+      const req2 = httpTestingController.expectOne({
+        url: 'http://localhost:4600/tasks/projectId',
+        method: 'POST',
+      });
+
+      expect(req2.request.url).toBe('http://localhost:4600/tasks/projectId');
+
+      req2.flush(mockTask);
+    });
+  });
+
+  describe('When calling service.create', () => {
+    it('Should call httpClient', () => {
+      service.remove('projectId', 'token', 'taskId').subscribe((res: any) => {
+        expect(res).not.toBeNull();
+        expect(JSON.stringify(res)).toBe(JSON.stringify(mockTask));
+      });
+
+      const req3 = httpTestingController.expectOne({
+        url: 'http://localhost:4600/tasks/projectId/taskId',
+        method: 'DELETE',
+      });
+
+      expect(req3.request.url).toBe(
+        'http://localhost:4600/tasks/projectId/taskId'
+      );
+
+      req3.flush(mockTask);
+    });
+  });
 });

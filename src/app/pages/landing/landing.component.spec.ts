@@ -11,7 +11,7 @@ import { LandingComponent } from './landing.component';
 const mockPath = {
   style: { strokeDasharray: {} },
   getTotalLength: () => {
-    'length';
+    10;
   },
 };
 
@@ -47,7 +47,7 @@ describe('LandingComponent', () => {
         expect(document.querySelector('.header')).toBeDefined();
       });
       component.configureScrollEffect();
-      component.queryDocument(mockPath, mockLenght, mockPath, mockLenght);
+      component.queryDocument(mockPath, mockPath);
     });
   });
 });

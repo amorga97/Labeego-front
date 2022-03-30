@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-landing',
@@ -15,37 +15,35 @@ export class LandingComponent {
   constructor(@Inject(DOCUMENT) public document: Document) {
     window.addEventListener('DOMContentLoaded', () => {
       this.linePath = this.document.querySelector('.line');
-      this.mazePath = document.querySelector('.maze');
-      this.queryDocument(
-        this.linePath,
-        this.linePathLength,
-        this.mazePath,
-        this.mazePathLength
-      );
+      this.mazePath = this.document.querySelector('.maze');
+      this.queryDocument(this.linePath, this.mazePath);
     });
-    window.addEventListener('scroll', this.configureScrollEffect);
+    window.addEventListener('scroll', () => {
+      this.configureScrollEffect();
+    });
   }
 
   queryDocument(
     linePath: any,
-    linePathLength: any,
-    mazePath: any,
-    mazePathLength: any
-  ) {
-    linePathLength = linePath?.getTotalLength();
-    linePath.style.strokeDasharray = linePathLength + ' ' + linePathLength;
-    linePath.style.strokeDashoffset = linePathLength;
 
-    mazePathLength = mazePath?.getTotalLength();
-    mazePath.style.strokeDasharray = mazePathLength + ' ' + mazePathLength;
-    mazePath.style.strokeDashoffset = mazePathLength;
+    mazePath: any
+  ) {
+    this.linePathLength = linePath?.getTotalLength();
+    linePath.style.strokeDasharray =
+      this.linePathLength + ' ' + this.linePathLength;
+    linePath.style.strokeDashoffset = this.linePathLength;
+
+    this.mazePathLength = mazePath?.getTotalLength();
+    mazePath.style.strokeDasharray =
+      this.mazePathLength + ' ' + this.mazePathLength;
+    mazePath.style.strokeDashoffset = this.mazePathLength;
   }
 
   configureScrollEffect() {
     let scrollPercentage =
-      this.document.documentElement.scrollTop /
-      (this.document.documentElement.scrollHeight -
-        this.document.documentElement.clientHeight);
+      document.documentElement.scrollTop /
+      (document.documentElement.scrollHeight -
+        document.documentElement.clientHeight);
 
     let drowLength = this.linePathLength * scrollPercentage;
 
