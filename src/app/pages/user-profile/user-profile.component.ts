@@ -167,6 +167,7 @@ export class UserProfileComponent implements OnInit {
         });
     }
     try {
+      window.location.reload();
       this.storage.refFromURL(this.userData.userImage).delete().subscribe();
     } catch (err) {}
   }

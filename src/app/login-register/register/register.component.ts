@@ -73,7 +73,7 @@ export class RegisterComponent {
             this.store.dispatch(user.saveUser({ userData: { ...data } }));
             this.localStorage.saveDataToLocalStorage(data.token);
             this.router.navigate(['dashboard']).then(() => {
-              // window.location.reload();
+              window.location.reload();
             });
           },
           error: () => {
