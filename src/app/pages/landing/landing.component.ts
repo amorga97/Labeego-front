@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-landing',
@@ -11,35 +12,45 @@ export class LandingComponent {
   mazePath: any;
   mazePathLength: any;
 
-  constructor() {
+  constructor(@Inject(DOCUMENT) public document: Document) {
     window.addEventListener('DOMContentLoaded', () => {
-      this.linePath = document.querySelector('.line');
-      this.linePathLength = this.linePath?.getTotalLength();
-      this.linePath.style.strokeDasharray =
-        this.linePathLength + ' ' + this.linePathLength;
-      this.linePath.style.strokeDashoffset = this.linePathLength;
-
-      this.mazePath = document.querySelector('.maze');
-      this.mazePathLength = this.mazePath?.getTotalLength();
-      this.mazePath.style.strokeDasharray =
-        this.mazePathLength + ' ' + this.mazePathLength;
-      this.mazePath.style.strokeDashoffset = this.mazePathLength;
+      this.linePath = this.document.querySelector('.line');
+      this.mazePath = this.document.querySelector('.maze');
+      this.queryDocument(this.linePath, this.mazePath);
     });
-
     window.addEventListener('scroll', () => {
-      let scrollPercentage =
-        document.documentElement.scrollTop /
-        (document.documentElement.scrollHeight -
-          document.documentElement.clientHeight);
-
-      let drowLength = this.linePathLength * scrollPercentage;
-
-      this.linePath.style.strokeDashoffset = this.linePathLength - drowLength;
-
-      let mazeDrowLength = this.mazePathLength * (scrollPercentage * 1.7);
-
-      this.mazePath.style.strokeDashoffset =
-        this.mazePathLength - mazeDrowLength;
+      this.configureScrollEffect();
     });
+  }
+
+  queryDocument(
+    linePath: any,
+
+    mazePath: any
+  ) {
+    this.linePathLength = linePath?.getTotalLength();
+    linePath.style.strokeDasharray =
+      this.linePathLength + ' ' + this.linePathLength;
+    linePath.style.strokeDashoffset = this.linePathLength;
+
+    this.mazePathLength = mazePath?.getTotalLength();
+    mazePath.style.strokeDasharray =
+      this.mazePathLength + ' ' + this.mazePathLength;
+    mazePath.style.strokeDashoffset = this.mazePathLength;
+  }
+
+  configureScrollEffect() {
+    let scrollPercentage =
+      document.documentElement.scrollTop /
+      (document.documentElement.scrollHeight -
+        document.documentElement.clientHeight);
+
+    let drowLength = this.linePathLength * scrollPercentage;
+
+    this.linePath.style.strokeDashoffset = this.linePathLength - drowLength;
+
+    let mazeDrowLength = this.mazePathLength * (scrollPercentage * 1.7);
+
+    this.mazePath.style.strokeDashoffset = this.mazePathLength - mazeDrowLength;
   }
 }
