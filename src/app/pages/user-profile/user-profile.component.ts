@@ -63,6 +63,7 @@ export class UserProfileComponent implements OnInit {
   onSelect(event: any) {
     this.files.unshift(...event.addedFiles);
     this.fileBrowseHandler({ files: [...this.files] });
+    console.log(this.files);
     this.toggleActive();
   }
 
@@ -151,12 +152,6 @@ export class UserProfileComponent implements OnInit {
               this.alertMessage = '';
             }, 2000);
             this.imageToUpload = undefined;
-            try {
-              this.storage
-                .refFromURL(this.userData.userImage)
-                .delete()
-                .subscribe();
-            } catch (err) {}
           },
           error: () => {
             this.alertMessage = 'Ha ocurrido un error actualizando tu imagen';
@@ -171,6 +166,9 @@ export class UserProfileComponent implements OnInit {
           },
         });
     }
+    try {
+      this.storage.refFromURL(this.userData.userImage).delete().subscribe();
+    } catch (err) {}
   }
 
   ngOnInit(): void {

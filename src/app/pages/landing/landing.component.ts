@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-landing',
@@ -12,47 +11,35 @@ export class LandingComponent {
   mazePath: any;
   mazePathLength: any;
 
-  constructor(@Inject(DOCUMENT) public document: Document) {
+  constructor() {
     window.addEventListener('DOMContentLoaded', () => {
-      this.linePath = this.document.querySelector('.line');
+      this.linePath = document.querySelector('.line');
+      this.linePathLength = this.linePath?.getTotalLength();
+      this.linePath.style.strokeDasharray =
+        this.linePathLength + ' ' + this.linePathLength;
+      this.linePath.style.strokeDashoffset = this.linePathLength;
+
       this.mazePath = document.querySelector('.maze');
-      this.queryDocument(
-        this.linePath,
-        this.linePathLength,
-        this.mazePath,
-        this.mazePathLength
-      );
+      this.mazePathLength = this.mazePath?.getTotalLength();
+      this.mazePath.style.strokeDasharray =
+        this.mazePathLength + ' ' + this.mazePathLength;
+      this.mazePath.style.strokeDashoffset = this.mazePathLength;
     });
-    window.addEventListener('scroll', this.configureScrollEffect);
-  }
 
-  queryDocument(
-    linePath: any,
-    linePathLength: any,
-    mazePath: any,
-    mazePathLength: any
-  ) {
-    linePathLength = linePath?.getTotalLength();
-    linePath.style.strokeDasharray = linePathLength + ' ' + linePathLength;
-    linePath.style.strokeDashoffset = linePathLength;
+    window.addEventListener('scroll', () => {
+      let scrollPercentage =
+        document.documentElement.scrollTop /
+        (document.documentElement.scrollHeight -
+          document.documentElement.clientHeight);
 
-    mazePathLength = mazePath?.getTotalLength();
-    mazePath.style.strokeDasharray = mazePathLength + ' ' + mazePathLength;
-    mazePath.style.strokeDashoffset = mazePathLength;
-  }
+      let drowLength = this.linePathLength * scrollPercentage;
 
-  configureScrollEffect() {
-    let scrollPercentage =
-      this.document.documentElement.scrollTop /
-      (this.document.documentElement.scrollHeight -
-        this.document.documentElement.clientHeight);
+      this.linePath.style.strokeDashoffset = this.linePathLength - drowLength;
 
-    let drowLength = this.linePathLength * scrollPercentage;
+      let mazeDrowLength = this.mazePathLength * (scrollPercentage * 1.7);
 
-    this.linePath.style.strokeDashoffset = this.linePathLength - drowLength;
-
-    let mazeDrowLength = this.mazePathLength * (scrollPercentage * 1.7);
-
-    this.mazePath.style.strokeDashoffset = this.mazePathLength - mazeDrowLength;
+      this.mazePath.style.strokeDashoffset =
+        this.mazePathLength - mazeDrowLength;
+    });
   }
 }

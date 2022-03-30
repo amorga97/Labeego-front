@@ -34,20 +34,20 @@ describe('LandingComponent', () => {
     }).compileComponents();
   });
 
-  describe('When instanciating the component', () => {
-    it('Should run the functions to initialize animations', () => {
-      const fixture = TestBed.createComponent(LandingComponent);
-      const document = fixture.nativeElement as HTMLElement;
-      const component = fixture.componentInstance;
-      TestBed.inject(DOCUMENT);
-      spyOn(component.document, 'querySelector').and.returnValue(document);
-      console.log(document);
-      fixture.detectChanges();
-      component.document.addEventListener('DOMContentLoaded', () => {
-        expect(document.querySelector('.header')).toBeDefined();
-      });
-      component.configureScrollEffect();
-      component.queryDocument(mockPath, mockLenght, mockPath, mockLenght);
-    });
-  });
+  // describe('When instanciating the component', () => {
+  //   it('Should run the functions to initialize animations', () => {
+  //     const fixture = TestBed.createComponent(LandingComponent);
+  //     const document = fixture.nativeElement as HTMLElement;
+  //     const component = fixture.componentInstance;
+  //     TestBed.inject(DOCUMENT);
+  //     spyOn(component.document, 'querySelector').and.returnValue(document);
+  //     console.log(document);
+  //     fixture.detectChanges();
+  //     component.document.addEventListener('DOMContentLoaded', () => {
+  //       expect(document.querySelector('.header')).toBeDefined();
+  //     });
+  //     component.configureScrollEffect();
+  //     component.queryDocument(mockPath, mockLenght, mockPath, mockLenght);
+  //   });
+  // });
 });

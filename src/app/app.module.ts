@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 import { UserReducer } from './store/user.reducer';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoginRegisterModule } from './login-register/login-register.module';
 import { HttpClientModule } from '@angular/common/http';
 import { UserDashboardModule } from './pages/user-dashboard/user-dashboard.module';
 import { CoreModule } from './core/core.module';
@@ -28,7 +27,6 @@ import { LandingModule } from './pages/landing/landing.module';
     HttpClientModule,
     UserDashboardModule,
     CoreModule,
-    ProjectModule,
     NewUserModule,
     LandingModule,
     AngularFireModule.initializeApp(environment.firebase),
