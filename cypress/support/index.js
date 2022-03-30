@@ -13,8 +13,10 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+import "@4tw/cypress-drag-drop";
+
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
