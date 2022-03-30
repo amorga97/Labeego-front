@@ -7,7 +7,7 @@ import { mockProject } from '../mocks/mocks';
 
 import { ProjectsService } from './projects.service';
 
-describe('ProjectsService', () => {
+fdescribe('ProjectsService', () => {
   let service: ProjectsService;
   let httpTestingController: HttpTestingController;
 
@@ -111,6 +111,26 @@ describe('ProjectsService', () => {
       expect(req5.request.url).toBe('http://localhost:4600/projects/new');
 
       req5.flush([mockProject]);
+    });
+  });
+
+  describe('When calling service.removeAppointment', () => {
+    it('Should call httpClient', () => {
+      service.removeAppointment('token', 'id').subscribe((res: any) => {
+        expect(res).not.toBeNull();
+        expect(JSON.stringify(res)).toBe(JSON.stringify([mockProject]));
+      });
+
+      const req6 = httpTestingController.expectOne({
+        url: 'http://localhost:4600/projects/id/appointment',
+        method: 'DELETE',
+      });
+
+      expect(req6.request.url).toBe(
+        'http://localhost:4600/projects/id/appointment'
+      );
+
+      req6.flush([mockProject]);
     });
   });
 });
