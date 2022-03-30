@@ -19,9 +19,17 @@
   position: fixed;
   display: flex;
   justify-content: space-between;
-  padding: 30px 30px;
+  align-items: center;
+  padding: 15px 30px;
   width: 100%;
   background-color: transparent;
+
+  &__logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
 }
 
 .section {
