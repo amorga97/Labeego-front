@@ -60,4 +60,40 @@ describe('ClientsService', () => {
       req2.flush(mockClient);
     });
   });
+
+  describe('When calling service.getOne', () => {
+    it('Should call httpClient', () => {
+      service.getOne('token', 'id').subscribe((res: any) => {
+        expect(res).not.toBeNull();
+        expect(JSON.stringify(res)).toBe(JSON.stringify(mockClient));
+      });
+
+      const req3 = httpTestingController.expectOne({
+        url: 'http://localhost:4600/clients/id',
+        method: 'GET',
+      });
+
+      expect(req3.request.url).toBe('http://localhost:4600/clients/id');
+
+      req3.flush(mockClient);
+    });
+  });
+
+  describe('When calling service.getOne', () => {
+    it('Should call httpClient', () => {
+      service.update('token', 'id', mockClient).subscribe((res: any) => {
+        expect(res).not.toBeNull();
+        expect(JSON.stringify(res)).toBe(JSON.stringify(mockClient));
+      });
+
+      const req4 = httpTestingController.expectOne({
+        url: 'http://localhost:4600/clients/id',
+        method: 'PATCH',
+      });
+
+      expect(req4.request.url).toBe('http://localhost:4600/clients/id');
+
+      req4.flush(mockClient);
+    });
+  });
 });
