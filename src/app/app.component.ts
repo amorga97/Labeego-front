@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     public auth: AuthService,
     public router: Router
   ) {}
-  title = 'front';
+  title = 'Labeego';
   ngOnInit() {
     let userToken = this.localStorageServ.getDataFromLocalStorage();
     if (userToken) {
