@@ -447,6 +447,7 @@ export class ProjectComponent implements OnInit {
           setTimeout(() => {
             this.alertIsActive = false;
             this.alertIsError = false;
+            this.alertMessage = '';
           }, 2000);
         },
         error: () => {
