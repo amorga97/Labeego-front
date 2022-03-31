@@ -79,7 +79,9 @@ export class NewUserComponent implements OnInit {
             setTimeout(() => {
               this.alertIsActive = false;
               this.alertMessage = '';
-              this.router.navigate(['dashboard']);
+              this.router
+                .navigate(['dashboard'])
+                .then(() => window.location.reload());
             }, 2000);
           },
           error: () => {
