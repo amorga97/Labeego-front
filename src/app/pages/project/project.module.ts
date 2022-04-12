@@ -6,10 +6,9 @@ import { ProjectComponent } from './project.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from 'src/app/core/core.module';
 import { KanbanComponent } from './kanban/kanban.component';
-import { DetailsComponent } from './details/details.component';
 
 @NgModule({
-  declarations: [ProjectComponent, KanbanComponent, DetailsComponent],
+  declarations: [ProjectComponent, KanbanComponent],
   imports: [
     CommonModule,
     ProjectRoutingModule,
