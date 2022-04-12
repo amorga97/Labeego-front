@@ -5,9 +5,10 @@ import { ProjectRoutingModule } from './project-routing.module';
 import { ProjectComponent } from './project.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from 'src/app/core/core.module';
+import { KanbanComponent } from './kanban/kanban.component';
 
 @NgModule({
-  declarations: [ProjectComponent],
+  declarations: [ProjectComponent, KanbanComponent],
   imports: [
     CommonModule,
     ProjectRoutingModule,
