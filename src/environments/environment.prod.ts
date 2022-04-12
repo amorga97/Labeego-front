@@ -8,6 +8,6 @@ export const environment = {
     authDomain: 'final-isdi-coders.firebaseapp.com',
     messagingSenderId: '649528423764',
   },
-  backUrl: 'http://localhost:4600/',
+  backUrl: 'https://labeego-api.herokuapp.com',
   production: true,
 };
