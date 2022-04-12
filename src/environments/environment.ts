@@ -13,7 +13,7 @@ export const environment = {
     messagingSenderId: '649528423764',
   },
   production: false,
-  backUrl: 'http://localhost:4600/',
+  backUrl: 'https://labeego-api.herokuapp.com/',
 };
 
 /*

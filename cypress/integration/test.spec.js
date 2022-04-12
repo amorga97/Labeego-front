@@ -40,7 +40,7 @@ it("Login and create new project", () => {
   cy.get("#description").type(
     "Oficinas isdi coders Madrid. Reforma completa del espacio. Mobiliario USM"
   );
-  cy.get('.project-form__buttons > [type="submit"]').click();
+  cy.get('.project-form__buttons > [type="submit"]').click({ force: true });
   cy.get(".alert__message").should("be.visible");
   cy.wait(2100);
   cy.get(".alert__message").should("not.exist");

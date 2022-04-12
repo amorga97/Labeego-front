@@ -44,7 +44,7 @@ export class RegisterComponent {
         '',
         [
           Validators.required,
-          Validators.minLength(3),
+          Validators.minLength(5),
           Validators.maxLength(20),
         ],
       ],
